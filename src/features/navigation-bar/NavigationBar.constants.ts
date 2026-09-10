@@ -145,7 +145,6 @@ const NAVIGATION_BAR_DESKTOP_ITEMS = [
         IconComponent: AccountCircleIcon,
         show: 'desktop',
         moreGroup: NavBarItemMoreGroup.SETTING_INFO,
-        requiredPermission: 'library.read',
     },
 ] as const satisfies RestrictedNavBarItem<'desktop'>[];
 
