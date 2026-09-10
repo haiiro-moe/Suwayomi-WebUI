@@ -379,6 +379,7 @@ msgid "Aborted"
 msgstr "Aborted"
 
 #: src/features/navigation-bar/NavigationBar.constants.ts
+#: src/features/profile/screens/Profile.tsx
 #: src/features/settings/screens/About.tsx
 msgid "About"
 msgstr "About"
@@ -1822,6 +1823,10 @@ msgstr "Failed to disconnect from KOReader Sync server."
 msgid "Failed to save changes"
 msgstr "Failed to save changes"
 
+#: src/features/profile/screens/Profile.tsx
+msgid "Favorites"
+msgstr "Favorites"
+
 #: src/features/settings/Settings.constants.ts
 msgid "Features and changes in this version might not be completely ready yet and can cause bugs.\n"
 "Make sure that you have automatic backups enabled to prevent loss of your library!\n"
@@ -3020,6 +3025,11 @@ msgstr "Previous page"
 msgid "Previous:"
 msgstr "Previous:"
 
+#: src/features/navigation-bar/NavigationBar.constants.ts
+#: src/features/profile/screens/Profile.tsx
+msgid "Profile"
+msgstr "Profile"
+
 #: src/features/reader/overlay/progress-bar/settings/components/ReaderSettingProgressBarPosition.tsx
 msgid "Progress bar position"
 msgstr "Progress bar position"
@@ -3228,6 +3238,10 @@ msgstr "Right and left"
 #: src/features/reader/settings/ReaderSettings.constants.tsx
 msgid "Right to left"
 msgstr "Right to left"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "Role"
+msgstr "Role"
 
 #: src/features/theme/Themes.ts
 msgid "Rosegold"
@@ -4063,6 +4077,10 @@ msgstr "Unable to load data"
 #: src/features/extension/store/screens/ExtensionStores.tsx
 msgid "Unable to load extension stores"
 msgstr "Unable to load extension stores"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "Unable to load profile"
+msgstr "Unable to load profile"
 
 #: src/features/migration/screens/MigrationSelectDestinationSources.tsx
 msgid "Unable to load sources"

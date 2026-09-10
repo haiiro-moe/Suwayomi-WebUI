@@ -72,7 +72,7 @@ export function DefaultNavBar() {
                 hideDesktop: isMobileWidth,
                 hideMobile: !isMobileWidth,
             }),
-        [isMobileWidth, hideHistory],
+        [isMobileWidth, hideHistory, permissions],
     );
     const NavBarComponent = useMemo(() => (isMobileWidth ? MobileBottomBar : DesktopSideBar), [isMobileWidth]);
 

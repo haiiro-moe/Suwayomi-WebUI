@@ -19,6 +19,7 @@ import GetAppOutlinedIcon from '@mui/icons-material/GetAppOutlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useLingui } from '@lingui/react/macro';
 import { msg, plural } from '@lingui/core/macro';
 import type { NavbarItem } from '@/features/navigation-bar/NavigationBar.types.ts';
@@ -136,6 +137,15 @@ const NAVIGATION_BAR_DESKTOP_ITEMS = [
         IconComponent: InfoIcon,
         show: 'desktop',
         moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+    },
+    {
+        path: AppRoutes.profile.path,
+        title: msg`Profile`,
+        SelectedIconComponent: AccountCircleIcon,
+        IconComponent: AccountCircleIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+        requiredPermission: 'library.read',
     },
 ] as const satisfies RestrictedNavBarItem<'desktop'>[];
 

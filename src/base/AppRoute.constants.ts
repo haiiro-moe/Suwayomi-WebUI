@@ -46,6 +46,10 @@ export const AppRoutes = {
         match: 'about',
         path: '/about',
     },
+    profile: {
+        match: 'profile',
+        path: '/profile',
+    },
     settings: {
         match: 'settings',
         path: '/settings',
