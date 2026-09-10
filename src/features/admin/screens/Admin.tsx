@@ -10,15 +10,23 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
 import Checkbox from '@mui/material/Checkbox';
+import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import InputAdornment from '@mui/material/InputAdornment';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { EmptyViewAbsoluteCentered } from '@/base/components/feedback/EmptyViewAbsoluteCentered.tsx';
@@ -44,6 +52,7 @@ export function Admin() {
     const [roleName, setRoleName] = useState('');
     const [roleDescription, setRoleDescription] = useState('');
     const [rolePermissions, setRolePermissions] = useState<string[]>([]);
+    const [permissionSearch, setPermissionSearch] = useState('');
     const [editingRoleId, setEditingRoleId] = useState<number | null>(null);
     const { data, loading, error, refetch } = requestManager.useGetAdminUsers();
     const { data: rolesData, loading: rolesLoading } = requestManager.useGetAdminRoles();
@@ -115,10 +124,22 @@ export function Admin() {
     };
 
     const startRoleEdit = (role: (typeof rolesData.roles)[number]) => {
+        if (role.name === 'owner') {
+            return;
+        }
         setEditingRoleId(role.id);
         setRoleName(role.name);
         setRoleDescription(role.description);
         setRolePermissions(role.permissions);
+        setPermissionSearch('');
+    };
+
+    const resetRoleEditor = () => {
+        setRoleName('');
+        setRoleDescription('');
+        setRolePermissions([]);
+        setEditingRoleId(null);
+        setPermissionSearch('');
     };
 
     const removeRole = async (adminRoleId: number) => {
@@ -214,49 +235,133 @@ export function Admin() {
                 </select>
                 <Button startIcon={<AddIcon />} variant="contained" onClick={submit}>{t`Create`}</Button>
             </Stack>
-            <Stack spacing={1}>
-                <strong>{t`Roles`}</strong>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
-                    <TextField
-                        label={t`Role name`}
-                        value={roleName}
-                        onChange={(event) => setRoleName(event.target.value)}
-                    />
-                    <TextField
-                        label={t`Description`}
-                        value={roleDescription}
-                        onChange={(event) => setRoleDescription(event.target.value)}
-                    />
-                    <select
-                        multiple
-                        aria-label={t`Permissions`}
-                        value={rolePermissions}
-                        onChange={(event) =>
-                            setRolePermissions(Array.from(event.target.selectedOptions, (option) => option.value))
-                        }
-                    >
-                        {rolesData.permissionNodes.map((permission) => (
-                            <option key={permission} value={permission}>
-                                {permission}
-                            </option>
-                        ))}
-                    </select>
-                    <Button variant="contained" onClick={saveRole}>
-                        {editingRoleId === null ? t`Create role` : t`Save role`}
-                    </Button>
-                    {editingRoleId !== null && <Button onClick={() => setEditingRoleId(null)}>{t`Cancel`}</Button>}
-                </Stack>
-                <List>
-                    {rolesData.roles.map((role) => (
-                        <ListItem
-                            component="div"
-                            key={role.id}
-                            secondaryAction={
-                                <Stack direction="row">
+            <Stack spacing={2}>
+                <Box>
+                    <Typography variant="h6">{t`Roles`}</Typography>
+                    <Typography color="text.secondary" variant="body2">
+                        {editingRoleId === null
+                            ? t`Create a role and choose the permissions it should have.`
+                            : t`Edit role details and permissions.`}
+                    </Typography>
+                </Box>
+                <Card variant="outlined">
+                    <CardContent>
+                        <Stack spacing={2}>
+                            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                                <TextField
+                                    fullWidth
+                                    label={t`Role name`}
+                                    value={roleName}
+                                    onChange={(event) => setRoleName(event.target.value)}
+                                />
+                                <TextField
+                                    fullWidth
+                                    label={t`Description`}
+                                    value={roleDescription}
+                                    onChange={(event) => setRoleDescription(event.target.value)}
+                                />
+                            </Stack>
+                            <Stack
+                                direction={{ xs: 'column', sm: 'row' }}
+                                sx={{ justifyContent: 'space-between' }}
+                                spacing={1}
+                            >
+                                <Box>
+                                    <Typography variant="subtitle1">{t`Permissions`}</Typography>
+                                    <Typography color="text.secondary" variant="body2">
+                                        {t`${rolePermissions.length} selected`}
+                                    </Typography>
+                                </Box>
+                                <TextField
+                                    label={t`Search permissions`}
+                                    value={permissionSearch}
+                                    onChange={(event) => setPermissionSearch(event.target.value)}
+                                    size="small"
+                                    slotProps={{
+                                        input: {
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <SearchIcon fontSize="small" />
+                                                </InputAdornment>
+                                            ),
+                                        },
+                                    }}
+                                />
+                            </Stack>
+                            <Box
+                                sx={{
+                                    display: 'grid',
+                                    gap: 1.5,
+                                    gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' },
+                                }}
+                            >
+                                {Object.entries(
+                                    rolesData.permissionNodes
+                                        .filter((permission) =>
+                                            permission.toLowerCase().includes(permissionSearch.trim().toLowerCase()),
+                                        )
+                                        .reduce<Record<string, string[]>>((groups, permission) => {
+                                            const group = permission.split(/[.:/]/, 1)[0] || t`Other`;
+                                            return { ...groups, [group]: [...(groups[group] ?? []), permission] };
+                                        }, {}),
+                                ).map(([group, permissions]) => (
+                                    <Paper key={group} variant="outlined" sx={{ p: 1.5 }}>
+                                        <Typography sx={{ fontWeight: 'bold' }} variant="subtitle2">
+                                            {group}
+                                        </Typography>
+                                        <Divider sx={{ my: 1 }} />
+                                        <Stack>
+                                            {permissions.map((permission) => (
+                                                <FormControlLabel
+                                                    key={permission}
+                                                    control={
+                                                        <Checkbox
+                                                            checked={rolePermissions.includes(permission)}
+                                                            onChange={(event) =>
+                                                                setRolePermissions((current) =>
+                                                                    event.target.checked
+                                                                        ? [...current, permission]
+                                                                        : current.filter(
+                                                                              (selected) => selected !== permission,
+                                                                          ),
+                                                                )
+                                                            }
+                                                        />
+                                                    }
+                                                    label={permission}
+                                                />
+                                            ))}
+                                        </Stack>
+                                    </Paper>
+                                ))}
+                            </Box>
+                        </Stack>
+                    </CardContent>
+                    <CardActions sx={{ justifyContent: 'flex-end', px: 2, pb: 2 }}>
+                        <Button onClick={resetRoleEditor}>{editingRoleId === null ? t`Reset` : t`Cancel`}</Button>
+                        <Button variant="contained" onClick={saveRole} disabled={!roleName.trim()}>
+                            {editingRoleId === null ? t`Create role` : t`Save role`}
+                        </Button>
+                    </CardActions>
+                </Card>
+                <Stack spacing={1}>
+                    <List>
+                        {rolesData.roles.map((role) => (
+                            <Card key={role.id} variant="outlined">
+                                <CardContent sx={{ pb: 1 }}>
+                                    <Typography variant="subtitle1">{role.name}</Typography>
+                                    <Typography color="text.secondary" variant="body2">
+                                        {role.description || role.permissions.join(', ')}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions sx={{ justifyContent: 'flex-end', pt: 0 }}>
                                     <Button
                                         startIcon={<EditIcon />}
                                         onClick={() => startRoleEdit(role)}
-                                    >{t`Edit`}</Button>
+                                        disabled={role.name === 'owner'}
+                                    >
+                                        {role.name === 'owner' ? t`Protected` : t`Edit`}
+                                    </Button>
                                     {role.name !== 'owner' && (
                                         <Button
                                             color="error"
@@ -264,16 +369,11 @@ export function Admin() {
                                             onClick={() => removeRole(role.id)}
                                         >{t`Delete`}</Button>
                                     )}
-                                </Stack>
-                            }
-                        >
-                            <ListItemText
-                                primary={role.name}
-                                secondary={role.description || role.permissions.join(', ')}
-                            />
-                        </ListItem>
-                    ))}
-                </List>
+                                </CardActions>
+                            </Card>
+                        ))}
+                    </List>
+                </Stack>
             </Stack>
             <List>
                 {data.users.map((user) => (
