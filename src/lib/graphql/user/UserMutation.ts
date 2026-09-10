@@ -17,6 +17,15 @@ export const USER_LOGIN = gql`
     }
 `;
 
+export const SETUP_OWNER = gql`
+    mutation SETUP_OWNER($password: String!, $username: String!) {
+        setupOwner(input: { password: $password, username: $username }) {
+            accessToken
+            refreshToken
+        }
+    }
+`;
+
 export const USER_REFRESH = gql`
     mutation USER_REFRESH($refreshToken: String!) {
         refreshToken(input: { refreshToken: $refreshToken }) {
