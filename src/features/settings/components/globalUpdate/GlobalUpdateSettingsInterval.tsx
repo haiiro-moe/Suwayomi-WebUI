@@ -19,15 +19,20 @@ import type { ServerSettings } from '@/features/settings/Settings.types.ts';
 
 import { GLOBAL_UPDATE_INTERVAL } from '@/features/settings/Settings.constants.ts';
 
+const cronToIntervalHours = (cron: string | null | undefined): number => {
+    const match = cron?.match(/^0 \*\/(\d+) \* \* \*$/);
+    return match ? Number(match[1]) : GLOBAL_UPDATE_INTERVAL.default;
+};
+
 export const GlobalUpdateSettingsInterval = ({
-    globalUpdateInterval,
+    globalUpdateCron,
 }: {
-    globalUpdateInterval: ServerSettings['globalUpdateInterval'];
+    globalUpdateCron: ServerSettings['globalUpdateCron'];
 }) => {
     const { t } = useLingui();
 
-    const autoUpdateIntervalHours = globalUpdateInterval;
-    const doAutoUpdates = !!autoUpdateIntervalHours;
+    const autoUpdateIntervalHours = cronToIntervalHours(globalUpdateCron);
+    const doAutoUpdates = !!globalUpdateCron;
     const [mutateSettings] = requestManager.useUpdateServerSettings();
     const [currentAutoUpdateIntervalHours, persistAutoUpdateIntervalHours] = usePersistedValue(
         'lastGlobalUpdateInterval',
@@ -41,7 +46,16 @@ export const GlobalUpdateSettingsInterval = ({
             persistAutoUpdateIntervalHours(
                 newGlobalUpdateInterval === 0 ? currentAutoUpdateIntervalHours : newGlobalUpdateInterval,
             );
-            mutateSettings({ variables: { input: { settings: { globalUpdateInterval: newGlobalUpdateInterval } } } });
+            mutateSettings({
+                variables: {
+                    input: {
+                        settings: {
+                            globalUpdateCron:
+                                newGlobalUpdateInterval === 0 ? '' : `0 */${newGlobalUpdateInterval} * * *`,
+                        },
+                    },
+                },
+            });
         },
         [currentAutoUpdateIntervalHours],
     );

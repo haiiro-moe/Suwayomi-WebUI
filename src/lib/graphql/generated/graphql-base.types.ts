@@ -1565,6 +1565,7 @@ export type Mutation = {
     reorderChapterDownload?: Maybe<ReorderChapterDownloadPayload>;
     reorderChapterDownloads?: Maybe<ReorderChapterDownloadPayload>;
     resetSettings: ResetSettingsPayload;
+    resetUserSettings: SetUserSettingsPayload;
     resetWebUIUpdateStatus?: Maybe<WebUiUpdateStatus>;
     restoreBackup: RestoreBackupPayload;
     sendMessage: MessageMutationPayload;
@@ -1580,6 +1581,7 @@ export type Mutation = {
     setSettings: SetSettingsPayload;
     setSourceMeta?: Maybe<SetSourceMetaPayload>;
     setSourceMetas?: Maybe<SetSourceMetasPayload>;
+    setUserSettings: SetUserSettingsPayload;
     startDownloader?: Maybe<StartDownloaderPayload>;
     startSync: StartSyncPayload;
     stopDownloader?: Maybe<StopDownloaderPayload>;
@@ -1820,6 +1822,10 @@ export type MutationResetSettingsArgs = {
     input: ResetSettingsInput;
 };
 
+export type MutationResetUserSettingsArgs = {
+    input: ResetUserSettingsInput;
+};
+
 export type MutationRestoreBackupArgs = {
     input: RestoreBackupInput;
 };
@@ -1874,6 +1880,10 @@ export type MutationSetSourceMetaArgs = {
 
 export type MutationSetSourceMetasArgs = {
     input: SetSourceMetasInput;
+};
+
+export type MutationSetUserSettingsArgs = {
+    input: SetUserSettingsInput;
 };
 
 export type MutationStartDownloaderArgs = {
@@ -2093,6 +2103,8 @@ export type PartialSettingsType = Settings & {
     flareSolverrSessionTtl?: Maybe<Scalars['Int']['output']>;
     flareSolverrTimeout?: Maybe<Scalars['Int']['output']>;
     flareSolverrUrl?: Maybe<Scalars['String']['output']>;
+    globalUpdateCron?: Maybe<Scalars['String']['output']>;
+    /** @deprecated Use a cron expression for automated library updates, replace with globalUpdateCron */
     globalUpdateInterval?: Maybe<Scalars['Float']['output']>;
     /** @deprecated Removed - does not do anything */
     gqlDebugLogsEnabled?: Maybe<Scalars['Boolean']['output']>;
@@ -2193,7 +2205,7 @@ export type PartialSettingsTypeInput = {
     flareSolverrSessionTtl?: InputMaybe<Scalars['Int']['input']>;
     flareSolverrTimeout?: InputMaybe<Scalars['Int']['input']>;
     flareSolverrUrl?: InputMaybe<Scalars['String']['input']>;
-    globalUpdateInterval?: InputMaybe<Scalars['Float']['input']>;
+    globalUpdateCron?: InputMaybe<Scalars['String']['input']>;
     initialOpenInBrowserEnabled?: InputMaybe<Scalars['Boolean']['input']>;
     ip?: InputMaybe<Scalars['String']['input']>;
     jwtAudience?: InputMaybe<Scalars['String']['input']>;
@@ -2332,6 +2344,7 @@ export type Query = {
     /** @deprecated Replaced with libraryUpdateStatus, replace with libraryUpdateStatus */
     updateStatus: UpdateStatus;
     userDirectory: Array<UserProfile>;
+    userSettings: Array<UserSetting>;
     users: Array<UserProfile>;
     validateBackup: ValidateBackupResult;
 };
@@ -2541,6 +2554,10 @@ export type ResetSettingsPayload = {
     __typename?: 'ResetSettingsPayload';
     clientMutationId?: Maybe<Scalars['String']['output']>;
     settings: SettingsType;
+};
+
+export type ResetUserSettingsInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type RestoreBackupInput = {
@@ -2759,6 +2776,17 @@ export type SetSourceMetasPayload = {
     sources: Array<SourceType>;
 };
 
+export type SetUserSettingsInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    settings: Array<UserSettingInput>;
+};
+
+export type SetUserSettingsPayload = {
+    __typename?: 'SetUserSettingsPayload';
+    clientMutationId?: Maybe<Scalars['String']['output']>;
+    updated: Scalars['Boolean']['output'];
+};
+
 export type Settings = {
     authMode?: Maybe<AuthMode>;
     authPassword?: Maybe<Scalars['String']['output']>;
@@ -2806,6 +2834,8 @@ export type Settings = {
     flareSolverrSessionTtl?: Maybe<Scalars['Int']['output']>;
     flareSolverrTimeout?: Maybe<Scalars['Int']['output']>;
     flareSolverrUrl?: Maybe<Scalars['String']['output']>;
+    globalUpdateCron?: Maybe<Scalars['String']['output']>;
+    /** @deprecated Use a cron expression for automated library updates, replace with globalUpdateCron */
     globalUpdateInterval?: Maybe<Scalars['Float']['output']>;
     /** @deprecated Removed - does not do anything */
     gqlDebugLogsEnabled?: Maybe<Scalars['Boolean']['output']>;
@@ -2961,6 +2991,8 @@ export type SettingsType = Settings & {
     flareSolverrSessionTtl: Scalars['Int']['output'];
     flareSolverrTimeout: Scalars['Int']['output'];
     flareSolverrUrl: Scalars['String']['output'];
+    globalUpdateCron: Scalars['String']['output'];
+    /** @deprecated Use a cron expression for automated library updates, replace with globalUpdateCron */
     globalUpdateInterval: Scalars['Float']['output'];
     /** @deprecated Removed - does not do anything */
     gqlDebugLogsEnabled: Scalars['Boolean']['output'];
@@ -3852,6 +3884,17 @@ export type UserProfile = {
     permissions: Array<Scalars['String']['output']>;
     role: Scalars['String']['output'];
     username: Scalars['String']['output'];
+};
+
+export type UserSetting = {
+    __typename?: 'UserSetting';
+    key: Scalars['String']['output'];
+    value: Scalars['String']['output'];
+};
+
+export type UserSettingInput = {
+    key: Scalars['String']['input'];
+    value: Scalars['String']['input'];
 };
 
 export type ValidateBackupInput = {

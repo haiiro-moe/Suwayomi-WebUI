@@ -5239,6 +5239,31 @@ export type GetCurrentUserProfileQuery = {
     } | null;
 };
 
+export type GetUserSettingsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserSettingsQuery = {
+    __typename: 'Query';
+    userSettings: Array<{ __typename: 'UserSetting'; key: string; value: string }>;
+};
+
+export type SetUserSettingsMutationVariables = Exact<{
+    input: Types.SetUserSettingsInput;
+}>;
+
+export type SetUserSettingsMutation = {
+    __typename: 'Mutation';
+    setUserSettings: { __typename: 'SetUserSettingsPayload'; updated: boolean };
+};
+
+export type ResetUserSettingsMutationVariables = Exact<{
+    input: Types.ResetUserSettingsInput;
+}>;
+
+export type ResetUserSettingsMutation = {
+    __typename: 'Mutation';
+    resetUserSettings: { __typename: 'SetUserSettingsPayload'; updated: boolean };
+};
+
 export type WebviewClearCacheCookiesMutationVariables = Exact<{ [key: string]: never }>;
 
 export type WebviewClearCacheCookiesMutation = {

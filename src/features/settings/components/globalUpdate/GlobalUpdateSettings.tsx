@@ -52,7 +52,7 @@ export const GlobalUpdateSettings = ({
                 </ListSubheader>
             }
         >
-            <GlobalUpdateSettingsInterval globalUpdateInterval={serverSettings.globalUpdateInterval} />
+            <GlobalUpdateSettingsInterval globalUpdateCron={serverSettings.globalUpdateCron} />
             <GlobalUpdateSettingsEntries serverSettings={serverSettings} />
             <CategoriesInclusionSetting
                 categories={categories}

@@ -1050,6 +1050,7 @@ export type MutationKeySpecifier = (
     | 'reorderChapterDownload'
     | 'reorderChapterDownloads'
     | 'resetSettings'
+    | 'resetUserSettings'
     | 'resetWebUIUpdateStatus'
     | 'restoreBackup'
     | 'sendMessage'
@@ -1065,6 +1066,7 @@ export type MutationKeySpecifier = (
     | 'setSettings'
     | 'setSourceMeta'
     | 'setSourceMetas'
+    | 'setUserSettings'
     | 'startDownloader'
     | 'startSync'
     | 'stopDownloader'
@@ -1147,6 +1149,7 @@ export type MutationFieldPolicy = {
     reorderChapterDownload?: FieldPolicy<any> | FieldReadFunction<any>;
     reorderChapterDownloads?: FieldPolicy<any> | FieldReadFunction<any>;
     resetSettings?: FieldPolicy<any> | FieldReadFunction<any>;
+    resetUserSettings?: FieldPolicy<any> | FieldReadFunction<any>;
     resetWebUIUpdateStatus?: FieldPolicy<any> | FieldReadFunction<any>;
     restoreBackup?: FieldPolicy<any> | FieldReadFunction<any>;
     sendMessage?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1162,6 +1165,7 @@ export type MutationFieldPolicy = {
     setSettings?: FieldPolicy<any> | FieldReadFunction<any>;
     setSourceMeta?: FieldPolicy<any> | FieldReadFunction<any>;
     setSourceMetas?: FieldPolicy<any> | FieldReadFunction<any>;
+    setUserSettings?: FieldPolicy<any> | FieldReadFunction<any>;
     startDownloader?: FieldPolicy<any> | FieldReadFunction<any>;
     startSync?: FieldPolicy<any> | FieldReadFunction<any>;
     stopDownloader?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1262,6 +1266,7 @@ export type PartialSettingsTypeKeySpecifier = (
     | 'flareSolverrSessionTtl'
     | 'flareSolverrTimeout'
     | 'flareSolverrUrl'
+    | 'globalUpdateCron'
     | 'globalUpdateInterval'
     | 'gqlDebugLogsEnabled'
     | 'initialOpenInBrowserEnabled'
@@ -1361,6 +1366,7 @@ export type PartialSettingsTypeFieldPolicy = {
     flareSolverrSessionTtl?: FieldPolicy<any> | FieldReadFunction<any>;
     flareSolverrTimeout?: FieldPolicy<any> | FieldReadFunction<any>;
     flareSolverrUrl?: FieldPolicy<any> | FieldReadFunction<any>;
+    globalUpdateCron?: FieldPolicy<any> | FieldReadFunction<any>;
     globalUpdateInterval?: FieldPolicy<any> | FieldReadFunction<any>;
     gqlDebugLogsEnabled?: FieldPolicy<any> | FieldReadFunction<any>;
     initialOpenInBrowserEnabled?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1496,6 +1502,7 @@ export type QueryKeySpecifier = (
     | 'unreadMessageCount'
     | 'updateStatus'
     | 'userDirectory'
+    | 'userSettings'
     | 'users'
     | 'validateBackup'
     | QueryKeySpecifier
@@ -1541,6 +1548,7 @@ export type QueryFieldPolicy = {
     unreadMessageCount?: FieldPolicy<any> | FieldReadFunction<any>;
     updateStatus?: FieldPolicy<any> | FieldReadFunction<any>;
     userDirectory?: FieldPolicy<any> | FieldReadFunction<any>;
+    userSettings?: FieldPolicy<any> | FieldReadFunction<any>;
     users?: FieldPolicy<any> | FieldReadFunction<any>;
     validateBackup?: FieldPolicy<any> | FieldReadFunction<any>;
 };
@@ -1692,6 +1700,15 @@ export type SetSourceMetasPayloadFieldPolicy = {
     metas?: FieldPolicy<any> | FieldReadFunction<any>;
     sources?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type SetUserSettingsPayloadKeySpecifier = (
+    | 'clientMutationId'
+    | 'updated'
+    | SetUserSettingsPayloadKeySpecifier
+)[];
+export type SetUserSettingsPayloadFieldPolicy = {
+    clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+    updated?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type SettingsKeySpecifier = (
     | 'authMode'
     | 'authPassword'
@@ -1734,6 +1751,7 @@ export type SettingsKeySpecifier = (
     | 'flareSolverrSessionTtl'
     | 'flareSolverrTimeout'
     | 'flareSolverrUrl'
+    | 'globalUpdateCron'
     | 'globalUpdateInterval'
     | 'gqlDebugLogsEnabled'
     | 'initialOpenInBrowserEnabled'
@@ -1833,6 +1851,7 @@ export type SettingsFieldPolicy = {
     flareSolverrSessionTtl?: FieldPolicy<any> | FieldReadFunction<any>;
     flareSolverrTimeout?: FieldPolicy<any> | FieldReadFunction<any>;
     flareSolverrUrl?: FieldPolicy<any> | FieldReadFunction<any>;
+    globalUpdateCron?: FieldPolicy<any> | FieldReadFunction<any>;
     globalUpdateInterval?: FieldPolicy<any> | FieldReadFunction<any>;
     gqlDebugLogsEnabled?: FieldPolicy<any> | FieldReadFunction<any>;
     initialOpenInBrowserEnabled?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1983,6 +2002,7 @@ export type SettingsTypeKeySpecifier = (
     | 'flareSolverrSessionTtl'
     | 'flareSolverrTimeout'
     | 'flareSolverrUrl'
+    | 'globalUpdateCron'
     | 'globalUpdateInterval'
     | 'gqlDebugLogsEnabled'
     | 'initialOpenInBrowserEnabled'
@@ -2082,6 +2102,7 @@ export type SettingsTypeFieldPolicy = {
     flareSolverrSessionTtl?: FieldPolicy<any> | FieldReadFunction<any>;
     flareSolverrTimeout?: FieldPolicy<any> | FieldReadFunction<any>;
     flareSolverrUrl?: FieldPolicy<any> | FieldReadFunction<any>;
+    globalUpdateCron?: FieldPolicy<any> | FieldReadFunction<any>;
     globalUpdateInterval?: FieldPolicy<any> | FieldReadFunction<any>;
     gqlDebugLogsEnabled?: FieldPolicy<any> | FieldReadFunction<any>;
     initialOpenInBrowserEnabled?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -2677,6 +2698,11 @@ export type UserProfileFieldPolicy = {
     permissions?: FieldPolicy<any> | FieldReadFunction<any>;
     role?: FieldPolicy<any> | FieldReadFunction<any>;
     username?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type UserSettingKeySpecifier = ('key' | 'value' | UserSettingKeySpecifier)[];
+export type UserSettingFieldPolicy = {
+    key?: FieldPolicy<any> | FieldReadFunction<any>;
+    value?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type ValidateBackupResultKeySpecifier = (
     | 'missingSources'
@@ -3297,6 +3323,10 @@ export type StrictTypedTypePolicies = {
         keyFields?: false | SetSourceMetasPayloadKeySpecifier | (() => undefined | SetSourceMetasPayloadKeySpecifier);
         fields?: SetSourceMetasPayloadFieldPolicy;
     };
+    SetUserSettingsPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | SetUserSettingsPayloadKeySpecifier | (() => undefined | SetUserSettingsPayloadKeySpecifier);
+        fields?: SetUserSettingsPayloadFieldPolicy;
+    };
     Settings?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | SettingsKeySpecifier | (() => undefined | SettingsKeySpecifier);
         fields?: SettingsFieldPolicy;
@@ -3559,6 +3589,10 @@ export type StrictTypedTypePolicies = {
     UserProfile?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | UserProfileKeySpecifier | (() => undefined | UserProfileKeySpecifier);
         fields?: UserProfileFieldPolicy;
+    };
+    UserSetting?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | UserSettingKeySpecifier | (() => undefined | UserSettingKeySpecifier);
+        fields?: UserSettingFieldPolicy;
     };
     ValidateBackupResult?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | ValidateBackupResultKeySpecifier | (() => undefined | ValidateBackupResultKeySpecifier);

@@ -70,6 +70,12 @@ import type {
     GetAdminUsersQueryVariables,
     GetCurrentUserProfileQuery,
     GetCurrentUserProfileQueryVariables,
+    GetUserSettingsQuery,
+    GetUserSettingsQueryVariables,
+    SetUserSettingsMutation,
+    SetUserSettingsMutationVariables,
+    ResetUserSettingsMutation,
+    ResetUserSettingsMutationVariables,
     GetCategoriesSettingsQuery,
     GetCategoriesSettingsQueryVariables,
     GetCategoryMangasQuery,
@@ -367,6 +373,7 @@ import type { MangaIdInfo } from '@/features/manga/Manga.types.ts';
 import { updateMetadataList } from '@/features/metadata/services/MetadataApolloCacheHandler.ts';
 import { UPDATE_PROFILE, USER_LOGIN, USER_REFRESH } from '@/lib/graphql/user/UserMutation.ts';
 import { GET_CURRENT_USER_PROFILE } from '@/lib/graphql/user/UserQuery.ts';
+import { GET_USER_SETTINGS, RESET_USER_SETTINGS, SET_USER_SETTINGS } from '@/lib/graphql/user/UserSettings.ts';
 import {
     CREATE_ROLE,
     CREATE_USER,
@@ -4060,6 +4067,24 @@ export class RequestManager {
         options?: MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>,
     ): AbortableApolloUseMutationResponse<UpdateProfileMutation, UpdateProfileMutationVariables> {
         return this.doRequest(GQLMethod.USE_MUTATION, UPDATE_PROFILE, undefined, options);
+    }
+
+    public useGetUserSettings(
+        options?: QueryHookOptions<GetUserSettingsQuery, GetUserSettingsQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetUserSettingsQuery, GetUserSettingsQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_USER_SETTINGS, undefined, options);
+    }
+
+    public useSetUserSettings(
+        options?: MutationHookOptions<SetUserSettingsMutation, SetUserSettingsMutationVariables>,
+    ): AbortableApolloUseMutationResponse<SetUserSettingsMutation, SetUserSettingsMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, SET_USER_SETTINGS, undefined, options);
+    }
+
+    public useResetUserSettings(
+        options?: MutationHookOptions<ResetUserSettingsMutation, ResetUserSettingsMutationVariables>,
+    ): AbortableApolloUseMutationResponse<ResetUserSettingsMutation, ResetUserSettingsMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, RESET_USER_SETTINGS, undefined, options);
     }
 
     public startSync(
