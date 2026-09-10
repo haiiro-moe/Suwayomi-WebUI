@@ -27,6 +27,7 @@ import { useNavBarContext } from '@/features/navigation-bar/NavbarContext.tsx';
 import { useMetadataServerSettings } from '@/features/settings/services/ServerSettingsMetadata.ts';
 import { NAVIGATION_BAR_ITEMS } from '@/features/navigation-bar/NavigationBar.constants.ts';
 import { NavigationBarUtil } from '@/features/navigation-bar/NavigationBar.util.ts';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 
 export function DefaultNavBar() {
     const { title, action, override, isCollapsed, setIsCollapsed, setAppBarHeight, navBarWidth, setNavBarWidth } =
@@ -37,6 +38,7 @@ export function DefaultNavBar() {
     const { pathname } = useLocation();
     const handleBack = useBackButton();
     const isMobileWidth = MediaQuery.useIsMobileWidth();
+    const permissions = usePermissions();
 
     const {
         settings: { hideHistory },
@@ -44,7 +46,11 @@ export function DefaultNavBar() {
 
     const appBarRef = useRef<HTMLDivElement | null>(null);
 
-    const isMainRoute = NAVIGATION_BAR_ITEMS.some(({ path, show }) => {
+    const isMainRoute = NAVIGATION_BAR_ITEMS.some((item) => {
+        const { path, show } = item;
+        if ('requiredPermission' in item && item.requiredPermission && !permissions.has(item.requiredPermission)) {
+            return false;
+        }
         if (isMobileWidth && show === 'desktop') {
             return false;
         }
@@ -62,6 +68,7 @@ export function DefaultNavBar() {
             NavigationBarUtil.filterItems(NAVIGATION_BAR_ITEMS, {
                 hideHistory,
                 hideBoth: false,
+                permissions,
                 hideDesktop: isMobileWidth,
                 hideMobile: !isMobileWidth,
             }),

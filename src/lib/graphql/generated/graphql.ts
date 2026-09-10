@@ -5143,6 +5143,23 @@ export type UserRefreshMutation = {
     refreshToken: { __typename: 'RefreshTokenPayload'; accessToken: string };
 };
 
+export type GetCurrentUserProfileQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetCurrentUserProfileQuery = {
+    __typename: 'Query';
+    currentUserProfile: {
+        __typename: 'UserProfile';
+        id: number;
+        username: string;
+        displayName: string;
+        avatarUrl: string | null;
+        role: string;
+        description: string;
+        favoriteMangaIds: Array<number>;
+        permissions: Array<string>;
+    } | null;
+};
+
 export type WebviewClearCacheCookiesMutationVariables = Exact<{ [key: string]: never }>;
 
 export type WebviewClearCacheCookiesMutation = {

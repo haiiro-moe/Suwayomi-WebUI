@@ -38,6 +38,7 @@ const NAVIGATION_BAR_BASE_ITEMS = [
         IconComponent: CollectionsOutlinedBookmarkIcon,
         show: 'both',
         moreGroup: NavBarItemMoreGroup.GENERAL,
+        requiredPermission: 'library.read',
     },
     {
         path: AppRoutes.updates.path,
@@ -46,6 +47,7 @@ const NAVIGATION_BAR_BASE_ITEMS = [
         IconComponent: NewReleasesOutlinedIcon,
         show: 'both',
         moreGroup: NavBarItemMoreGroup.GENERAL,
+        requiredPermission: 'updates.read',
     },
     {
         path: AppRoutes.history.path,
@@ -62,6 +64,7 @@ const NAVIGATION_BAR_BASE_ITEMS = [
         IconComponent: ExploreOutlinedIcon,
         show: 'both',
         moreGroup: NavBarItemMoreGroup.GENERAL,
+        requiredPermission: 'browse.read',
         useBadge: () => {
             const { data } = requestManager.useGetExtensionList({ fetchPolicy: 'cache-only' });
 

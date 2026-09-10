@@ -180,6 +180,7 @@ export type CategoryType = {
     id: Scalars['Int']['output'];
     includeInDownload: IncludeOrExclude;
     includeInUpdate: IncludeOrExclude;
+    isDefaultCategory: Scalars['Boolean']['output'];
     mangas: MangaNodeList;
     meta: Array<CategoryMetaType>;
     name: Scalars['String']['output'];
@@ -425,6 +426,14 @@ export type CreateCategoryPayload = {
     clientMutationId?: Maybe<Scalars['String']['output']>;
 };
 
+export type CreateUserInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    displayName: Scalars['String']['input'];
+    password: Scalars['String']['input'];
+    roleId?: InputMaybe<Scalars['Int']['input']>;
+    username: Scalars['String']['input'];
+};
+
 export enum DatabaseType {
     H2 = 'H2',
     Postgresql = 'POSTGRESQL',
@@ -580,6 +589,11 @@ export type DeleteMangaMetasPayload = {
     metas: Array<MangaMetaType>;
 };
 
+export type DeleteRoleInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    roleId: Scalars['Int']['input'];
+};
+
 export type DeleteSourceMetaInput = {
     clientMutationId?: InputMaybe<Scalars['String']['input']>;
     key: Scalars['String']['input'];
@@ -609,6 +623,11 @@ export type DeleteSourceMetasPayload = {
     clientMutationId?: Maybe<Scalars['String']['output']>;
     metas: Array<SourceMetaType>;
     sources: Array<SourceType>;
+};
+
+export type DeleteUserInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    userId: Scalars['Int']['input'];
 };
 
 export type DequeueChapterDownloadInput = {
@@ -911,6 +930,11 @@ export type ExtensionType = {
     versionCode: Scalars['Int']['output'];
     versionCodeLong: Scalars['LongString']['output'];
     versionName: Scalars['String']['output'];
+};
+
+export type FavoriteMangaInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    mangaId: Scalars['Int']['input'];
 };
 
 export type FetchChapterPagesInput = {
@@ -1408,6 +1432,28 @@ export type MangaUpdateType = {
     status: MangaJobStatus;
 };
 
+export type MarkMessageReadInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    messageId: Scalars['Int']['input'];
+};
+
+export type MessageMutationPayload = {
+    __typename?: 'MessageMutationPayload';
+    clientMutationId?: Maybe<Scalars['String']['output']>;
+    messageId: Scalars['Int']['output'];
+};
+
+export type MessageType = {
+    __typename?: 'MessageType';
+    content: Scalars['String']['output'];
+    createdAt: Scalars['LongString']['output'];
+    id: Scalars['Int']['output'];
+    parentId?: Maybe<Scalars['Int']['output']>;
+    readAt?: Maybe<Scalars['LongString']['output']>;
+    receiverId: Scalars['Int']['output'];
+    senderId: Scalars['Int']['output'];
+};
+
 export type MetaConditionInput = {
     key?: InputMaybe<Scalars['String']['input']>;
     value?: InputMaybe<Scalars['String']['input']>;
@@ -1465,6 +1511,7 @@ export type MultiSelectListPreference = {
 export type Mutation = {
     __typename?: 'Mutation';
     addExtensionStore?: Maybe<AddExtensionStorePayload>;
+    addFavorite: ProfileMutationPayload;
     bindTrack: BindTrackPayload;
     bindTrackRecord?: Maybe<BindTrackRecordPayload>;
     clearCachedImages: ClearCachedImagesPayload;
@@ -1473,6 +1520,8 @@ export type Mutation = {
     connectKoSyncAccount: KoSyncConnectPayload;
     createBackup: CreateBackupPayload;
     createCategory?: Maybe<CreateCategoryPayload>;
+    createRole: UserAdminPayload;
+    createUser: UserAdminPayload;
     deleteCategory?: Maybe<DeleteCategoryPayload>;
     deleteCategoryMeta?: Maybe<DeleteCategoryMetaPayload>;
     deleteCategoryMetas?: Maybe<DeleteCategoryMetasPayload>;
@@ -1484,8 +1533,10 @@ export type Mutation = {
     deleteGlobalMetas?: Maybe<DeleteGlobalMetasPayload>;
     deleteMangaMeta?: Maybe<DeleteMangaMetaPayload>;
     deleteMangaMetas?: Maybe<DeleteMangaMetasPayload>;
+    deleteRole: OperationPayload;
     deleteSourceMeta?: Maybe<DeleteSourceMetaPayload>;
     deleteSourceMetas?: Maybe<DeleteSourceMetasPayload>;
+    deleteUser: OperationPayload;
     dequeueChapterDownload?: Maybe<DequeueChapterDownloadPayload>;
     dequeueChapterDownloads?: Maybe<DequeueChapterDownloadsPayload>;
     enqueueChapterDownload?: Maybe<EnqueueChapterDownloadPayload>;
@@ -1505,15 +1556,19 @@ export type Mutation = {
     loginTrackerOAuth: LoginTrackerOAuthPayload;
     logoutKoSyncAccount: LogoutKoSyncAccountPayload;
     logoutTracker: LogoutTrackerPayload;
+    markMessageRead: ProfileMutationPayload;
     pullKoSyncProgress?: Maybe<PullKoSyncProgressPayload>;
     pushKoSyncProgress?: Maybe<PushKoSyncProgressPayload>;
     refreshToken: RefreshTokenPayload;
     removeExtensionStore?: Maybe<RemoveExtensionStorePayload>;
+    removeFavorite: ProfileMutationPayload;
     reorderChapterDownload?: Maybe<ReorderChapterDownloadPayload>;
     reorderChapterDownloads?: Maybe<ReorderChapterDownloadPayload>;
     resetSettings: ResetSettingsPayload;
     resetWebUIUpdateStatus?: Maybe<WebUiUpdateStatus>;
     restoreBackup: RestoreBackupPayload;
+    sendMessage: MessageMutationPayload;
+    setCategoryAccess: SetCategoryAccessPayload;
     setCategoryMeta?: Maybe<SetCategoryMetaPayload>;
     setCategoryMetas?: Maybe<SetCategoryMetasPayload>;
     setChapterMeta?: Maybe<SetChapterMetaPayload>;
@@ -1544,14 +1599,21 @@ export type Mutation = {
     updateMangaCategories?: Maybe<UpdateMangaCategoriesPayload>;
     updateMangas?: Maybe<UpdateMangasPayload>;
     updateMangasCategories?: Maybe<UpdateMangasCategoriesPayload>;
+    updateProfile: ProfileMutationPayload;
+    updateRole: OperationPayload;
     updateSourcePreference?: Maybe<UpdateSourcePreferencePayload>;
     updateStop: UpdateStopPayload;
     updateTrack: UpdateTrackPayload;
+    updateUser: UpdateUserPayload;
     updateWebUI?: Maybe<WebUiUpdatePayload>;
 };
 
 export type MutationAddExtensionStoreArgs = {
     input: AddExtensionStoreInput;
+};
+
+export type MutationAddFavoriteArgs = {
+    input: FavoriteMangaInput;
 };
 
 export type MutationBindTrackArgs = {
@@ -1584,6 +1646,14 @@ export type MutationCreateBackupArgs = {
 
 export type MutationCreateCategoryArgs = {
     input: CreateCategoryInput;
+};
+
+export type MutationCreateRoleArgs = {
+    input: RoleInput;
+};
+
+export type MutationCreateUserArgs = {
+    input: CreateUserInput;
 };
 
 export type MutationDeleteCategoryArgs = {
@@ -1630,12 +1700,20 @@ export type MutationDeleteMangaMetasArgs = {
     input: DeleteMangaMetasInput;
 };
 
+export type MutationDeleteRoleArgs = {
+    input: DeleteRoleInput;
+};
+
 export type MutationDeleteSourceMetaArgs = {
     input: DeleteSourceMetaInput;
 };
 
 export type MutationDeleteSourceMetasArgs = {
     input: DeleteSourceMetasInput;
+};
+
+export type MutationDeleteUserArgs = {
+    input: DeleteUserInput;
 };
 
 export type MutationDequeueChapterDownloadArgs = {
@@ -1706,6 +1784,10 @@ export type MutationLogoutTrackerArgs = {
     input: LogoutTrackerInput;
 };
 
+export type MutationMarkMessageReadArgs = {
+    input: MarkMessageReadInput;
+};
+
 export type MutationPullKoSyncProgressArgs = {
     input: PullKoSyncProgressInput;
 };
@@ -1722,6 +1804,10 @@ export type MutationRemoveExtensionStoreArgs = {
     input: RemoveExtensionStoreInput;
 };
 
+export type MutationRemoveFavoriteArgs = {
+    input: FavoriteMangaInput;
+};
+
 export type MutationReorderChapterDownloadArgs = {
     input: ReorderChapterDownloadInput;
 };
@@ -1736,6 +1822,14 @@ export type MutationResetSettingsArgs = {
 
 export type MutationRestoreBackupArgs = {
     input: RestoreBackupInput;
+};
+
+export type MutationSendMessageArgs = {
+    input: SendMessageInput;
+};
+
+export type MutationSetCategoryAccessArgs = {
+    input: SetCategoryAccessInput;
 };
 
 export type MutationSetCategoryMetaArgs = {
@@ -1858,6 +1952,14 @@ export type MutationUpdateMangasCategoriesArgs = {
     input: UpdateMangasCategoriesInput;
 };
 
+export type MutationUpdateProfileArgs = {
+    input: UpdateProfileInput;
+};
+
+export type MutationUpdateRoleArgs = {
+    input: UpdateRoleInput;
+};
+
 export type MutationUpdateSourcePreferenceArgs = {
     input: UpdateSourcePreferenceInput;
 };
@@ -1868,6 +1970,10 @@ export type MutationUpdateStopArgs = {
 
 export type MutationUpdateTrackArgs = {
     input: UpdateTrackInput;
+};
+
+export type MutationUpdateUserArgs = {
+    input: UpdateUserInput;
 };
 
 export type MutationUpdateWebUiArgs = {
@@ -1909,6 +2015,12 @@ export type OsInfo = {
     build?: Maybe<Scalars['String']['output']>;
     name: Scalars['String']['output'];
     version: Scalars['String']['output'];
+};
+
+export type OperationPayload = {
+    __typename?: 'OperationPayload';
+    clientMutationId?: Maybe<Scalars['String']['output']>;
+    success: Scalars['Boolean']['output'];
 };
 
 export type PageInfo = {
@@ -1973,7 +2085,7 @@ export type PartialSettingsType = Settings & {
     excludeEntryWithUnreadChapters?: Maybe<Scalars['Boolean']['output']>;
     excludeNotStarted?: Maybe<Scalars['Boolean']['output']>;
     excludeUnreadChapters?: Maybe<Scalars['Boolean']['output']>;
-    /** @deprecated Replaced with addExtensionStore and removeExtensionStore mutations */
+    /** @deprecated Replaced with addExtensionStore and removeExtensionStore mutations, replace with extensionStores */
     extensionRepos?: Maybe<Array<Scalars['String']['output']>>;
     flareSolverrAsResponseFallback?: Maybe<Scalars['Boolean']['output']>;
     flareSolverrEnabled?: Maybe<Scalars['Boolean']['output']>;
@@ -2147,6 +2259,12 @@ export type Preference =
     | MultiSelectListPreference
     | SwitchPreference;
 
+export type ProfileMutationPayload = {
+    __typename?: 'ProfileMutationPayload';
+    clientMutationId?: Maybe<Scalars['String']['output']>;
+    updated: Scalars['Boolean']['output'];
+};
+
 export type PullKoSyncProgressInput = {
     chapterId: Scalars['Int']['input'];
     clientMutationId?: InputMaybe<Scalars['String']['input']>;
@@ -2181,6 +2299,9 @@ export type Query = {
     chapters: ChapterNodeList;
     checkForServerUpdates: Array<CheckForServerUpdatesPayload>;
     checkForWebUIUpdate: WebUiUpdateCheck;
+    conversation: Array<MessageType>;
+    currentUser?: Maybe<UserProfile>;
+    currentUserProfile?: Maybe<UserProfile>;
     downloadStatus: DownloadStatus;
     extension: ExtensionType;
     extensionStore: ExtensionStoreType;
@@ -2195,7 +2316,10 @@ export type Query = {
     mangas: MangaNodeList;
     meta: GlobalMetaType;
     metas: GlobalMetaNodeList;
+    permissionNodes: Array<Scalars['String']['output']>;
+    profile?: Maybe<UserProfile>;
     restoreStatus?: Maybe<BackupRestoreStatus>;
+    roles: Array<RoleType>;
     searchTracker: SearchTrackerPayload;
     settings: SettingsType;
     source: SourceType;
@@ -2204,8 +2328,11 @@ export type Query = {
     trackRecords: TrackRecordNodeList;
     tracker: TrackerType;
     trackers: TrackerNodeList;
+    unreadMessageCount: Scalars['LongString']['output'];
     /** @deprecated Replaced with libraryUpdateStatus, replace with libraryUpdateStatus */
     updateStatus: UpdateStatus;
+    userDirectory: Array<UserProfile>;
+    users: Array<UserProfile>;
     validateBackup: ValidateBackupResult;
 };
 
@@ -2237,6 +2364,14 @@ export type QueryChaptersArgs = {
     last?: InputMaybe<Scalars['Int']['input']>;
     offset?: InputMaybe<Scalars['Int']['input']>;
     order?: InputMaybe<Array<ChapterOrderInput>>;
+};
+
+export type QueryConversationArgs = {
+    otherUserId: Scalars['Int']['input'];
+};
+
+export type QueryCurrentUserArgs = {
+    userId: Scalars['Int']['input'];
 };
 
 export type QueryExtensionArgs = {
@@ -2297,6 +2432,10 @@ export type QueryMetasArgs = {
     last?: InputMaybe<Scalars['Int']['input']>;
     offset?: InputMaybe<Scalars['Int']['input']>;
     order?: InputMaybe<Array<MetaOrderInput>>;
+};
+
+export type QueryProfileArgs = {
+    userId: Scalars['Int']['input'];
 };
 
 export type QueryRestoreStatusArgs = {
@@ -2417,6 +2556,21 @@ export type RestoreBackupPayload = {
     status?: Maybe<BackupRestoreStatus>;
 };
 
+export type RoleInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    description: Scalars['String']['input'];
+    name: Scalars['String']['input'];
+    permissions: Array<Scalars['String']['input']>;
+};
+
+export type RoleType = {
+    __typename?: 'RoleType';
+    description: Scalars['String']['output'];
+    id: Scalars['Int']['output'];
+    name: Scalars['String']['output'];
+    permissions: Array<Scalars['String']['output']>;
+};
+
 export type SearchTrackerInput = {
     query: Scalars['String']['input'];
     trackerId: Scalars['Int']['input'];
@@ -2434,9 +2588,30 @@ export type SelectFilter = {
     values: Array<Scalars['String']['output']>;
 };
 
+export type SendMessageInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    content: Scalars['String']['input'];
+    parentId?: InputMaybe<Scalars['Int']['input']>;
+    receiverId: Scalars['Int']['input'];
+};
+
 export type SeparatorFilter = {
     __typename?: 'SeparatorFilter';
     name: Scalars['String']['output'];
+};
+
+export type SetCategoryAccessInput = {
+    canEdit: Scalars['Boolean']['input'];
+    canRead: Scalars['Boolean']['input'];
+    categoryId: Scalars['Int']['input'];
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    userId: Scalars['Int']['input'];
+};
+
+export type SetCategoryAccessPayload = {
+    __typename?: 'SetCategoryAccessPayload';
+    clientMutationId?: Maybe<Scalars['String']['output']>;
+    updated: Scalars['Boolean']['output'];
 };
 
 export type SetCategoryMetaInput = {
@@ -2623,7 +2798,7 @@ export type Settings = {
     excludeEntryWithUnreadChapters?: Maybe<Scalars['Boolean']['output']>;
     excludeNotStarted?: Maybe<Scalars['Boolean']['output']>;
     excludeUnreadChapters?: Maybe<Scalars['Boolean']['output']>;
-    /** @deprecated Replaced with addExtensionStore and removeExtensionStore mutations */
+    /** @deprecated Replaced with addExtensionStore and removeExtensionStore mutations, replace with extensionStores */
     extensionRepos?: Maybe<Array<Scalars['String']['output']>>;
     flareSolverrAsResponseFallback?: Maybe<Scalars['Boolean']['output']>;
     flareSolverrEnabled?: Maybe<Scalars['Boolean']['output']>;
@@ -2778,7 +2953,7 @@ export type SettingsType = Settings & {
     excludeEntryWithUnreadChapters: Scalars['Boolean']['output'];
     excludeNotStarted: Scalars['Boolean']['output'];
     excludeUnreadChapters: Scalars['Boolean']['output'];
-    /** @deprecated Replaced with addExtensionStore and removeExtensionStore mutations */
+    /** @deprecated Replaced with addExtensionStore and removeExtensionStore mutations, replace with extensionStores */
     extensionRepos: Array<Scalars['String']['output']>;
     flareSolverrAsResponseFallback: Scalars['Boolean']['output'];
     flareSolverrEnabled: Scalars['Boolean']['output'];
@@ -3536,6 +3711,19 @@ export type UpdateMangasPayload = {
     mangas: Array<MangaType>;
 };
 
+export type UpdateProfileInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    description: Scalars['String']['input'];
+};
+
+export type UpdateRoleInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    description: Scalars['String']['input'];
+    name: Scalars['String']['input'];
+    permissions: Array<Scalars['String']['input']>;
+    roleId: Scalars['Int']['input'];
+};
+
 export type UpdateSourcePreferenceInput = {
     change: SourcePreferenceChangeInput;
     clientMutationId?: InputMaybe<Scalars['String']['input']>;
@@ -3612,6 +3800,20 @@ export type UpdateTrackPayload = {
     trackRecord?: Maybe<TrackRecordType>;
 };
 
+export type UpdateUserInput = {
+    avatarUrl?: InputMaybe<Scalars['String']['input']>;
+    displayName?: InputMaybe<Scalars['String']['input']>;
+    enabled?: InputMaybe<Scalars['Boolean']['input']>;
+    id: Scalars['Int']['input'];
+    password?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateUserPayload = {
+    __typename?: 'UpdateUserPayload';
+    clientMutationId?: Maybe<Scalars['String']['output']>;
+    updated: Scalars['Boolean']['output'];
+};
+
 export type UpdaterJobsInfoType = {
     __typename?: 'UpdaterJobsInfoType';
     finishedJobs: Scalars['Int']['output'];
@@ -3630,6 +3832,24 @@ export type UpdaterUpdates = {
     mangaUpdates: Array<MangaUpdateType>;
     /** Indicates whether updates have been omitted based on the "maxUpdates" subscription variable. In case updates have been omitted, the "updateStatus" query should be re-fetched. */
     omittedUpdates: Scalars['Boolean']['output'];
+};
+
+export type UserAdminPayload = {
+    __typename?: 'UserAdminPayload';
+    clientMutationId?: Maybe<Scalars['String']['output']>;
+    id: Scalars['Int']['output'];
+};
+
+export type UserProfile = {
+    __typename?: 'UserProfile';
+    avatarUrl?: Maybe<Scalars['String']['output']>;
+    description: Scalars['String']['output'];
+    displayName: Scalars['String']['output'];
+    favoriteMangaIds: Array<Scalars['Int']['output']>;
+    id: Scalars['Int']['output'];
+    permissions: Array<Scalars['String']['output']>;
+    role: Scalars['String']['output'];
+    username: Scalars['String']['output'];
 };
 
 export type ValidateBackupInput = {

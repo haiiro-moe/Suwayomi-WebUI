@@ -56,6 +56,8 @@ import type {
     EnqueueChapterDownloadsMutationVariables,
     GetAboutQuery,
     GetAboutQueryVariables,
+    GetCurrentUserProfileQuery,
+    GetCurrentUserProfileQueryVariables,
     GetCategoriesSettingsQuery,
     GetCategoriesSettingsQueryVariables,
     GetCategoryMangasQuery,
@@ -346,6 +348,7 @@ import type { MetadataMigrationSettings } from '@/features/migration/Migration.t
 import type { MangaIdInfo } from '@/features/manga/Manga.types.ts';
 import { updateMetadataList } from '@/features/metadata/services/MetadataApolloCacheHandler.ts';
 import { USER_LOGIN, USER_REFRESH } from '@/lib/graphql/user/UserMutation.ts';
+import { GET_CURRENT_USER_PROFILE } from '@/lib/graphql/user/UserQuery.ts';
 import { AuthManager } from '@/features/authentication/AuthManager.ts';
 import { useLocalStorage } from '@/base/hooks/useStorage.tsx';
 import { KO_SYNC_LOGIN, KO_SYNC_LOGOUT } from '@/lib/graphql/koreader/KoreaderSyncMutation.ts';
@@ -1428,6 +1431,12 @@ export class RequestManager {
         options?: QueryHookOptions<GetAboutQuery, GetAboutQueryVariables>,
     ): AbortableApolloUseQueryResponse<GetAboutQuery, GetAboutQueryVariables> {
         return this.doRequest(GQLMethod.USE_QUERY, GET_ABOUT, {}, options);
+    }
+
+    public useGetCurrentUserProfile(
+        options?: QueryHookOptions<GetCurrentUserProfileQuery, GetCurrentUserProfileQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetCurrentUserProfileQuery, GetCurrentUserProfileQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_CURRENT_USER_PROFILE, {}, options);
     }
 
     public useCheckForServerUpdate(
