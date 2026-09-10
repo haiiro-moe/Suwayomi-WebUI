@@ -770,6 +770,7 @@ msgstr "Can't migrate an entry to itself"
 #: src/base/components/settings/SelectSetting.tsx
 #: src/base/components/settings/text/TextSettingDialog.tsx
 #: src/base/components/settings/TimeSetting.tsx
+#: src/features/admin/screens/Admin.tsx
 #: src/features/backup/component/BackupFlagInclusionDialog.tsx
 #: src/features/backup/component/BackupValidationDialog.tsx
 #: src/features/category/components/CategoriesInclusionSetting.tsx
@@ -993,6 +994,10 @@ msgstr "Completed"
 #: src/features/settings/components/images/Processing.tsx
 msgid "Compression level"
 msgstr "Compression level"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Confirm"
+msgstr "Confirm"
 
 #: src/features/settings/components/images/Processing.tsx
 msgid "Connect timeout"
@@ -1450,6 +1455,10 @@ msgstr "Delete search"
 msgid "Delete selected"
 msgstr "Delete selected"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "Delete this user?"
+msgstr "Delete this user?"
+
 #. placeholder {0}: theme.getName()
 #: src/features/theme/components/ThemeList.tsx
 msgid "Deleted theme \"{0}\""
@@ -1635,6 +1644,7 @@ msgstr "Dynamic theme colors on manga page"
 msgid "Edge"
 msgstr "Edge"
 
+#: src/features/admin/screens/Admin.tsx
 #: src/features/category/components/CategorySelect.tsx
 #: src/features/category/components/CategorySettingsCard.tsx
 #: src/features/manga/components/details/MangaNotes.tsx
@@ -1686,6 +1696,10 @@ msgstr "Enable page read progress"
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "Enable the WebView via CEF (Chromium)"
 msgstr "Enable the WebView via CEF (Chromium)"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Enabled"
+msgstr "Enabled"
 
 #: src/base/components/inputs/LanguageSelect.tsx
 msgid "Enabled languages"
@@ -1849,6 +1863,10 @@ msgstr "Failed to save changes"
 #: src/features/profile/screens/Profile.tsx
 msgid "Failed to save profile"
 msgstr "Failed to save profile"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Failed to update user"
+msgstr "Failed to update user"
 
 #: src/features/profile/screens/Profile.tsx
 msgid "Favorites"
@@ -2729,6 +2747,10 @@ msgstr "Never"
 msgid "New category"
 msgstr "New category"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "New password"
+msgstr "New password"
+
 #: src/features/reader/tap-zones/ReaderTapZone.constants.ts
 msgid "Next"
 msgstr "Next"
@@ -3267,6 +3289,7 @@ msgstr "Right and left"
 msgid "Right to left"
 msgstr "Right to left"
 
+#: src/features/admin/screens/Admin.tsx
 #: src/features/profile/screens/Profile.tsx
 msgid "Role"
 msgstr "Role"
@@ -3275,6 +3298,7 @@ msgstr "Role"
 msgid "Rosegold"
 msgstr "Rosegold"
 
+#: src/features/admin/screens/Admin.tsx
 #: src/features/manga/components/details/MangaNotes.tsx
 #: src/features/settings/screens/ImageProcessingSetting.tsx
 #: src/features/theme/components/CreateThemeDialog.tsx
@@ -3432,6 +3456,10 @@ msgstr "Select enabled sources"
 #: src/features/migration/screens/MigrationSelectDestinationSources.tsx
 msgid "Select pinned sources"
 msgstr "Select pinned sources"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Select role"
+msgstr "Select role"
 
 #: src/features/migration/components/MigrationDestinationSourceList.tsx
 msgid "Selected"

@@ -430,7 +430,7 @@ export type CreateUserInput = {
     clientMutationId?: InputMaybe<Scalars['String']['input']>;
     displayName: Scalars['String']['input'];
     password: Scalars['String']['input'];
-    roleId?: InputMaybe<Scalars['Int']['input']>;
+    roleId: Scalars['Int']['input'];
     username: Scalars['String']['input'];
 };
 
@@ -3802,10 +3802,12 @@ export type UpdateTrackPayload = {
 
 export type UpdateUserInput = {
     avatarUrl?: InputMaybe<Scalars['String']['input']>;
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
     displayName?: InputMaybe<Scalars['String']['input']>;
     enabled?: InputMaybe<Scalars['Boolean']['input']>;
     id: Scalars['Int']['input'];
     password?: InputMaybe<Scalars['String']['input']>;
+    roleId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateUserPayload = {
