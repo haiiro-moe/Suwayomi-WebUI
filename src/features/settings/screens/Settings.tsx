@@ -17,7 +17,6 @@ import DnsIcon from '@mui/icons-material/Dns';
 import WebIcon from '@mui/icons-material/Web';
 import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
 import DevicesIcon from '@mui/icons-material/Devices';
-import SyncIcon from '@mui/icons-material/Sync';
 import PaletteIcon from '@mui/icons-material/Palette';
 import HistoryIcon from '@mui/icons-material/History';
 import ImageIcon from '@mui/icons-material/Image';
@@ -62,12 +61,6 @@ export function Settings() {
                     <ImageIcon />
                 </ListItemIcon>
                 <ListItemText primary={t`Images`} />
-            </ListItemLink>
-            <ListItemLink to={AppRoutes.settings.children.tracking.path}>
-                <ListItemIcon>
-                    <SyncIcon />
-                </ListItemIcon>
-                <ListItemText primary={t`Tracking`} />
             </ListItemLink>
             <ListItemLink to={AppRoutes.settings.children.backup.path}>
                 <ListItemIcon>

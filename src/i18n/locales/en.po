@@ -4006,7 +4006,6 @@ msgstr "Trackers"
 #: src/features/backup/Backup.constants.ts
 #: src/features/manga/components/TrackMangaButton.tsx
 #: src/features/migration/components/MigrationOptionsDialog.tsx
-#: src/features/settings/screens/Settings.tsx
 #: src/features/tracker/screens/TrackingSettings.tsx
 msgid "Tracking"
 msgstr "Tracking"

@@ -81,14 +81,6 @@ const { BrowseSettings } = loadable(() => import('@/features/browse/screens/Brow
 const { WebUISettings } = loadable(() => import('@/features/settings/screens/WebUISettings.tsx'), lazyLoadFallback);
 const { Migration } = loadable(() => import('@/features/migration/screens/Migration.tsx'), lazyLoadFallback);
 const { DeviceSetting } = loadable(() => import('@/features/device/screens/DeviceSetting.tsx'), lazyLoadFallback);
-const { TrackingSettings } = loadable(
-    () => import('@/features/tracker/screens/TrackingSettings.tsx'),
-    lazyLoadFallback,
-);
-const { TrackerOAuthLogin } = loadable(
-    () => import('@/features/tracker/screens/TrackerOAuthLogin.tsx'),
-    lazyLoadFallback,
-);
 const { LibraryDuplicates } = loadable(
     () => import('@/features/library/screens/LibraryDuplicates.tsx'),
     lazyLoadFallback,
@@ -338,7 +330,6 @@ const MainApp = () => {
                             </Route>
                             <Route path={AppRoutes.settings.children.history.match} element={<HistorySettings />} />
                             <Route path={AppRoutes.settings.children.device.match} element={<DeviceSetting />} />
-                            <Route path={AppRoutes.settings.children.tracking.match} element={<TrackingSettings />} />
                             <Route path={AppRoutes.settings.children.appearance.match} element={<Appearance />} />
                         </Route>
 
@@ -377,7 +368,6 @@ const MainApp = () => {
                                 element={<MigrationManualSearch />}
                             />
                         </Route>
-                        <Route path={AppRoutes.tracker.match} element={<TrackerOAuthLogin />} />
                     </Route>
                 </Routes>
             </ErrorBoundary>
