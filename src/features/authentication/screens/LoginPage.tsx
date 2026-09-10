@@ -39,8 +39,11 @@ export const LoginPage = () => {
 
     const [redirect] = useQueryParam(SearchParam.REDIRECT, StringParam);
     const [loginUser, { loading: isLoading }] = requestManager.useLoginUser();
-    const { data: onboardingData } = useQuery(ONBOARDING_STATUS);
-    const [setupOwner, { loading: isSettingUp }] = useMutation(SETUP_OWNER);
+    const { data: onboardingData } = useQuery<{ onboardingStatus: boolean }>(ONBOARDING_STATUS);
+    const [setupOwner, { loading: isSettingUp }] = useMutation<
+        { setupOwner: { accessToken: string; refreshToken: string } },
+        { username: string; password: string }
+    >(SETUP_OWNER);
     const onboardingRequired = onboardingData?.onboardingStatus === true;
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
