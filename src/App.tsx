@@ -28,6 +28,7 @@ import { MediaQuery } from '@/base/utils/MediaQuery.tsx';
 import { BrowseTab } from '@/features/browse/Browse.types.ts';
 import { LoginPage } from '@/features/authentication/screens/LoginPage.tsx';
 import { AuthGuard } from '@/features/authentication/components/AuthGuard.tsx';
+import { PermissionGuard } from '@/features/authentication/components/PermissionGuard.tsx';
 import { SearchParam } from '@/base/Base.types.ts';
 import { defaultPromiseErrorHandler } from '@/lib/DefaultPromiseErrorHandler.ts';
 import { ReactRouter } from '@/lib/react-router/ReactRouter.ts';
@@ -234,7 +235,7 @@ const PrivateRoutes = () => {
             <Navigate
                 to={{
                     pathname: AppRoutes.authentication.children.login.path,
-                    search: `${SearchParam.REDIRECT}=${window.location.pathname}`,
+                    search: `${SearchParam.REDIRECT}=${encodeURIComponent(window.location.pathname + window.location.search + window.location.hash)}`,
                 }}
                 replace
             />
@@ -286,7 +287,9 @@ const MainApp = () => {
                         {isMobileWidth && <Route path={AppRoutes.more.match} element={<More />} />}
                         <Route path={AppRoutes.about.match} element={<About />} />
                         <Route path={AppRoutes.profile.match} element={<Profile />} />
-                        <Route path={AppRoutes.admin.match} element={<Admin />} />
+                        <Route element={<PermissionGuard permission="admin.users.manage" />}>
+                            <Route path={AppRoutes.admin.match} element={<Admin />} />
+                        </Route>
                         <Route path={AppRoutes.settings.match}>
                             <Route index element={<Settings />} />
                             <Route path={AppRoutes.settings.children.categories.match} element={<CategorySettings />} />
@@ -362,7 +365,6 @@ const MainApp = () => {
                         <Route path={AppRoutes.library.match} element={<Library />} />
                         <Route path={AppRoutes.updates.match} element={<Updates />} />
                         {!hideHistory && <Route path={AppRoutes.history.match} element={<History />} />}
-                        <Route path={AppRoutes.browse.match} element={<Browse />} />
                         <Route path={AppRoutes.browse.match} element={<Browse />} />
                         <Route path={AppRoutes.migrate.match}>
                             <Route index element={<Migration />} />
