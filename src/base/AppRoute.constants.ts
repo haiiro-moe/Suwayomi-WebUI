@@ -50,6 +50,22 @@ export const AppRoutes = {
         match: 'profile',
         path: '/profile',
     },
+    userDirectory: {
+        match: 'users',
+        path: '/users',
+    },
+    userProfile: {
+        match: 'users/:userId',
+        path: (userId: number) => `/users/${userId}`,
+    },
+    conversation: {
+        match: 'messages/:userId',
+        path: (userId: number) => `/messages/${userId}`,
+    },
+    inbox: {
+        match: 'messages',
+        path: '/messages',
+    },
     admin: {
         match: 'admin',
         path: '/admin',

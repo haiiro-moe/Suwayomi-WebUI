@@ -134,6 +134,16 @@ msgstr "{0} / {1}"
 msgid "{0} / {1}{2}"
 msgstr "{0} / {1}{2}"
 
+#. placeholder {0}: profile.favoriteMangaIds.length
+#: src/features/community/screens/UserProfile.tsx
+msgid "{0} manga"
+msgstr "{0} manga"
+
+#. placeholder {0}: rolePermissions.length
+#: src/features/admin/screens/Admin.tsx
+msgid "{0} selected"
+msgstr "{0} selected"
+
 #. placeholder {0}: updateStatus.progress
 #: src/features/app-updates/components/WebUIUpdateChecker.tsx
 msgid "{0}% | Updating…"
@@ -378,6 +388,7 @@ msgstr "Abort migration"
 msgid "Aborted"
 msgstr "Aborted"
 
+#: src/features/community/screens/UserProfile.tsx
 #: src/features/navigation-bar/NavigationBar.constants.ts
 #: src/features/profile/screens/Profile.tsx
 #: src/features/settings/screens/About.tsx
@@ -1045,6 +1056,10 @@ msgid "Controls the MimeType that Suwayomi sends in OPDS entries for CBZ archive
 msgstr "Controls the MimeType that Suwayomi sends in OPDS entries for CBZ archives. Also affects global CBZ download.\n"
 "Modern follows recent IANA standard (2017), while LEGACY (deprecated mimetype for .cbz) and COMPATIBLE (deprecated mimetype for all comic archives) might be more compatible with older clients."
 
+#: src/features/community/screens/Conversation.tsx
+msgid "Conversation"
+msgstr "Conversation"
+
 #: src/features/settings/Settings.constants.ts
 msgid "Convert images to different formats"
 msgstr "Convert images to different formats"
@@ -1278,6 +1293,10 @@ msgstr "Could not validate backup"
 #: src/features/reader/hotkeys/settings/components/RecordHotkey.tsx
 msgid "Create"
 msgstr "Create"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Create a role and choose the permissions it should have."
+msgstr "Create a role and choose the permissions it should have."
 
 #: src/features/backup/screens/Backup.tsx
 msgid "Create backup"
@@ -1677,6 +1696,10 @@ msgstr "Edit manga categories"
 msgid "Edit notes"
 msgstr "Edit notes"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "Edit role details and permissions."
+msgstr "Edit role details and permissions."
+
 #: src/features/theme/components/CreateThemeDialog.tsx
 msgid "Edit theme"
 msgstr "Edit theme"
@@ -1883,6 +1906,7 @@ msgstr "Failed to save role"
 msgid "Failed to update user"
 msgstr "Failed to update user"
 
+#: src/features/community/screens/UserProfile.tsx
 #: src/features/profile/screens/Profile.tsx
 msgid "Favorites"
 msgstr "Favorites"
@@ -2630,6 +2654,15 @@ msgstr "Menu"
 msgid "Merging"
 msgstr "Merging"
 
+#: src/features/community/screens/UserProfile.tsx
+msgid "Message"
+msgstr "Message"
+
+#: src/features/community/screens/Inbox.tsx
+#: src/features/navigation-bar/NavigationBar.constants.ts
+msgid "Messages"
+msgstr "Messages"
+
 #: src/features/browse/screens/Browse.tsx
 #: src/features/manga/components/MangaToolbarMenu.tsx
 #: src/features/manga/Manga.constants.ts
@@ -2791,6 +2824,10 @@ msgstr "No chapters found"
 #: src/features/chapter/components/ChapterList.tsx
 msgid "No chapters matching filter"
 msgstr "No chapters matching filter"
+
+#: src/features/community/screens/UserProfile.tsx
+msgid "No description"
+msgstr "No description"
 
 #: src/features/downloads/screens/DownloadQueue.tsx
 msgid "No downloads"
@@ -2990,6 +3027,7 @@ msgid "Original size"
 msgstr "Original size"
 
 #: src/base/utils/Languages.ts
+#: src/features/admin/screens/Admin.tsx
 #: src/features/extension/Extensions.constants.ts
 #: src/features/library/components/LibraryOptionsPanel.tsx
 msgid "Other"
@@ -3094,6 +3132,7 @@ msgstr "Previous page"
 msgid "Previous:"
 msgstr "Previous:"
 
+#: src/features/community/screens/UserProfile.tsx
 #: src/features/navigation-bar/NavigationBar.constants.ts
 #: src/features/profile/screens/Profile.tsx
 msgid "Profile"
@@ -3114,6 +3153,10 @@ msgstr "Progress bar style"
 #: src/features/settings/Settings.constants.ts
 msgid "Prompt"
 msgstr "Prompt"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Protected"
+msgstr "Protected"
 
 #: src/features/manga/Manga.constants.ts
 msgid "Publishing finished"
@@ -3243,6 +3286,7 @@ msgstr "Removed non library manga from categories"
 
 #: src/base/components/buttons/ResetButton.tsx
 #: src/base/components/settings/CheckboxListSetting.tsx
+#: src/features/admin/screens/Admin.tsx
 #: src/features/reader/hotkeys/settings/components/RecordHotkey.tsx
 #: src/features/source/browse/components/SourceOptions.tsx
 msgid "Reset"
@@ -3428,6 +3472,10 @@ msgstr "Search parameters"
 msgid "Search parameters ({0})"
 msgstr "Search parameters ({0})"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "Search permissions"
+msgstr "Search permissions"
+
 #: src/features/migration/screens/MigrationSearch.tsx
 msgid "Search results"
 msgstr "Search results"
@@ -3495,6 +3543,10 @@ msgstr "Select role"
 #: src/features/migration/components/MigrationDestinationSourceList.tsx
 msgid "Selected"
 msgstr "Selected"
+
+#: src/features/community/screens/Conversation.tsx
+msgid "Send"
+msgstr "Send"
 
 #: src/features/reader/filters/settings/components/ReaderSettingSepia.tsx
 msgid "Sepia"
@@ -3765,6 +3817,10 @@ msgstr "Standard"
 #: src/features/manga/components/ResumeFAB.tsx
 msgid "Start"
 msgstr "Start"
+
+#: src/features/community/screens/Inbox.tsx
+msgid "Start a conversation"
+msgstr "Start a conversation"
 
 #: src/features/tracker/components/cards/TrackerActiveCard.tsx
 msgid "Start date"
@@ -4128,6 +4184,10 @@ msgstr "UI Login"
 msgid "Unable to load administration"
 msgstr "Unable to load administration"
 
+#: src/features/community/screens/Conversation.tsx
+msgid "Unable to load conversation"
+msgstr "Unable to load conversation"
+
 #: src/features/backup/screens/Backup.tsx
 #: src/features/browse/extensions/Extensions.tsx
 #: src/features/browse/screens/BrowseSettings.tsx
@@ -4169,6 +4229,7 @@ msgstr "Unable to load data"
 msgid "Unable to load extension stores"
 msgstr "Unable to load extension stores"
 
+#: src/features/community/screens/UserProfile.tsx
 #: src/features/profile/screens/Profile.tsx
 msgid "Unable to load profile"
 msgstr "Unable to load profile"
@@ -4176,6 +4237,10 @@ msgstr "Unable to load profile"
 #: src/features/migration/screens/MigrationSelectDestinationSources.tsx
 msgid "Unable to load sources"
 msgstr "Unable to load sources"
+
+#: src/features/community/screens/UserDirectory.tsx
+msgid "Unable to load user directory"
+msgstr "Unable to load user directory"
 
 #: src/features/migration/MigrationManager.ts
 #: src/features/settings/screens/ServerSettings.tsx
@@ -4322,12 +4387,25 @@ msgstr "Use the version that was delivered with the server release"
 msgid "User administration"
 msgstr "User administration"
 
+#: src/features/community/screens/UserDirectory.tsx
+msgid "User directory"
+msgstr "User directory"
+
+#: src/features/community/screens/UserProfile.tsx
+msgid "User profile"
+msgstr "User profile"
+
 #: src/base/components/modals/LoginDialog.tsx
 #: src/features/admin/screens/Admin.tsx
 #: src/features/authentication/screens/LoginPage.tsx
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "Username"
 msgstr "Username"
+
+#: src/features/community/screens/UserDirectory.tsx
+#: src/features/navigation-bar/NavigationBar.constants.ts
+msgid "Users"
+msgstr "Users"
 
 #: src/features/settings/components/images/KeyValueItem.tsx
 msgid "Value"
@@ -4424,6 +4502,10 @@ msgstr "With \"Completed\" status"
 #: src/features/settings/Settings.constants.ts
 msgid "With unread chapter(s)"
 msgstr "With unread chapter(s)"
+
+#: src/features/community/screens/Conversation.tsx
+msgid "Write a message"
+msgstr "Write a message"
 
 #: src/base/utils/DateHelper.ts
 msgid "Yesterday"

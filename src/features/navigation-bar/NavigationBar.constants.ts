@@ -21,6 +21,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import PeopleIcon from '@mui/icons-material/People';
 import { useLingui } from '@lingui/react/macro';
 import { msg, plural } from '@lingui/core/macro';
 import type { NavbarItem } from '@/features/navigation-bar/NavigationBar.types.ts';
@@ -136,6 +137,22 @@ const NAVIGATION_BAR_DESKTOP_ITEMS = [
         title: msg`About`,
         SelectedIconComponent: InfoIcon,
         IconComponent: InfoIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+    },
+    {
+        path: AppRoutes.userDirectory.path,
+        title: msg`Users`,
+        SelectedIconComponent: PeopleIcon,
+        IconComponent: PeopleIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+    },
+    {
+        path: AppRoutes.inbox.path,
+        title: msg`Messages`,
+        SelectedIconComponent: AccountCircleIcon,
+        IconComponent: AccountCircleIcon,
         show: 'desktop',
         moreGroup: NavBarItemMoreGroup.SETTING_INFO,
     },

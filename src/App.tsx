@@ -52,6 +52,10 @@ const { MigrationManualSearch } = loadable(
 const { Settings } = loadable(() => import('@/features/settings/screens/Settings.tsx'), lazyLoadFallback);
 const { About } = loadable(() => import('@/features/settings/screens/About.tsx'), lazyLoadFallback);
 const { Profile } = loadable(() => import('@/features/profile/screens/Profile.tsx'), lazyLoadFallback);
+const { UserDirectory } = loadable(() => import('@/features/community/screens/UserDirectory.tsx'), lazyLoadFallback);
+const { UserProfile } = loadable(() => import('@/features/community/screens/UserProfile.tsx'), lazyLoadFallback);
+const { Inbox } = loadable(() => import('@/features/community/screens/Inbox.tsx'), lazyLoadFallback);
+const { Conversation } = loadable(() => import('@/features/community/screens/Conversation.tsx'), lazyLoadFallback);
 const { Admin } = loadable(() => import('@/features/admin/screens/Admin.tsx'), lazyLoadFallback);
 const { Backup } = loadable(() => import('@/features/backup/screens/Backup.tsx'), lazyLoadFallback);
 const { CategorySettings } = loadable(
@@ -287,6 +291,10 @@ const MainApp = () => {
                         {isMobileWidth && <Route path={AppRoutes.more.match} element={<More />} />}
                         <Route path={AppRoutes.about.match} element={<About />} />
                         <Route path={AppRoutes.profile.match} element={<Profile />} />
+                        <Route path={AppRoutes.userDirectory.match} element={<UserDirectory />} />
+                        <Route path={AppRoutes.userProfile.match} element={<UserProfile />} />
+                        <Route path={AppRoutes.inbox.match} element={<Inbox />} />
+                        <Route path={AppRoutes.conversation.match} element={<Conversation />} />
                         <Route element={<PermissionGuard permission="admin.users.manage" />}>
                             <Route path={AppRoutes.admin.match} element={<Admin />} />
                         </Route>

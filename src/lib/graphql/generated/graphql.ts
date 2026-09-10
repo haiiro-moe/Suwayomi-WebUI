@@ -5194,6 +5194,80 @@ export type UpdaterSubscription = {
     };
 };
 
+export type GetUserDirectoryQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserDirectoryQuery = {
+    __typename: 'Query';
+    userDirectory: Array<{
+        __typename: 'UserProfile';
+        id: number;
+        username: string;
+        displayName: string;
+        avatarUrl: string | null;
+        role: string;
+        description: string;
+        favoriteMangaIds: Array<number>;
+    }>;
+};
+
+export type GetUserProfileQueryVariables = Exact<{
+    userId: number;
+}>;
+
+export type GetUserProfileQuery = {
+    __typename: 'Query';
+    profile: {
+        __typename: 'UserProfile';
+        id: number;
+        username: string;
+        displayName: string;
+        avatarUrl: string | null;
+        role: string;
+        description: string;
+        favoriteMangaIds: Array<number>;
+    } | null;
+};
+
+export type GetConversationQueryVariables = Exact<{
+    otherUserId: number;
+}>;
+
+export type GetConversationQuery = {
+    __typename: 'Query';
+    conversation: Array<{
+        __typename: 'MessageType';
+        id: number;
+        senderId: number;
+        receiverId: number;
+        content: string;
+        createdAt: string;
+        readAt: string | null;
+        parentId: number | null;
+    }>;
+};
+
+export type GetUnreadMessageCountQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUnreadMessageCountQuery = { __typename: 'Query'; unreadMessageCount: string };
+
+export type SendMessageMutationVariables = Exact<{
+    input: Types.SendMessageInput;
+}>;
+
+export type SendMessageMutation = {
+    __typename: 'Mutation';
+    sendMessage: { __typename: 'MessageMutationPayload'; messageId: number };
+};
+
+export type MarkMessageReadMutationVariables = Exact<{
+    input: Types.MarkMessageReadInput;
+}>;
+
+export type MarkMessageReadMutation = {
+    __typename: 'Mutation';
+    markMessageRead: { __typename: 'ProfileMutationPayload'; updated: boolean };
+};
+
 export type UserLoginMutationVariables = Exact<{
     password: string;
     username: string;

@@ -70,6 +70,18 @@ import type {
     GetAdminUsersQueryVariables,
     GetCurrentUserProfileQuery,
     GetCurrentUserProfileQueryVariables,
+    GetUserDirectoryQuery,
+    GetUserDirectoryQueryVariables,
+    GetUserProfileQuery,
+    GetUserProfileQueryVariables,
+    GetConversationQuery,
+    GetConversationQueryVariables,
+    GetUnreadMessageCountQuery,
+    GetUnreadMessageCountQueryVariables,
+    SendMessageMutation,
+    SendMessageMutationVariables,
+    MarkMessageReadMutation,
+    MarkMessageReadMutationVariables,
     GetUserSettingsQuery,
     GetUserSettingsQueryVariables,
     SetUserSettingsMutation,
@@ -373,6 +385,14 @@ import type { MangaIdInfo } from '@/features/manga/Manga.types.ts';
 import { updateMetadataList } from '@/features/metadata/services/MetadataApolloCacheHandler.ts';
 import { UPDATE_PROFILE, USER_LOGIN, USER_REFRESH } from '@/lib/graphql/user/UserMutation.ts';
 import { GET_CURRENT_USER_PROFILE } from '@/lib/graphql/user/UserQuery.ts';
+import {
+    GET_CONVERSATION,
+    GET_UNREAD_MESSAGE_COUNT,
+    GET_USER_DIRECTORY,
+    GET_USER_PROFILE,
+    MARK_MESSAGE_READ,
+    SEND_MESSAGE,
+} from '@/lib/graphql/user/UserCommunity.ts';
 import { GET_USER_SETTINGS, RESET_USER_SETTINGS, SET_USER_SETTINGS } from '@/lib/graphql/user/UserSettings.ts';
 import {
     CREATE_ROLE,
@@ -1471,6 +1491,44 @@ export class RequestManager {
         options?: QueryHookOptions<GetCurrentUserProfileQuery, GetCurrentUserProfileQueryVariables>,
     ): AbortableApolloUseQueryResponse<GetCurrentUserProfileQuery, GetCurrentUserProfileQueryVariables> {
         return this.doRequest(GQLMethod.USE_QUERY, GET_CURRENT_USER_PROFILE, {}, options);
+    }
+
+    public useGetUserDirectory(
+        options?: QueryHookOptions<GetUserDirectoryQuery, GetUserDirectoryQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetUserDirectoryQuery, GetUserDirectoryQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_USER_DIRECTORY, {}, options);
+    }
+
+    public useGetUserProfile(
+        variables: GetUserProfileQueryVariables,
+        options?: QueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetUserProfileQuery, GetUserProfileQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_USER_PROFILE, variables, options);
+    }
+
+    public useGetConversation(
+        variables: GetConversationQueryVariables,
+        options?: QueryHookOptions<GetConversationQuery, GetConversationQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetConversationQuery, GetConversationQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_CONVERSATION, variables, options);
+    }
+
+    public useGetUnreadMessageCount(
+        options?: QueryHookOptions<GetUnreadMessageCountQuery, GetUnreadMessageCountQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetUnreadMessageCountQuery, GetUnreadMessageCountQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_UNREAD_MESSAGE_COUNT, {}, options);
+    }
+
+    public useSendMessage(
+        options?: MutationHookOptions<SendMessageMutation, SendMessageMutationVariables>,
+    ): AbortableApolloUseMutationResponse<SendMessageMutation, SendMessageMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, SEND_MESSAGE, undefined, options);
+    }
+
+    public useMarkMessageRead(
+        options?: MutationHookOptions<MarkMessageReadMutation, MarkMessageReadMutationVariables>,
+    ): AbortableApolloUseMutationResponse<MarkMessageReadMutation, MarkMessageReadMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, MARK_MESSAGE_READ, undefined, options);
     }
 
     public useGetAdminUsers(
