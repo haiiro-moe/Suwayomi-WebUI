@@ -1283,6 +1283,10 @@ msgstr "Create"
 msgid "Create backup"
 msgstr "Create backup"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "Create role"
+msgstr "Create role"
+
 #: src/features/theme/components/CreateThemeButton.tsx
 #: src/features/theme/components/CreateThemeDialog.tsx
 msgid "Create theme"
@@ -1477,6 +1481,10 @@ msgstr "Descending"
 #: src/features/profile/screens/Profile.tsx
 msgid "Describe yourself to other users."
 msgstr "Describe yourself to other users."
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Description"
+msgstr "Description"
 
 #: src/features/chapter/components/cards/ChapterCard.tsx
 #: src/features/manga/components/MangaOptionButton.tsx
@@ -1820,6 +1828,10 @@ msgid "Failed to create user"
 msgstr "Failed to create user"
 
 #: src/features/admin/screens/Admin.tsx
+msgid "Failed to delete role"
+msgstr "Failed to delete role"
+
+#: src/features/admin/screens/Admin.tsx
 msgid "Failed to delete user"
 msgstr "Failed to delete user"
 
@@ -1863,6 +1875,10 @@ msgstr "Failed to save changes"
 #: src/features/profile/screens/Profile.tsx
 msgid "Failed to save profile"
 msgstr "Failed to save profile"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Failed to save role"
+msgstr "Failed to save role"
 
 #: src/features/admin/screens/Admin.tsx
 msgid "Failed to update user"
@@ -3018,6 +3034,10 @@ msgstr "Pending…"
 msgid "Percentage Tolerance"
 msgstr "Percentage Tolerance"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "Permissions"
+msgstr "Permissions"
+
 #: src/features/browse/sources/components/SourceCard.tsx
 msgid "Pin source"
 msgstr "Pin source"
@@ -3294,6 +3314,14 @@ msgstr "Right to left"
 msgid "Role"
 msgstr "Role"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "Role name"
+msgstr "Role name"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Roles"
+msgstr "Roles"
+
 #: src/features/theme/Themes.ts
 msgid "Rosegold"
 msgstr "Rosegold"
@@ -3317,6 +3345,10 @@ msgstr "Save current search"
 #: src/features/theme/components/CreateThemeDialog.tsx
 msgid "Save dynamic color theme"
 msgstr "Save dynamic color theme"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Save role"
+msgstr "Save role"
 
 #: src/features/source/browse/components/SourceOptions.tsx
 msgid "Save search"

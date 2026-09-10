@@ -41,11 +41,18 @@ export function Admin() {
     const [editRoleId, setEditRoleId] = useState<number | undefined>();
     const [editEnabled, setEditEnabled] = useState(true);
     const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+    const [roleName, setRoleName] = useState('');
+    const [roleDescription, setRoleDescription] = useState('');
+    const [rolePermissions, setRolePermissions] = useState<string[]>([]);
+    const [editingRoleId, setEditingRoleId] = useState<number | null>(null);
     const { data, loading, error, refetch } = requestManager.useGetAdminUsers();
     const { data: rolesData, loading: rolesLoading } = requestManager.useGetAdminRoles();
     const [createUser] = requestManager.useCreateUser();
     const [updateUser] = requestManager.useUpdateUser();
     const [deleteUser] = requestManager.useDeleteUser();
+    const [createRole] = requestManager.useCreateRole();
+    const [updateRole] = requestManager.useUpdateRole();
+    const [deleteRole] = requestManager.useDeleteRole();
 
     if ((loading || rolesLoading) && !data) {
         return <LoadingPlaceholder />;
@@ -72,6 +79,53 @@ export function Admin() {
             setRoleId(undefined);
         } catch (saveError) {
             makeToast(t`Failed to create user`, 'error', getErrorMessage(saveError));
+        }
+    };
+
+    const saveRole = async () => {
+        if (!roleName.trim()) {
+            return;
+        }
+        try {
+            if (editingRoleId === null) {
+                await createRole({
+                    variables: {
+                        input: { name: roleName, description: roleDescription, permissions: rolePermissions },
+                    },
+                });
+            } else {
+                await updateRole({
+                    variables: {
+                        input: {
+                            roleId: editingRoleId,
+                            name: roleName,
+                            description: roleDescription,
+                            permissions: rolePermissions,
+                        },
+                    },
+                });
+            }
+            setRoleName('');
+            setRoleDescription('');
+            setRolePermissions([]);
+            setEditingRoleId(null);
+        } catch (saveError) {
+            makeToast(t`Failed to save role`, 'error', getErrorMessage(saveError));
+        }
+    };
+
+    const startRoleEdit = (role: (typeof rolesData.roles)[number]) => {
+        setEditingRoleId(role.id);
+        setRoleName(role.name);
+        setRoleDescription(role.description);
+        setRolePermissions(role.permissions);
+    };
+
+    const removeRole = async (adminRoleId: number) => {
+        try {
+            await deleteRole({ variables: { input: { roleId: adminRoleId } } });
+        } catch (deleteError) {
+            makeToast(t`Failed to delete role`, 'error', getErrorMessage(deleteError));
         }
     };
 
@@ -159,6 +213,67 @@ export function Admin() {
                     ))}
                 </select>
                 <Button startIcon={<AddIcon />} variant="contained" onClick={submit}>{t`Create`}</Button>
+            </Stack>
+            <Stack spacing={1}>
+                <strong>{t`Roles`}</strong>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
+                    <TextField
+                        label={t`Role name`}
+                        value={roleName}
+                        onChange={(event) => setRoleName(event.target.value)}
+                    />
+                    <TextField
+                        label={t`Description`}
+                        value={roleDescription}
+                        onChange={(event) => setRoleDescription(event.target.value)}
+                    />
+                    <select
+                        multiple
+                        aria-label={t`Permissions`}
+                        value={rolePermissions}
+                        onChange={(event) =>
+                            setRolePermissions(Array.from(event.target.selectedOptions, (option) => option.value))
+                        }
+                    >
+                        {rolesData.permissionNodes.map((permission) => (
+                            <option key={permission} value={permission}>
+                                {permission}
+                            </option>
+                        ))}
+                    </select>
+                    <Button variant="contained" onClick={saveRole}>
+                        {editingRoleId === null ? t`Create role` : t`Save role`}
+                    </Button>
+                    {editingRoleId !== null && <Button onClick={() => setEditingRoleId(null)}>{t`Cancel`}</Button>}
+                </Stack>
+                <List>
+                    {rolesData.roles.map((role) => (
+                        <ListItem
+                            component="div"
+                            key={role.id}
+                            secondaryAction={
+                                <Stack direction="row">
+                                    <Button
+                                        startIcon={<EditIcon />}
+                                        onClick={() => startRoleEdit(role)}
+                                    >{t`Edit`}</Button>
+                                    {role.name !== 'owner' && (
+                                        <Button
+                                            color="error"
+                                            startIcon={<DeleteIcon />}
+                                            onClick={() => removeRole(role.id)}
+                                        >{t`Delete`}</Button>
+                                    )}
+                                </Stack>
+                            }
+                        >
+                            <ListItemText
+                                primary={role.name}
+                                secondary={role.description || role.permissions.join(', ')}
+                            />
+                        </ListItem>
+                    ))}
+                </List>
             </Stack>
             <List>
                 {data.users.map((user) => (
