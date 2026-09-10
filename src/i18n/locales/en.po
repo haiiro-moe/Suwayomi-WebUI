@@ -1866,7 +1866,6 @@ msgstr "Failed to disconnect from KOReader Sync server."
 #: src/features/source/components/SourceLanguageSelect.tsx
 #: src/features/source/configuration/screens/SourceConfigure.tsx
 #: src/features/source/services/Sources.ts
-#: src/features/theme/AppThemeContext.tsx
 #: src/features/tracker/components/cards/TrackerActiveCard.tsx
 #: src/features/tracker/screens/TrackingSettings.tsx
 msgid "Failed to save changes"
