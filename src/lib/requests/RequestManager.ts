@@ -54,8 +54,20 @@ import type {
     EnqueueChapterDownloadMutationVariables,
     EnqueueChapterDownloadsMutation,
     EnqueueChapterDownloadsMutationVariables,
+    CreateRoleMutation,
+    CreateRoleMutationVariables,
+    CreateUserMutation,
+    CreateUserMutationVariables,
+    DeleteRoleMutation,
+    DeleteRoleMutationVariables,
+    DeleteUserMutation,
+    DeleteUserMutationVariables,
     GetAboutQuery,
     GetAboutQueryVariables,
+    GetAdminRolesQuery,
+    GetAdminRolesQueryVariables,
+    GetAdminUsersQuery,
+    GetAdminUsersQueryVariables,
     GetCurrentUserProfileQuery,
     GetCurrentUserProfileQueryVariables,
     GetCategoriesSettingsQuery,
@@ -196,6 +208,10 @@ import type {
     UpdateSourcePreferencesMutationVariables,
     UpdateWebuiMutation,
     UpdateWebuiMutationVariables,
+    UpdateRoleMutation,
+    UpdateRoleMutationVariables,
+    UpdateUserMutation,
+    UpdateUserMutationVariables,
     UpdateProfileMutation,
     UpdateProfileMutationVariables,
     UserLoginMutation,
@@ -351,6 +367,15 @@ import type { MangaIdInfo } from '@/features/manga/Manga.types.ts';
 import { updateMetadataList } from '@/features/metadata/services/MetadataApolloCacheHandler.ts';
 import { UPDATE_PROFILE, USER_LOGIN, USER_REFRESH } from '@/lib/graphql/user/UserMutation.ts';
 import { GET_CURRENT_USER_PROFILE } from '@/lib/graphql/user/UserQuery.ts';
+import {
+    CREATE_ROLE,
+    CREATE_USER,
+    DELETE_ROLE,
+    DELETE_USER,
+    UPDATE_ROLE,
+    UPDATE_USER,
+} from '@/lib/graphql/admin/AdminMutation.ts';
+import { GET_ADMIN_ROLES, GET_ADMIN_USERS } from '@/lib/graphql/admin/AdminQuery.ts';
 import { AuthManager } from '@/features/authentication/AuthManager.ts';
 import { useLocalStorage } from '@/base/hooks/useStorage.tsx';
 import { KO_SYNC_LOGIN, KO_SYNC_LOGOUT } from '@/lib/graphql/koreader/KoreaderSyncMutation.ts';
@@ -1439,6 +1464,72 @@ export class RequestManager {
         options?: QueryHookOptions<GetCurrentUserProfileQuery, GetCurrentUserProfileQueryVariables>,
     ): AbortableApolloUseQueryResponse<GetCurrentUserProfileQuery, GetCurrentUserProfileQueryVariables> {
         return this.doRequest(GQLMethod.USE_QUERY, GET_CURRENT_USER_PROFILE, {}, options);
+    }
+
+    public useGetAdminUsers(
+        options?: QueryHookOptions<GetAdminUsersQuery, GetAdminUsersQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetAdminUsersQuery, GetAdminUsersQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_ADMIN_USERS, {}, options);
+    }
+
+    public useGetAdminRoles(
+        options?: QueryHookOptions<GetAdminRolesQuery, GetAdminRolesQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetAdminRolesQuery, GetAdminRolesQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_ADMIN_ROLES, {}, options);
+    }
+
+    public useCreateUser(
+        options?: MutationHookOptions<CreateUserMutation, CreateUserMutationVariables>,
+    ): AbortableApolloUseMutationResponse<CreateUserMutation, CreateUserMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, CREATE_USER, undefined, {
+            refetchQueries: [GET_ADMIN_USERS],
+            ...options,
+        });
+    }
+
+    public useUpdateUser(
+        options?: MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>,
+    ): AbortableApolloUseMutationResponse<UpdateUserMutation, UpdateUserMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, UPDATE_USER, undefined, {
+            refetchQueries: [GET_ADMIN_USERS],
+            ...options,
+        });
+    }
+
+    public useDeleteUser(
+        options?: MutationHookOptions<DeleteUserMutation, DeleteUserMutationVariables>,
+    ): AbortableApolloUseMutationResponse<DeleteUserMutation, DeleteUserMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, DELETE_USER, undefined, {
+            refetchQueries: [GET_ADMIN_USERS],
+            ...options,
+        });
+    }
+
+    public useCreateRole(
+        options?: MutationHookOptions<CreateRoleMutation, CreateRoleMutationVariables>,
+    ): AbortableApolloUseMutationResponse<CreateRoleMutation, CreateRoleMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, CREATE_ROLE, undefined, {
+            refetchQueries: [GET_ADMIN_ROLES],
+            ...options,
+        });
+    }
+
+    public useUpdateRole(
+        options?: MutationHookOptions<UpdateRoleMutation, UpdateRoleMutationVariables>,
+    ): AbortableApolloUseMutationResponse<UpdateRoleMutation, UpdateRoleMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, UPDATE_ROLE, undefined, {
+            refetchQueries: [GET_ADMIN_ROLES],
+            ...options,
+        });
+    }
+
+    public useDeleteRole(
+        options?: MutationHookOptions<DeleteRoleMutation, DeleteRoleMutationVariables>,
+    ): AbortableApolloUseMutationResponse<DeleteRoleMutation, DeleteRoleMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, DELETE_ROLE, undefined, {
+            refetchQueries: [GET_ADMIN_ROLES, GET_ADMIN_USERS],
+            ...options,
+        });
     }
 
     public useCheckForServerUpdate(

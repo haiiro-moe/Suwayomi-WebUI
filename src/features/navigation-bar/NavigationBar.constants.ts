@@ -20,6 +20,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { useLingui } from '@lingui/react/macro';
 import { msg, plural } from '@lingui/core/macro';
 import type { NavbarItem } from '@/features/navigation-bar/NavigationBar.types.ts';
@@ -145,6 +146,15 @@ const NAVIGATION_BAR_DESKTOP_ITEMS = [
         IconComponent: AccountCircleIcon,
         show: 'desktop',
         moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+    },
+    {
+        path: AppRoutes.admin.path,
+        title: msg`Administration`,
+        SelectedIconComponent: ManageAccountsIcon,
+        IconComponent: ManageAccountsIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+        requiredPermission: 'admin.users.manage',
     },
 ] as const satisfies RestrictedNavBarItem<'desktop'>[];
 

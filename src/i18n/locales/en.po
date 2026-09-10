@@ -437,6 +437,11 @@ msgstr "Add tracking"
 msgid "Added manga to library!"
 msgstr "Added manga to library!"
 
+#: src/features/admin/screens/Admin.tsx
+#: src/features/navigation-bar/NavigationBar.constants.ts
+msgid "Administration"
+msgstr "Administration"
+
 #: src/features/library/screens/LibrarySettings.tsx
 msgid "Advanced"
 msgstr "Advanced"
@@ -1262,6 +1267,7 @@ msgstr "Could not update WebUI"
 msgid "Could not validate backup"
 msgstr "Could not validate backup"
 
+#: src/features/admin/screens/Admin.tsx
 #: src/features/category/components/CategorySelect.tsx
 #: src/features/device/screens/DeviceSetting.tsx
 #: src/features/reader/hotkeys/settings/components/RecordHotkey.tsx
@@ -1403,6 +1409,7 @@ msgid "Default category when adding new manga to the library"
 msgstr "Default category when adding new manga to the library"
 
 #: src/base/components/settings/MutableListSetting.tsx
+#: src/features/admin/screens/Admin.tsx
 #: src/features/category/components/CategorySettingsCard.tsx
 #: src/features/chapter/Chapter.constants.ts
 #: src/features/downloads/components/DownloadQueueChapterCard.tsx
@@ -1521,6 +1528,10 @@ msgstr "Display file sizes in binary (KiB, MiB, GiB) instead of decimal (KB, MB,
 #: src/features/library/components/LibraryOptionsPanel.tsx
 msgid "Display mode"
 msgstr "Display mode"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Display name"
+msgstr "Display name"
 
 #: src/features/settings/components/koreaderSync/KoreaderSyncSettings.tsx
 msgid "Document matching method"
@@ -1789,6 +1800,14 @@ msgstr "Extension stores"
 #: src/features/settings/components/koreaderSync/KoreaderSyncSettings.tsx
 msgid "Failed to connect to KOReader Sync server."
 msgstr "Failed to connect to KOReader Sync server."
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Failed to create user"
+msgstr "Failed to create user"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Failed to delete user"
+msgstr "Failed to delete user"
 
 #: src/features/settings/components/koreaderSync/KoreaderSyncSettings.tsx
 msgid "Failed to disconnect from KOReader Sync server."
@@ -2960,6 +2979,7 @@ msgid "Parallel source requests"
 msgstr "Parallel source requests"
 
 #: src/base/components/inputs/PasswordTextField.tsx
+#: src/features/admin/screens/Admin.tsx
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "Password"
 msgstr "Password"
@@ -4045,6 +4065,10 @@ msgstr "Type"
 msgid "UI Login"
 msgstr "UI Login"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "Unable to load administration"
+msgstr "Unable to load administration"
+
 #: src/features/backup/screens/Backup.tsx
 #: src/features/browse/extensions/Extensions.tsx
 #: src/features/browse/screens/BrowseSettings.tsx
@@ -4235,7 +4259,12 @@ msgstr "Use the latest released version."
 msgid "Use the version that was delivered with the server release"
 msgstr "Use the version that was delivered with the server release"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "User administration"
+msgstr "User administration"
+
 #: src/base/components/modals/LoginDialog.tsx
+#: src/features/admin/screens/Admin.tsx
 #: src/features/authentication/screens/LoginPage.tsx
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "Username"

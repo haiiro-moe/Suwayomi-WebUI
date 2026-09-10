@@ -4,6 +4,76 @@ type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import type * as Types from './graphql-base.types';
 
+export type CreateUserMutationVariables = Exact<{
+    input: Types.CreateUserInput;
+}>;
+
+export type CreateUserMutation = { __typename: 'Mutation'; createUser: { __typename: 'UserAdminPayload'; id: number } };
+
+export type UpdateUserMutationVariables = Exact<{
+    input: Types.UpdateUserInput;
+}>;
+
+export type UpdateUserMutation = {
+    __typename: 'Mutation';
+    updateUser: { __typename: 'UpdateUserPayload'; updated: boolean };
+};
+
+export type DeleteUserMutationVariables = Exact<{
+    input: Types.DeleteUserInput;
+}>;
+
+export type DeleteUserMutation = {
+    __typename: 'Mutation';
+    deleteUser: { __typename: 'OperationPayload'; success: boolean };
+};
+
+export type CreateRoleMutationVariables = Exact<{
+    input: Types.RoleInput;
+}>;
+
+export type CreateRoleMutation = { __typename: 'Mutation'; createRole: { __typename: 'UserAdminPayload'; id: number } };
+
+export type UpdateRoleMutationVariables = Exact<{
+    input: Types.UpdateRoleInput;
+}>;
+
+export type UpdateRoleMutation = {
+    __typename: 'Mutation';
+    updateRole: { __typename: 'OperationPayload'; success: boolean };
+};
+
+export type DeleteRoleMutationVariables = Exact<{
+    input: Types.DeleteRoleInput;
+}>;
+
+export type DeleteRoleMutation = {
+    __typename: 'Mutation';
+    deleteRole: { __typename: 'OperationPayload'; success: boolean };
+};
+
+export type GetAdminUsersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAdminUsersQuery = {
+    __typename: 'Query';
+    users: Array<{
+        __typename: 'UserProfile';
+        id: number;
+        username: string;
+        displayName: string;
+        role: string;
+        avatarUrl: string | null;
+    }>;
+};
+
+export type GetAdminRolesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAdminRolesQuery = {
+    __typename: 'Query';
+    permissionNodes: Array<string>;
+    roles: Array<{ __typename: 'RoleType'; id: number; name: string; description: string; permissions: Array<string> }>;
+};
+
 export type CreateBackupMutationVariables = Exact<{
     input: Types.CreateBackupInput;
 }>;

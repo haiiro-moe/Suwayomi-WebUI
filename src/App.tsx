@@ -51,6 +51,7 @@ const { MigrationManualSearch } = loadable(
 const { Settings } = loadable(() => import('@/features/settings/screens/Settings.tsx'), lazyLoadFallback);
 const { About } = loadable(() => import('@/features/settings/screens/About.tsx'), lazyLoadFallback);
 const { Profile } = loadable(() => import('@/features/profile/screens/Profile.tsx'), lazyLoadFallback);
+const { Admin } = loadable(() => import('@/features/admin/screens/Admin.tsx'), lazyLoadFallback);
 const { Backup } = loadable(() => import('@/features/backup/screens/Backup.tsx'), lazyLoadFallback);
 const { CategorySettings } = loadable(
     () => import('@/features/category/screens/CategorySettings.tsx'),
@@ -285,6 +286,7 @@ const MainApp = () => {
                         {isMobileWidth && <Route path={AppRoutes.more.match} element={<More />} />}
                         <Route path={AppRoutes.about.match} element={<About />} />
                         <Route path={AppRoutes.profile.match} element={<Profile />} />
+                        <Route path={AppRoutes.admin.match} element={<Admin />} />
                         <Route path={AppRoutes.settings.match}>
                             <Route index element={<Settings />} />
                             <Route path={AppRoutes.settings.children.categories.match} element={<CategorySettings />} />

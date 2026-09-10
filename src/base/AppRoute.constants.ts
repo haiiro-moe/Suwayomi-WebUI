@@ -50,6 +50,10 @@ export const AppRoutes = {
         match: 'profile',
         path: '/profile',
     },
+    admin: {
+        match: 'admin',
+        path: '/admin',
+    },
     settings: {
         match: 'settings',
         path: '/settings',
