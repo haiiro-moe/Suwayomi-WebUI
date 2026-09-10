@@ -1458,6 +1458,10 @@ msgstr "Deleting theme \"{0}\"…"
 msgid "Descending"
 msgstr "Descending"
 
+#: src/features/profile/screens/Profile.tsx
+msgid "Describe yourself to other users."
+msgstr "Describe yourself to other users."
+
 #: src/features/chapter/components/cards/ChapterCard.tsx
 #: src/features/manga/components/MangaOptionButton.tsx
 msgid "Deselect"
@@ -1822,6 +1826,10 @@ msgstr "Failed to disconnect from KOReader Sync server."
 #: src/features/tracker/screens/TrackingSettings.tsx
 msgid "Failed to save changes"
 msgstr "Failed to save changes"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "Failed to save profile"
+msgstr "Failed to save profile"
 
 #: src/features/profile/screens/Profile.tsx
 msgid "Favorites"

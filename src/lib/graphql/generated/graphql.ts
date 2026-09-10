@@ -5143,6 +5143,15 @@ export type UserRefreshMutation = {
     refreshToken: { __typename: 'RefreshTokenPayload'; accessToken: string };
 };
 
+export type UpdateProfileMutationVariables = Exact<{
+    input: Types.UpdateProfileInput;
+}>;
+
+export type UpdateProfileMutation = {
+    __typename: 'Mutation';
+    updateProfile: { __typename: 'ProfileMutationPayload'; updated: boolean };
+};
+
 export type GetCurrentUserProfileQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetCurrentUserProfileQuery = {

@@ -24,3 +24,11 @@ export const USER_REFRESH = gql`
         }
     }
 `;
+
+export const UPDATE_PROFILE = gql`
+    mutation UPDATE_PROFILE($input: UpdateProfileInput!) {
+        updateProfile(input: $input) {
+            updated
+        }
+    }
+`;

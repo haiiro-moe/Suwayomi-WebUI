@@ -196,6 +196,8 @@ import type {
     UpdateSourcePreferencesMutationVariables,
     UpdateWebuiMutation,
     UpdateWebuiMutationVariables,
+    UpdateProfileMutation,
+    UpdateProfileMutationVariables,
     UserLoginMutation,
     UserLoginMutationVariables,
     UserRefreshMutation,
@@ -347,7 +349,7 @@ import { CHAPTER_META_FIELDS } from '@/lib/graphql/chapter/ChapterFragments.ts';
 import type { MetadataMigrationSettings } from '@/features/migration/Migration.types.ts';
 import type { MangaIdInfo } from '@/features/manga/Manga.types.ts';
 import { updateMetadataList } from '@/features/metadata/services/MetadataApolloCacheHandler.ts';
-import { USER_LOGIN, USER_REFRESH } from '@/lib/graphql/user/UserMutation.ts';
+import { UPDATE_PROFILE, USER_LOGIN, USER_REFRESH } from '@/lib/graphql/user/UserMutation.ts';
 import { GET_CURRENT_USER_PROFILE } from '@/lib/graphql/user/UserQuery.ts';
 import { AuthManager } from '@/features/authentication/AuthManager.ts';
 import { useLocalStorage } from '@/base/hooks/useStorage.tsx';
@@ -3961,6 +3963,12 @@ export class RequestManager {
         options?: MutationHookOptions<UserLoginMutation, UserLoginMutationVariables>,
     ): AbortableApolloUseMutationResponse<UserLoginMutation, UserLoginMutationVariables> {
         return this.doRequest(GQLMethod.USE_MUTATION, USER_LOGIN, undefined, options);
+    }
+
+    public useUpdateProfile(
+        options?: MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>,
+    ): AbortableApolloUseMutationResponse<UpdateProfileMutation, UpdateProfileMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, UPDATE_PROFILE, undefined, options);
     }
 
     public startSync(
