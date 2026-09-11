@@ -3778,6 +3778,7 @@ export type UpdateMangasPayload = {
 
 export type UpdateProfileInput = {
     avatarUrl?: InputMaybe<Scalars['String']['input']>;
+    bannerUrl?: InputMaybe<Scalars['String']['input']>;
     clientMutationId?: InputMaybe<Scalars['String']['input']>;
     description: Scalars['String']['input'];
     displayName?: InputMaybe<Scalars['String']['input']>;
@@ -3912,6 +3913,7 @@ export type UserAdminPayload = {
 export type UserProfile = {
     __typename?: 'UserProfile';
     avatarUrl?: Maybe<Scalars['String']['output']>;
+    bannerUrl?: Maybe<Scalars['String']['output']>;
     description: Scalars['String']['output'];
     displayName: Scalars['String']['output'];
     favoriteManga: Array<FavoriteMangaEntryType>;

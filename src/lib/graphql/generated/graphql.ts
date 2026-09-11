@@ -5236,6 +5236,7 @@ export type GetUserProfileQuery = {
         avatarUrl: string | null;
         role: string;
         description: string;
+        bannerUrl: string | null;
         favoriteMangaIds: Array<number>;
         favoriteManga: Array<{
             __typename: 'FavoriteMangaEntryType';
@@ -5366,6 +5367,7 @@ export type GetCurrentUserProfileQuery = {
         avatarUrl: string | null;
         role: string;
         description: string;
+        bannerUrl: string | null;
         favoriteMangaIds: Array<number>;
         permissions: Array<string>;
     } | null;

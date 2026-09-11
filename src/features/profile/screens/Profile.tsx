@@ -40,6 +40,7 @@ export function Profile() {
 
     const [displayName, setDisplayName] = useState('');
     const [avatarUrl, setAvatarUrl] = useState('');
+    const [bannerUrl, setBannerUrl] = useState('');
     const [description, setDescription] = useState('');
 
     const profile = data?.currentUserProfile;
@@ -47,9 +48,10 @@ export function Profile() {
         if (profile) {
             setDisplayName(profile.displayName);
             setAvatarUrl(profile.avatarUrl ?? '');
+            setBannerUrl(profile.bannerUrl ?? '');
             setDescription(profile.description);
         }
-    }, [profile?.id, profile?.displayName, profile?.avatarUrl, profile?.description]);
+    }, [profile?.id, profile?.displayName, profile?.avatarUrl, profile?.bannerUrl, profile?.description]);
 
     if (loading && !profile) {
         return <LoadingPlaceholder />;
@@ -73,6 +75,7 @@ export function Profile() {
                     input: {
                         displayName: displayName.trim() || profile.displayName,
                         avatarUrl,
+                        bannerUrl,
                         description,
                     },
                 },
@@ -88,6 +91,7 @@ export function Profile() {
     const dirty =
         displayName !== profile.displayName ||
         avatarUrl !== (profile.avatarUrl ?? '') ||
+        bannerUrl !== (profile.bannerUrl ?? '') ||
         description !== profile.description;
 
     return (
@@ -124,6 +128,12 @@ export function Profile() {
                     label={t`Avatar URL`}
                     value={avatarUrl}
                     onChange={(event) => setAvatarUrl(event.target.value)}
+                    placeholder="https://…"
+                />
+                <TextField
+                    label={t`Banner URL`}
+                    value={bannerUrl}
+                    onChange={(event) => setBannerUrl(event.target.value)}
                     placeholder="https://…"
                 />
                 <Button variant="contained" onClick={save} disabled={isSaving || !dirty}>{t`Save profile`}</Button>

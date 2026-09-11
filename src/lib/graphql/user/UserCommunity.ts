@@ -31,6 +31,7 @@ export const GET_USER_PROFILE = gql`
             avatarUrl
             role
             description
+            bannerUrl
             favoriteMangaIds
             favoriteManga {
                 mangaId

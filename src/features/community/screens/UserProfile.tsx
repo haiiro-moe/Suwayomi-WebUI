@@ -6,15 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import LockIcon from '@mui/icons-material/Lock';
+import ChatIcon from '@mui/icons-material/Chat';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ListSubheader from '@mui/material/ListSubheader';
+import LockIcon from '@mui/icons-material/Lock';
+import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
@@ -27,6 +23,8 @@ import { getErrorMessage } from '@/lib/HelperFunctions.ts';
 import { AppRoutes } from '@/base/AppRoute.constants.ts';
 import { Mangas } from '@/features/manga/services/Mangas.ts';
 import { useAppTitle } from '@/features/navigation-bar/hooks/useAppTitle.ts';
+
+const AVATAR_SIZE = 120;
 
 export function UserProfile() {
     const { t } = useLingui();
@@ -50,110 +48,199 @@ export function UserProfile() {
     const favorites = profile.favoriteManga ?? [];
 
     return (
-        <Stack>
-            <List sx={{ pt: 0 }}>
-                <ListSubheader component="div">{t`Profile`}</ListSubheader>
-                <ListItem>
-                    <ListItemIcon>
-                        {profile.avatarUrl ? (
-                            <Box
-                                component="img"
-                                src={profile.avatarUrl}
-                                alt={profile.displayName}
-                                sx={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }}
-                            />
-                        ) : (
-                            <AccountCircleIcon />
-                        )}
-                    </ListItemIcon>
-                    <ListItemText primary={profile.displayName} secondary={`@${profile.username}`} />
-                </ListItem>
-                <ListItem>
-                    <ListItemText primary={t`About`} secondary={profile.description || t`No description`} />
-                </ListItem>
-            </List>
-            <ListSubheader component="div" sx={{ pt: 1 }}>
-                {t`Favorites`} · {favorites.length}
-            </ListSubheader>
-            {favorites.length === 0 ? (
-                <Typography color="text.secondary" sx={{ px: 2, pb: 2 }}>{t`No favorites yet.`}</Typography>
-            ) : (
+        <Box sx={{ pb: 3 }}>
+            {/* Banner */}
+            <Box
+                sx={{
+                    height: { xs: 160, sm: 220 },
+                    width: '100%',
+                    bgcolor: 'background.paper',
+                    backgroundImage: profile.bannerUrl ? `url(${profile.bannerUrl})` : undefined,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                }}
+            />
+
+            {/* Avatar + username row */}
+            <Stack
+                direction="row"
+                sx={{
+                    px: { xs: 2, sm: 4 },
+                    mt: `-${AVATAR_SIZE / 2}px`,
+                    alignItems: 'flex-end',
+                    gap: 2,
+                }}
+            >
                 <Box
                     sx={{
-                        display: 'grid',
-                        gap: 1.5,
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(96px, 1fr))',
-                        p: 2,
+                        width: AVATAR_SIZE,
+                        height: AVATAR_SIZE,
+                        borderRadius: 4,
+                        overflow: 'hidden',
+                        flexShrink: 0,
+                        border: 4,
+                        borderColor: 'background.default',
+                        bgcolor: 'background.paper',
+                        boxShadow: 3,
                     }}
                 >
-                    {favorites.map((entry) => {
-                        const { manga } = entry;
-                        if (!entry.accessible || !manga) {
-                            return (
-                                <Tooltip key={entry.mangaId} title={t`No access`}>
-                                    <Box
-                                        sx={{
-                                            position: 'relative',
-                                            aspectRatio: '2 / 3',
-                                            borderRadius: 1,
-                                            overflow: 'hidden',
-                                            bgcolor: 'action.hover',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                        }}
-                                    >
-                                        <LockIcon color="disabled" />
-                                    </Box>
-                                </Tooltip>
-                            );
-                        }
-                        return (
-                            <Box
-                                key={manga.id}
-                                component={RouterLink}
-                                to={AppRoutes.manga.path(manga.id)}
-                                sx={{
-                                    position: 'relative',
-                                    aspectRatio: '2 / 3',
-                                    borderRadius: 1,
-                                    overflow: 'hidden',
-                                    display: 'block',
-                                    bgcolor: 'action.hover',
-                                    textDecoration: 'none',
-                                }}
-                            >
-                                <Box
-                                    component="img"
-                                    src={Mangas.getThumbnailUrl(manga)}
-                                    alt={manga.title}
-                                    loading="lazy"
-                                    sx={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                                />
-                                <Typography
-                                    variant="caption"
-                                    sx={{
-                                        position: 'absolute',
-                                        left: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                        px: 0.5,
-                                        py: 0.25,
-                                        color: 'common.white',
-                                        bgcolor: 'rgba(0, 0, 0, 0.6)',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        whiteSpace: 'nowrap',
-                                    }}
-                                >
-                                    {manga.title}
-                                </Typography>
-                            </Box>
-                        );
-                    })}
+                    {profile.avatarUrl ? (
+                        <Box
+                            component="img"
+                            src={profile.avatarUrl}
+                            alt={profile.displayName}
+                            sx={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        />
+                    ) : (
+                        <Stack
+                            sx={{
+                                width: '100%',
+                                height: '100%',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <Typography variant="h4" component="span">
+                                {profile.displayName.charAt(0).toUpperCase()}
+                            </Typography>
+                        </Stack>
+                    )}
                 </Box>
-            )}
-            <Button onClick={() => navigate(AppRoutes.conversation.path(parsedUserId))}>{t`Message`}</Button>
-        </Stack>
+                <Box sx={{ pb: 1.5, flex: 1, minWidth: 0 }}>
+                    <Typography
+                        variant="h5"
+                        component="h1"
+                        sx={{
+                            display: 'inline-flex',
+                            px: 1.5,
+                            py: 0.5,
+                            borderRadius: 2.5,
+                            bgcolor: 'background.paper',
+                            boxShadow: 1,
+                            wordBreak: 'break-word',
+                        }}
+                    >
+                        {profile.displayName}
+                    </Typography>
+                    <Typography color="text.secondary" variant="body2" sx={{ mt: 0.5 }}>
+                        @{profile.username}
+                    </Typography>
+                </Box>
+                <Box sx={{ pb: 1.5 }}>
+                    <Button
+                        variant="contained"
+                        startIcon={<ChatIcon />}
+                        onClick={() => navigate(AppRoutes.conversation.path(parsedUserId))}
+                    >
+                        {t`Message`}
+                    </Button>
+                </Box>
+            </Stack>
+
+            {/* Description + favorites panels */}
+            <Stack
+                direction={{ xs: 'column', md: 'row' }}
+                sx={{ px: { xs: 2, sm: 4 }, mt: 3, gap: 2, alignItems: 'stretch' }}
+            >
+                <Paper variant="outlined" sx={{ p: 2, width: { md: '30%' }, flexShrink: 0, alignSelf: 'flex-start' }}>
+                    <Typography variant="h6" component="h2" sx={{ mb: 1 }}>{t`Description`}</Typography>
+                    <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                        {profile.description || t`No description.`}
+                    </Typography>
+                </Paper>
+                <Paper variant="outlined" sx={{ p: 2, flex: 1, minWidth: 0 }}>
+                    <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
+                        {t`Favorites`} · {favorites.length}
+                    </Typography>
+                    {favorites.length === 0 ? (
+                        <Typography color="text.secondary">{t`No favorites yet.`}</Typography>
+                    ) : (
+                        <Box
+                            sx={{
+                                display: 'grid',
+                                gridTemplateColumns: {
+                                    xs: 'repeat(2, 1fr)',
+                                    sm: 'repeat(3, 1fr)',
+                                    lg: 'repeat(4, 1fr)',
+                                },
+                                gap: 1.5,
+                            }}
+                        >
+                            {favorites.map((entry) => {
+                                const { manga } = entry;
+                                if (!entry.accessible || !manga) {
+                                    return (
+                                        <Tooltip key={entry.mangaId} title={t`No access`}>
+                                            <Box
+                                                sx={{
+                                                    position: 'relative',
+                                                    aspectRatio: '2 / 3',
+                                                    borderRadius: 1.5,
+                                                    overflow: 'hidden',
+                                                    bgcolor: 'action.hover',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                }}
+                                            >
+                                                <LockIcon color="disabled" />
+                                            </Box>
+                                        </Tooltip>
+                                    );
+                                }
+                                return (
+                                    <Tooltip key={manga.id} title={manga.title}>
+                                        <Box
+                                            component={RouterLink}
+                                            to={AppRoutes.manga.path(manga.id)}
+                                            sx={{
+                                                position: 'relative',
+                                                aspectRatio: '2 / 3',
+                                                borderRadius: 1.5,
+                                                overflow: 'hidden',
+                                                display: 'block',
+                                                bgcolor: 'action.hover',
+                                                textDecoration: 'none',
+                                            }}
+                                        >
+                                            <Box
+                                                component="img"
+                                                src={Mangas.getThumbnailUrl(manga)}
+                                                alt={manga.title}
+                                                loading="lazy"
+                                                sx={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    objectFit: 'cover',
+                                                    display: 'block',
+                                                }}
+                                            />
+                                            <Typography
+                                                variant="caption"
+                                                sx={{
+                                                    position: 'absolute',
+                                                    left: 0,
+                                                    right: 0,
+                                                    bottom: 0,
+                                                    px: 0.75,
+                                                    py: 0.5,
+                                                    color: 'common.white',
+                                                    bgcolor: 'rgba(0, 0, 0, 0.6)',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    whiteSpace: 'nowrap',
+                                                }}
+                                            >
+                                                {manga.title}
+                                            </Typography>
+                                        </Box>
+                                    </Tooltip>
+                                );
+                            })}
+                        </Box>
+                    )}
+                </Paper>
+            </Stack>
+        </Box>
     );
 }

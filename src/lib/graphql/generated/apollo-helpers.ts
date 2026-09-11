@@ -2715,6 +2715,7 @@ export type UserAdminPayloadFieldPolicy = {
 };
 export type UserProfileKeySpecifier = (
     | 'avatarUrl'
+    | 'bannerUrl'
     | 'description'
     | 'displayName'
     | 'favoriteManga'
@@ -2727,6 +2728,7 @@ export type UserProfileKeySpecifier = (
 )[];
 export type UserProfileFieldPolicy = {
     avatarUrl?: FieldPolicy<any> | FieldReadFunction<any>;
+    bannerUrl?: FieldPolicy<any> | FieldReadFunction<any>;
     description?: FieldPolicy<any> | FieldReadFunction<any>;
     displayName?: FieldPolicy<any> | FieldReadFunction<any>;
     favoriteManga?: FieldPolicy<any> | FieldReadFunction<any>;

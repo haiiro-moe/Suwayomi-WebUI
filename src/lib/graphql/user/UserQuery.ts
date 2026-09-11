@@ -23,6 +23,7 @@ export const GET_CURRENT_USER_PROFILE = gql`
             avatarUrl
             role
             description
+            bannerUrl
             favoriteMangaIds
             permissions
         }
