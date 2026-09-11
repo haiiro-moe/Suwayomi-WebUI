@@ -32,6 +32,9 @@ export const GET_USER_PROFILE = gql`
             role
             description
             bannerUrl
+            appTheme
+            themeMode
+            pureBlackMode
             favoriteMangaIds
             favoriteManga {
                 mangaId

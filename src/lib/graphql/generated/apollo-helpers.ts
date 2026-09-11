@@ -2714,6 +2714,7 @@ export type UserAdminPayloadFieldPolicy = {
     id?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type UserProfileKeySpecifier = (
+    | 'appTheme'
     | 'avatarUrl'
     | 'bannerUrl'
     | 'description'
@@ -2722,11 +2723,14 @@ export type UserProfileKeySpecifier = (
     | 'favoriteMangaIds'
     | 'id'
     | 'permissions'
+    | 'pureBlackMode'
     | 'role'
+    | 'themeMode'
     | 'username'
     | UserProfileKeySpecifier
 )[];
 export type UserProfileFieldPolicy = {
+    appTheme?: FieldPolicy<any> | FieldReadFunction<any>;
     avatarUrl?: FieldPolicy<any> | FieldReadFunction<any>;
     bannerUrl?: FieldPolicy<any> | FieldReadFunction<any>;
     description?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -2735,7 +2739,9 @@ export type UserProfileFieldPolicy = {
     favoriteMangaIds?: FieldPolicy<any> | FieldReadFunction<any>;
     id?: FieldPolicy<any> | FieldReadFunction<any>;
     permissions?: FieldPolicy<any> | FieldReadFunction<any>;
+    pureBlackMode?: FieldPolicy<any> | FieldReadFunction<any>;
     role?: FieldPolicy<any> | FieldReadFunction<any>;
+    themeMode?: FieldPolicy<any> | FieldReadFunction<any>;
     username?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type UserSettingKeySpecifier = ('key' | 'value' | UserSettingKeySpecifier)[];

@@ -3912,6 +3912,7 @@ export type UserAdminPayload = {
 
 export type UserProfile = {
     __typename?: 'UserProfile';
+    appTheme?: Maybe<Scalars['String']['output']>;
     avatarUrl?: Maybe<Scalars['String']['output']>;
     bannerUrl?: Maybe<Scalars['String']['output']>;
     description: Scalars['String']['output'];
@@ -3920,7 +3921,9 @@ export type UserProfile = {
     favoriteMangaIds: Array<Scalars['Int']['output']>;
     id: Scalars['Int']['output'];
     permissions: Array<Scalars['String']['output']>;
+    pureBlackMode?: Maybe<Scalars['Boolean']['output']>;
     role: Scalars['String']['output'];
+    themeMode?: Maybe<Scalars['String']['output']>;
     username: Scalars['String']['output'];
 };
 

@@ -5237,6 +5237,9 @@ export type GetUserProfileQuery = {
         role: string;
         description: string;
         bannerUrl: string | null;
+        appTheme: string | null;
+        themeMode: string | null;
+        pureBlackMode: boolean | null;
         favoriteMangaIds: Array<number>;
         favoriteManga: Array<{
             __typename: 'FavoriteMangaEntryType';
