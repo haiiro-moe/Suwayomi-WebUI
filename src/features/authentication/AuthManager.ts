@@ -73,7 +73,7 @@ export class AuthManager {
     static useIsAuthenticated(): boolean {
         const { isAuthRequired, accessToken, refreshToken } = AuthManager.useSession();
 
-        return !isAuthRequired || (isAuthRequired && (!!accessToken || !!refreshToken));
+        return isAuthRequired === false || (isAuthRequired === true && (!!accessToken || !!refreshToken));
     }
 
     static isAuthInitialized(): boolean {
