@@ -64,15 +64,19 @@ export function Inbox() {
     const { t } = useLingui();
     useAppTitle(t`Messages`);
     const { data, loading } = requestManager.useGetUserDirectory({ fetchPolicy: 'cache-and-network' });
+    const { data: profileData } = requestManager.useGetCurrentUserProfile();
+    const myUserId = profileData?.currentUserProfile?.id;
 
     if (loading && !data) {
         return <LoadingPlaceholder />;
     }
 
+    const otherUsers = (data?.userDirectory ?? []).filter((user) => user.id !== myUserId);
+
     return (
         <List sx={{ pt: 0 }}>
             <ListSubheader component="div">{t`Conversations`}</ListSubheader>
-            {(data?.userDirectory ?? []).map((user) => (
+            {otherUsers.map((user) => (
                 <ConversationListItem key={user.id} user={user} />
             ))}
         </List>

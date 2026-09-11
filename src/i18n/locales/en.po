@@ -392,7 +392,6 @@ msgstr "Abort migration"
 msgid "Aborted"
 msgstr "Aborted"
 
-#: src/features/community/screens/UserProfile.tsx
 #: src/features/navigation-bar/NavigationBar.constants.ts
 #: src/features/profile/screens/Profile.tsx
 #: src/features/settings/screens/About.tsx
@@ -496,11 +495,6 @@ msgstr "Also remove from {0}"
 #: src/features/library/components/LibraryOptionsPanel.tsx
 msgid "and"
 msgstr "and"
-
-#: src/features/settings/screens/Appearance.tsx
-#: src/features/settings/screens/Settings.tsx
-msgid "Appearance"
-msgstr "Appearance"
 
 #: src/features/reader/settings/general/components/ReaderSettingSafeAreaInset.tsx
 msgid "Apply safe area padding"
@@ -667,6 +661,10 @@ msgstr "Backup validation"
 #: src/features/library/components/LibraryOptionsPanel.tsx
 msgid "Badges"
 msgstr "Badges"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "Banner URL"
+msgstr "Banner URL"
 
 #: src/features/settings/Settings.constants.ts
 msgid "Basic Authentication"
@@ -1542,6 +1540,7 @@ msgid "Describe yourself to other users."
 msgstr "Describe yourself to other users."
 
 #: src/features/admin/screens/Admin.tsx
+#: src/features/community/screens/UserProfile.tsx
 msgid "Description"
 msgstr "Description"
 
@@ -2890,8 +2889,8 @@ msgid "No chapters matching filter"
 msgstr "No chapters matching filter"
 
 #: src/features/community/screens/UserProfile.tsx
-msgid "No description"
-msgstr "No description"
+msgid "No description."
+msgstr "No description."
 
 #: src/features/downloads/screens/DownloadQueue.tsx
 msgid "No downloads"
@@ -3206,11 +3205,15 @@ msgstr "Previous page"
 msgid "Previous:"
 msgstr "Previous:"
 
-#: src/features/community/screens/UserProfile.tsx
 #: src/features/navigation-bar/NavigationBar.constants.ts
 #: src/features/profile/screens/Profile.tsx
 msgid "Profile"
 msgstr "Profile"
+
+#: src/features/settings/screens/Appearance.tsx
+#: src/features/settings/screens/Settings.tsx
+msgid "Profile and Site theme"
+msgstr "Profile and Site theme"
 
 #: src/features/profile/screens/Profile.tsx
 msgid "Profile saved"

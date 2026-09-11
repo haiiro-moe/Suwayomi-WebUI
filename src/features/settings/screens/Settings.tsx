@@ -42,7 +42,7 @@ export function Settings() {
                     <ListItemIcon>
                         <PaletteIcon />
                     </ListItemIcon>
-                    <ListItemText primary={t`Appearance`} />
+                    <ListItemText primary={t`Profile and Site theme`} />
                 </ListItemLink>
             )}
             {canSee('settings.misc') && (

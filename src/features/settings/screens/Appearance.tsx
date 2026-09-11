@@ -46,7 +46,7 @@ export const Appearance = () => {
     const { mode, setMode } = useColorScheme();
     const actualThemeMode = (mode ?? themeMode) as ThemeMode;
 
-    useAppTitle(t`Appearance`);
+    useAppTitle(t`Profile and Site theme`);
 
     const {
         settings: { mangaThumbnailBackdrop, mangaDynamicColorSchemes, mangaGridItemWidth, locale },
