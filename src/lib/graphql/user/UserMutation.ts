@@ -41,3 +41,19 @@ export const UPDATE_PROFILE = gql`
         }
     }
 `;
+
+export const ADD_FAVORITE = gql`
+    mutation ADD_FAVORITE($input: FavoriteMangaInput!) {
+        addFavorite(input: $input) {
+            updated
+        }
+    }
+`;
+
+export const REMOVE_FAVORITE = gql`
+    mutation REMOVE_FAVORITE($input: FavoriteMangaInput!) {
+        removeFavorite(input: $input) {
+            updated
+        }
+    }
+`;
