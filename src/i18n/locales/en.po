@@ -136,6 +136,7 @@ msgstr "{0} / {1}{2}"
 
 #. placeholder {0}: profile.favoriteMangaIds.length
 #: src/features/community/screens/UserProfile.tsx
+#: src/features/profile/screens/Profile.tsx
 msgid "{0} manga"
 msgstr "{0} manga"
 
@@ -528,6 +529,10 @@ msgstr "Artist"
 msgid "Ascending"
 msgstr "Ascending"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "Assign individual category visibility and edit access to users. Role permissions still apply."
+msgstr "Assign individual category visibility and edit access to users. Role permissions still apply."
+
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "Authentication"
 msgstr "Authentication"
@@ -614,6 +619,10 @@ msgstr "Automatically use webtoon mode for entries that are detected to likely u
 #: src/features/migration/components/MigrationDestinationSourceList.tsx
 msgid "Available"
 msgstr "Available"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "Avatar URL"
+msgstr "Avatar URL"
 
 #: src/features/backup/screens/Backup.tsx
 msgid "Back up library as a Tachiyomi backup"
@@ -829,10 +838,15 @@ msgstr "Cancelled"
 msgid "Categories"
 msgstr "Categories"
 
+#: src/features/admin/screens/Admin.tsx
 #: src/features/category/components/CategoriesInclusionSetting.tsx
 #: src/features/migration/components/MigrationOptionsDialog.tsx
 msgid "Category"
 msgstr "Category"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Category access"
+msgstr "Category access"
 
 #: src/features/category/components/CreateOrEditCategoryDialog.tsx
 msgid "Category Name"
@@ -1093,6 +1107,10 @@ msgstr "Copy index url"
 msgid "Could not add extension store"
 msgstr "Could not add extension store"
 
+#: src/features/manga/components/FavoriteMangaButton.tsx
+msgid "Could not add favorite"
+msgstr "Could not add favorite"
+
 #: src/features/manga/hooks/useManageMangaLibraryState.tsx
 msgid "Could not add manga to library!"
 msgstr "Could not add manga to library!"
@@ -1221,6 +1239,10 @@ msgstr "Could not remove all downloads from the queue"
 #: src/features/extension/store/screens/ExtensionStores.tsx
 msgid "Could not remove extension store \"{name}\""
 msgstr "Could not remove extension store \"{name}\""
+
+#: src/features/manga/components/FavoriteMangaButton.tsx
+msgid "Could not remove favorite"
+msgstr "Could not remove favorite"
 
 #: src/features/library/screens/LibrarySettings.tsx
 msgid "Could not remove non library manga from categories"
@@ -1585,6 +1607,7 @@ msgid "Display mode"
 msgstr "Display mode"
 
 #: src/features/admin/screens/Admin.tsx
+#: src/features/profile/screens/Profile.tsx
 msgid "Display name"
 msgstr "Display name"
 
@@ -1921,8 +1944,20 @@ msgid "Failed to save role"
 msgstr "Failed to save role"
 
 #: src/features/admin/screens/Admin.tsx
+msgid "Failed to update category access"
+msgstr "Failed to update category access"
+
+#: src/features/admin/screens/Admin.tsx
 msgid "Failed to update user"
 msgstr "Failed to update user"
+
+#: src/features/manga/components/FavoriteMangaButton.tsx
+msgid "Favorite"
+msgstr "Favorite"
+
+#: src/features/manga/components/FavoriteMangaButton.tsx
+msgid "Favorited"
+msgstr "Favorited"
 
 #: src/features/community/screens/UserProfile.tsx
 #: src/features/profile/screens/Profile.tsx
@@ -2839,6 +2874,10 @@ msgstr "Next page"
 msgid "Next:"
 msgstr "Next:"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "No categories found."
+msgstr "No categories found."
+
 #: src/features/chapter/components/ChapterList.tsx
 msgid "No chapters found"
 msgstr "No chapters found"
@@ -2870,6 +2909,10 @@ msgstr "No manga matches this filter"
 #: src/features/migration/Migration.constants.ts
 msgid "No match found"
 msgstr "No match found"
+
+#: src/features/community/screens/Conversation.tsx
+msgid "No messages yet."
+msgstr "No messages yet."
 
 #: src/features/reader/viewer/ReaderChapterViewer.tsx
 msgid "No pages found"
@@ -3162,6 +3205,10 @@ msgstr "Previous:"
 msgid "Profile"
 msgstr "Profile"
 
+#: src/features/profile/screens/Profile.tsx
+msgid "Profile saved"
+msgstr "Profile saved"
+
 #: src/features/reader/overlay/progress-bar/settings/components/ReaderSettingProgressBarPosition.tsx
 msgid "Progress bar position"
 msgstr "Progress bar position"
@@ -3206,6 +3253,10 @@ msgstr "Quick settings"
 #: src/features/library/components/LibraryOptionsPanel.tsx
 msgid "Random"
 msgstr "Random"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Read"
+msgstr "Read"
 
 #: src/features/reader/settings/screens/GlobalReaderSettings.tsx
 #: src/features/settings/screens/Settings.tsx
@@ -3412,6 +3463,10 @@ msgstr "Save current search"
 #: src/features/theme/components/CreateThemeDialog.tsx
 msgid "Save dynamic color theme"
 msgstr "Save dynamic color theme"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "Save profile"
+msgstr "Save profile"
 
 #: src/features/admin/screens/Admin.tsx
 msgid "Save role"
@@ -4394,6 +4449,10 @@ msgstr "Use the latest released version."
 #: src/features/settings/Settings.constants.ts
 msgid "Use the version that was delivered with the server release"
 msgstr "Use the version that was delivered with the server release"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "User"
+msgstr "User"
 
 #: src/features/admin/screens/Admin.tsx
 msgid "User administration"

@@ -9,13 +9,13 @@
 import SendIcon from '@mui/icons-material/Send';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
+import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { useLingui } from '@lingui/react/macro';
 import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 import { useParams } from 'react-router-dom';
 import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { LoadingPlaceholder } from '@/base/components/feedback/LoadingPlaceholder.tsx';
@@ -36,6 +36,8 @@ export function Conversation() {
     const [sendMessage] = requestManager.useSendMessage();
     const [markMessageRead] = requestManager.useMarkMessageRead();
 
+    const { data: profileData } = requestManager.useGetCurrentUserProfile();
+    const myUserId = profileData?.currentUserProfile?.id;
     useEffect(() => {
         void Promise.all(
             (data?.conversation ?? [])
@@ -67,15 +69,45 @@ export function Conversation() {
         await refetch();
     };
 
+    const messages = data?.conversation ?? [];
+
     return (
         <Stack sx={{ height: '100%', p: 2 }}>
-            <List sx={{ flex: 1, overflow: 'auto' }}>
-                {(data?.conversation ?? []).map((message) => (
-                    <ListItem key={message.id}>
-                        <ListItemText primary={message.content} secondary={message.createdAt} />
-                    </ListItem>
-                ))}
-            </List>
+            <Stack spacing={1.5} sx={{ flex: 1, overflow: 'auto', py: 1 }}>
+                {messages.length === 0 && (
+                    <Typography color="text.secondary" sx={{ textAlign: 'center' }}>{t`No messages yet.`}</Typography>
+                )}
+                {messages.map((message) => {
+                    const isMine = message.senderId === myUserId;
+                    return (
+                        <Box
+                            key={message.id}
+                            sx={{
+                                display: 'flex',
+                                justifyContent: isMine ? 'flex-end' : 'flex-start',
+                                maxWidth: '100%',
+                            }}
+                        >
+                            <Paper
+                                variant="outlined"
+                                sx={{
+                                    px: 1.5,
+                                    py: 1,
+                                    maxWidth: '75%',
+                                    bgcolor: isMine ? 'action.selected' : 'background.paper',
+                                    borderRadius: 2,
+                                    wordBreak: 'break-word',
+                                }}
+                            >
+                                <Typography variant="body1">{message.content}</Typography>
+                                <Typography color="text.secondary" variant="caption">
+                                    {dayjs(Number(message.createdAt)).format('LLL')}
+                                </Typography>
+                            </Paper>
+                        </Box>
+                    );
+                })}
+            </Stack>
             <Box sx={{ display: 'flex', gap: 1 }}>
                 <TextField
                     fullWidth
