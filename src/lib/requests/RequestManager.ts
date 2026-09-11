@@ -240,6 +240,12 @@ import type {
     AddFavoriteMutationVariables,
     RemoveFavoriteMutation,
     RemoveFavoriteMutationVariables,
+    SetMangaNoteMutation,
+    SetMangaNoteMutationVariables,
+    GetMyMangaNoteQuery,
+    GetMyMangaNoteQueryVariables,
+    GetOtherUserMangaNotesQuery,
+    GetOtherUserMangaNotesQueryVariables,
     UserLoginMutation,
     UserLoginMutationVariables,
     UserRefreshMutation,
@@ -393,7 +399,10 @@ import type { MangaIdInfo } from '@/features/manga/Manga.types.ts';
 import { updateMetadataList } from '@/features/metadata/services/MetadataApolloCacheHandler.ts';
 import {
     ADD_FAVORITE,
+    GET_MY_MANGA_NOTE,
+    GET_OTHER_USER_MANGA_NOTES,
     REMOVE_FAVORITE,
+    SET_MANGA_NOTE,
     SETUP_OWNER,
     UPDATE_PROFILE,
     USER_LOGIN,
@@ -4176,6 +4185,36 @@ export class RequestManager {
         options?: MutationHookOptions<RemoveFavoriteMutation, RemoveFavoriteMutationVariables>,
     ): AbortableApolloUseMutationResponse<RemoveFavoriteMutation, RemoveFavoriteMutationVariables> {
         return this.doRequest(GQLMethod.USE_MUTATION, REMOVE_FAVORITE, undefined, options);
+    }
+
+    public useSetMangaNote(
+        options?: MutationHookOptions<SetMangaNoteMutation, SetMangaNoteMutationVariables>,
+    ): AbortableApolloUseMutationResponse<SetMangaNoteMutation, SetMangaNoteMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, SET_MANGA_NOTE, undefined, options);
+    }
+
+    public useGetMyMangaNote(
+        mangaId: number,
+        options?: QueryHookOptions<GetMyMangaNoteQuery, GetMyMangaNoteQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetMyMangaNoteQuery, GetMyMangaNoteQueryVariables> {
+        return this.doRequest<GetMyMangaNoteQuery, GetMyMangaNoteQueryVariables>(
+            GQLMethod.USE_QUERY,
+            GET_MY_MANGA_NOTE,
+            { mangaId },
+            options,
+        ) as AbortableApolloUseQueryResponse<GetMyMangaNoteQuery, GetMyMangaNoteQueryVariables>;
+    }
+
+    public useGetOtherUserMangaNotes(
+        mangaId: number,
+        options?: QueryHookOptions<GetOtherUserMangaNotesQuery, GetOtherUserMangaNotesQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetOtherUserMangaNotesQuery, GetOtherUserMangaNotesQueryVariables> {
+        return this.doRequest<GetOtherUserMangaNotesQuery, GetOtherUserMangaNotesQueryVariables>(
+            GQLMethod.USE_QUERY,
+            GET_OTHER_USER_MANGA_NOTES,
+            { mangaId },
+            options,
+        ) as AbortableApolloUseQueryResponse<GetOtherUserMangaNotesQuery, GetOtherUserMangaNotesQueryVariables>;
     }
 
     public useOnboardingStatus(

@@ -69,7 +69,7 @@ export const DescriptionGenre = ({
                                 mb: OPEN_CLOSE_BUTTON_HEIGHT,
                             }}
                         >
-                            <MangaNotes manga={manga} showDivider={!!description} />
+                            <MangaNotes mangaId={manga.id} showDivider={!!description} />
                             {description && <MarkdownViewer markdown={description} />}
                         </Stack>
                     </Collapse>
@@ -93,7 +93,7 @@ export const DescriptionGenre = ({
                     </Stack>
                 </Stack>
             ) : (
-                <MangaNotes manga={manga} showDivider={false} />
+                <MangaNotes mangaId={manga.id} showDivider={false} />
             )}
             <Stack
                 sx={{

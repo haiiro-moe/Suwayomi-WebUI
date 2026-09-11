@@ -5354,6 +5354,36 @@ export type RemoveFavoriteMutation = {
     removeFavorite: { __typename: 'ProfileMutationPayload'; updated: boolean };
 };
 
+export type SetMangaNoteMutationVariables = Exact<{
+    input: Types.SetMangaNoteInput;
+}>;
+
+export type SetMangaNoteMutation = {
+    __typename: 'Mutation';
+    setMangaNote: { __typename: 'ProfileMutationPayload'; updated: boolean };
+};
+
+export type GetMyMangaNoteQueryVariables = Exact<{
+    mangaId: number;
+}>;
+
+export type GetMyMangaNoteQuery = { __typename: 'Query'; myMangaNote: string };
+
+export type GetOtherUserMangaNotesQueryVariables = Exact<{
+    mangaId: number;
+}>;
+
+export type GetOtherUserMangaNotesQuery = {
+    __typename: 'Query';
+    otherUserMangaNotes: Array<{
+        __typename: 'UserMangaNoteType';
+        userId: number;
+        username: string;
+        displayName: string;
+        note: string;
+    }>;
+};
+
 export type OnboardingStatusQueryVariables = Exact<{ [key: string]: never }>;
 
 export type OnboardingStatusQuery = { __typename: 'Query'; onboardingStatus: boolean };

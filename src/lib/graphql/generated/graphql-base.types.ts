@@ -1593,6 +1593,7 @@ export type Mutation = {
     setGlobalMetas?: Maybe<SetGlobalMetasPayload>;
     setMangaMeta?: Maybe<SetMangaMetaPayload>;
     setMangaMetas?: Maybe<SetMangaMetasPayload>;
+    setMangaNote: ProfileMutationPayload;
     setSettings: SetSettingsPayload;
     setSourceMeta?: Maybe<SetSourceMetaPayload>;
     setSourceMetas?: Maybe<SetSourceMetasPayload>;
@@ -1884,6 +1885,10 @@ export type MutationSetMangaMetaArgs = {
 
 export type MutationSetMangaMetasArgs = {
     input: SetMangaMetasInput;
+};
+
+export type MutationSetMangaNoteArgs = {
+    input: SetMangaNoteInput;
 };
 
 export type MutationSetSettingsArgs = {
@@ -2347,7 +2352,9 @@ export type Query = {
     mangas: MangaNodeList;
     meta: GlobalMetaType;
     metas: GlobalMetaNodeList;
+    myMangaNote: Scalars['String']['output'];
     onboardingStatus: Scalars['Boolean']['output'];
+    otherUserMangaNotes: Array<UserMangaNoteType>;
     permissionNodes: Array<Scalars['String']['output']>;
     profile?: Maybe<UserProfile>;
     restoreStatus?: Maybe<BackupRestoreStatus>;
@@ -2469,6 +2476,14 @@ export type QueryMetasArgs = {
     last?: InputMaybe<Scalars['Int']['input']>;
     offset?: InputMaybe<Scalars['Int']['input']>;
     order?: InputMaybe<Array<MetaOrderInput>>;
+};
+
+export type QueryMyMangaNoteArgs = {
+    mangaId: Scalars['Int']['input'];
+};
+
+export type QueryOtherUserMangaNotesArgs = {
+    mangaId: Scalars['Int']['input'];
 };
 
 export type QueryProfileArgs = {
@@ -2759,6 +2774,12 @@ export type SetMangaMetasPayload = {
     clientMutationId?: Maybe<Scalars['String']['output']>;
     mangas: Array<MangaType>;
     metas: Array<MangaMetaType>;
+};
+
+export type SetMangaNoteInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    mangaId: Scalars['Int']['input'];
+    note: Scalars['String']['input'];
 };
 
 export type SetSettingsInput = {
@@ -3908,6 +3929,14 @@ export type UserAdminPayload = {
     __typename?: 'UserAdminPayload';
     clientMutationId?: Maybe<Scalars['String']['output']>;
     id: Scalars['Int']['output'];
+};
+
+export type UserMangaNoteType = {
+    __typename?: 'UserMangaNoteType';
+    displayName: Scalars['String']['output'];
+    note: Scalars['String']['output'];
+    userId: Scalars['Int']['output'];
+    username: Scalars['String']['output'];
 };
 
 export type UserProfile = {

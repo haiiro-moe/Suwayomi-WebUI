@@ -57,3 +57,28 @@ export const REMOVE_FAVORITE = gql`
         }
     }
 `;
+
+export const SET_MANGA_NOTE = gql`
+    mutation SET_MANGA_NOTE($input: SetMangaNoteInput!) {
+        setMangaNote(input: $input) {
+            updated
+        }
+    }
+`;
+
+export const GET_MY_MANGA_NOTE = gql`
+    query GET_MY_MANGA_NOTE($mangaId: Int!) {
+        myMangaNote(mangaId: $mangaId)
+    }
+`;
+
+export const GET_OTHER_USER_MANGA_NOTES = gql`
+    query GET_OTHER_USER_MANGA_NOTES($mangaId: Int!) {
+        otherUserMangaNotes(mangaId: $mangaId) {
+            userId
+            username
+            displayName
+            note
+        }
+    }
+`;

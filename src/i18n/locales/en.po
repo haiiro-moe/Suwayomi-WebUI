@@ -2957,6 +2957,10 @@ msgid "Notes"
 msgstr "Notes"
 
 #: src/features/manga/components/details/MangaNotes.tsx
+msgid "Notes from other users"
+msgstr "Notes from other users"
+
+#: src/features/manga/components/details/MangaNotes.tsx
 msgid "Notes saved"
 msgstr "Notes saved"
 

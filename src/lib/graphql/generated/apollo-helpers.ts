@@ -1087,6 +1087,7 @@ export type MutationKeySpecifier = (
     | 'setGlobalMetas'
     | 'setMangaMeta'
     | 'setMangaMetas'
+    | 'setMangaNote'
     | 'setSettings'
     | 'setSourceMeta'
     | 'setSourceMetas'
@@ -1187,6 +1188,7 @@ export type MutationFieldPolicy = {
     setGlobalMetas?: FieldPolicy<any> | FieldReadFunction<any>;
     setMangaMeta?: FieldPolicy<any> | FieldReadFunction<any>;
     setMangaMetas?: FieldPolicy<any> | FieldReadFunction<any>;
+    setMangaNote?: FieldPolicy<any> | FieldReadFunction<any>;
     setSettings?: FieldPolicy<any> | FieldReadFunction<any>;
     setSourceMeta?: FieldPolicy<any> | FieldReadFunction<any>;
     setSourceMetas?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1512,7 +1514,9 @@ export type QueryKeySpecifier = (
     | 'mangas'
     | 'meta'
     | 'metas'
+    | 'myMangaNote'
     | 'onboardingStatus'
+    | 'otherUserMangaNotes'
     | 'permissionNodes'
     | 'profile'
     | 'restoreStatus'
@@ -1560,7 +1564,9 @@ export type QueryFieldPolicy = {
     mangas?: FieldPolicy<any> | FieldReadFunction<any>;
     meta?: FieldPolicy<any> | FieldReadFunction<any>;
     metas?: FieldPolicy<any> | FieldReadFunction<any>;
+    myMangaNote?: FieldPolicy<any> | FieldReadFunction<any>;
     onboardingStatus?: FieldPolicy<any> | FieldReadFunction<any>;
+    otherUserMangaNotes?: FieldPolicy<any> | FieldReadFunction<any>;
     permissionNodes?: FieldPolicy<any> | FieldReadFunction<any>;
     profile?: FieldPolicy<any> | FieldReadFunction<any>;
     restoreStatus?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -2713,6 +2719,19 @@ export type UserAdminPayloadFieldPolicy = {
     clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
     id?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type UserMangaNoteTypeKeySpecifier = (
+    | 'displayName'
+    | 'note'
+    | 'userId'
+    | 'username'
+    | UserMangaNoteTypeKeySpecifier
+)[];
+export type UserMangaNoteTypeFieldPolicy = {
+    displayName?: FieldPolicy<any> | FieldReadFunction<any>;
+    note?: FieldPolicy<any> | FieldReadFunction<any>;
+    userId?: FieldPolicy<any> | FieldReadFunction<any>;
+    username?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type UserProfileKeySpecifier = (
     | 'appTheme'
     | 'avatarUrl'
@@ -3642,6 +3661,10 @@ export type StrictTypedTypePolicies = {
     UserAdminPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | UserAdminPayloadKeySpecifier | (() => undefined | UserAdminPayloadKeySpecifier);
         fields?: UserAdminPayloadFieldPolicy;
+    };
+    UserMangaNoteType?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | UserMangaNoteTypeKeySpecifier | (() => undefined | UserMangaNoteTypeKeySpecifier);
+        fields?: UserMangaNoteTypeFieldPolicy;
     };
     UserProfile?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | UserProfileKeySpecifier | (() => undefined | UserProfileKeySpecifier);
