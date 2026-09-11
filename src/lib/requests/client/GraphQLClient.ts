@@ -10,7 +10,7 @@ import { ErrorLink } from '@apollo/client/link/error';
 import { SetContextLink } from '@apollo/client/link/context';
 import type { ErrorLike } from '@apollo/client';
 import { ApolloClient, ApolloLink, CombinedGraphQLErrors, InMemoryCache, ServerError } from '@apollo/client';
-import { filter, firstValueFrom, from, map, switchMap } from 'rxjs';
+import { catchError, filter, firstValueFrom, from, map, switchMap } from 'rxjs';
 import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import type { Client } from 'graphql-ws';
@@ -330,6 +330,13 @@ export class GraphQLClient extends BaseClient<ApolloClient, ApolloClient.Options
                 return undefined;
             }
 
+            if (operation.operationName === 'USER_REFRESH') {
+                AuthManager.removeTokens();
+                AuthManager.setAuthRequired(true);
+                AuthManager.setAuthInitialized(true);
+                return undefined;
+            }
+
             return from(BaseClient.refreshAccessToken(this.handleRefreshToken)).pipe(
                 filter(Boolean),
                 map((result) => {
@@ -337,6 +344,12 @@ export class GraphQLClient extends BaseClient<ApolloClient, ApolloClient.Options
                     return result;
                 }),
                 switchMap(() => forward(operation)),
+                catchError((refreshError) => {
+                    AuthManager.removeTokens();
+                    AuthManager.setAuthRequired(true);
+                    AuthManager.setAuthInitialized(true);
+                    throw refreshError;
+                }),
             );
         });
     }
