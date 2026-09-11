@@ -241,7 +241,7 @@ export const MangaDetails = ({
         }
     }, [manga.source, t]);
 
-    const { updateLibraryState } = useManageMangaLibraryState(manga);
+    const { updateLibraryState, canManageLibrary } = useManageMangaLibraryState(manga);
 
     return (
         <DetailsWrapper>
@@ -283,6 +283,7 @@ export const MangaDetails = ({
                     <FlexWrapButton
                         size={MediaQuery.useIsMobileWidth() ? 'small' : 'medium'}
                         onClick={updateLibraryState}
+                        disabled={!canManageLibrary}
                         variant={manga.inLibrary ? 'contained' : 'outlined'}
                     >
                         {manga.inLibrary ? <FavoriteIcon /> : <FavoriteBorderIcon />}

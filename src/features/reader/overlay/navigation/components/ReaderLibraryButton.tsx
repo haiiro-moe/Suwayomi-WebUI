@@ -28,11 +28,11 @@ export const ReaderLibraryButton = memo(() => {
     const { inLibrary } = manga ?? ACTION_FALLBACK_MANGA;
 
     const { t } = useLingui();
-    const { updateLibraryState } = useManageMangaLibraryState(manga ?? ACTION_FALLBACK_MANGA, true);
+    const { updateLibraryState, canManageLibrary } = useManageMangaLibraryState(manga ?? ACTION_FALLBACK_MANGA, true);
 
     return (
         <CustomTooltip title={inLibrary ? t`Remove from the library` : t`Add To Library`}>
-            <IconButton onClick={updateLibraryState} color="inherit">
+            <IconButton onClick={updateLibraryState} disabled={!canManageLibrary} color="inherit">
                 {inLibrary ? <FavoriteIcon /> : <FavoriteBorderIcon />}
             </IconButton>
         </CustomTooltip>

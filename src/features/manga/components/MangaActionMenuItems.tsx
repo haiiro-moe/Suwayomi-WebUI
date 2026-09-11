@@ -41,6 +41,7 @@ import type {
 import { MANGA_ACTION_TO_TRANSLATION } from '@/features/manga/Manga.constants.ts';
 import { CategorySelect } from '@/features/category/components/CategorySelect.tsx';
 import { STABLE_EMPTY_ARRAY } from '@/base/Base.constants.ts';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 
 type BaseProps = { onClose: () => void; setHideMenu: (hide: boolean) => void };
 
@@ -70,6 +71,7 @@ export const MangaActionMenuItems = ({
     setHideMenu,
 }: Props) => {
     const { t } = useLingui();
+    const canManageLibrary = usePermissions().has('browse.add_to_library');
 
     const isSingleMode = !!manga;
 
@@ -171,11 +173,13 @@ export const MangaActionMenuItems = ({
                 Icon={Label}
                 title={getMenuItemTitle('change_categories', selectedMangas.length)}
             />
-            <MenuItem
-                onClick={() => performAction('remove_from_library', selectedMangas)}
-                Icon={FavoriteBorderIcon}
-                title={getMenuItemTitle('remove_from_library', selectedMangas.length)}
-            />
+            {canManageLibrary && (
+                <MenuItem
+                    onClick={() => performAction('remove_from_library', selectedMangas)}
+                    Icon={FavoriteBorderIcon}
+                    title={getMenuItemTitle('remove_from_library', selectedMangas.length)}
+                />
+            )}
         </>
     );
 };
