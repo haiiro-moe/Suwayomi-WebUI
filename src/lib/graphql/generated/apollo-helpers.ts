@@ -60,6 +60,19 @@ export type BindTrackRecordPayloadFieldPolicy = {
     clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
     trackRecord?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type CategoryAccessTypeKeySpecifier = (
+    | 'canEdit'
+    | 'canRead'
+    | 'categoryId'
+    | 'userId'
+    | CategoryAccessTypeKeySpecifier
+)[];
+export type CategoryAccessTypeFieldPolicy = {
+    canEdit?: FieldPolicy<any> | FieldReadFunction<any>;
+    canRead?: FieldPolicy<any> | FieldReadFunction<any>;
+    categoryId?: FieldPolicy<any> | FieldReadFunction<any>;
+    userId?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type CategoryEdgeKeySpecifier = ('cursor' | 'node' | CategoryEdgeKeySpecifier)[];
 export type CategoryEdgeFieldPolicy = {
     cursor?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1067,6 +1080,7 @@ export type MutationKeySpecifier = (
     | 'setSourceMeta'
     | 'setSourceMetas'
     | 'setUserSettings'
+    | 'setupOwner'
     | 'startDownloader'
     | 'startSync'
     | 'stopDownloader'
@@ -1166,6 +1180,7 @@ export type MutationFieldPolicy = {
     setSourceMeta?: FieldPolicy<any> | FieldReadFunction<any>;
     setSourceMetas?: FieldPolicy<any> | FieldReadFunction<any>;
     setUserSettings?: FieldPolicy<any> | FieldReadFunction<any>;
+    setupOwner?: FieldPolicy<any> | FieldReadFunction<any>;
     startDownloader?: FieldPolicy<any> | FieldReadFunction<any>;
     startSync?: FieldPolicy<any> | FieldReadFunction<any>;
     stopDownloader?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1267,7 +1282,6 @@ export type PartialSettingsTypeKeySpecifier = (
     | 'flareSolverrTimeout'
     | 'flareSolverrUrl'
     | 'globalUpdateCron'
-    | 'globalUpdateInterval'
     | 'gqlDebugLogsEnabled'
     | 'initialOpenInBrowserEnabled'
     | 'ip'
@@ -1367,7 +1381,6 @@ export type PartialSettingsTypeFieldPolicy = {
     flareSolverrTimeout?: FieldPolicy<any> | FieldReadFunction<any>;
     flareSolverrUrl?: FieldPolicy<any> | FieldReadFunction<any>;
     globalUpdateCron?: FieldPolicy<any> | FieldReadFunction<any>;
-    globalUpdateInterval?: FieldPolicy<any> | FieldReadFunction<any>;
     gqlDebugLogsEnabled?: FieldPolicy<any> | FieldReadFunction<any>;
     initialOpenInBrowserEnabled?: FieldPolicy<any> | FieldReadFunction<any>;
     ip?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1466,6 +1479,7 @@ export type QueryKeySpecifier = (
     | 'aboutWebUI'
     | 'categories'
     | 'category'
+    | 'categoryAccess'
     | 'chapter'
     | 'chapters'
     | 'checkForServerUpdates'
@@ -1487,6 +1501,7 @@ export type QueryKeySpecifier = (
     | 'mangas'
     | 'meta'
     | 'metas'
+    | 'onboardingStatus'
     | 'permissionNodes'
     | 'profile'
     | 'restoreStatus'
@@ -1512,6 +1527,7 @@ export type QueryFieldPolicy = {
     aboutWebUI?: FieldPolicy<any> | FieldReadFunction<any>;
     categories?: FieldPolicy<any> | FieldReadFunction<any>;
     category?: FieldPolicy<any> | FieldReadFunction<any>;
+    categoryAccess?: FieldPolicy<any> | FieldReadFunction<any>;
     chapter?: FieldPolicy<any> | FieldReadFunction<any>;
     chapters?: FieldPolicy<any> | FieldReadFunction<any>;
     checkForServerUpdates?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1533,6 +1549,7 @@ export type QueryFieldPolicy = {
     mangas?: FieldPolicy<any> | FieldReadFunction<any>;
     meta?: FieldPolicy<any> | FieldReadFunction<any>;
     metas?: FieldPolicy<any> | FieldReadFunction<any>;
+    onboardingStatus?: FieldPolicy<any> | FieldReadFunction<any>;
     permissionNodes?: FieldPolicy<any> | FieldReadFunction<any>;
     profile?: FieldPolicy<any> | FieldReadFunction<any>;
     restoreStatus?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1752,7 +1769,6 @@ export type SettingsKeySpecifier = (
     | 'flareSolverrTimeout'
     | 'flareSolverrUrl'
     | 'globalUpdateCron'
-    | 'globalUpdateInterval'
     | 'gqlDebugLogsEnabled'
     | 'initialOpenInBrowserEnabled'
     | 'ip'
@@ -1852,7 +1868,6 @@ export type SettingsFieldPolicy = {
     flareSolverrTimeout?: FieldPolicy<any> | FieldReadFunction<any>;
     flareSolverrUrl?: FieldPolicy<any> | FieldReadFunction<any>;
     globalUpdateCron?: FieldPolicy<any> | FieldReadFunction<any>;
-    globalUpdateInterval?: FieldPolicy<any> | FieldReadFunction<any>;
     gqlDebugLogsEnabled?: FieldPolicy<any> | FieldReadFunction<any>;
     initialOpenInBrowserEnabled?: FieldPolicy<any> | FieldReadFunction<any>;
     ip?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -2003,7 +2018,6 @@ export type SettingsTypeKeySpecifier = (
     | 'flareSolverrTimeout'
     | 'flareSolverrUrl'
     | 'globalUpdateCron'
-    | 'globalUpdateInterval'
     | 'gqlDebugLogsEnabled'
     | 'initialOpenInBrowserEnabled'
     | 'ip'
@@ -2103,7 +2117,6 @@ export type SettingsTypeFieldPolicy = {
     flareSolverrTimeout?: FieldPolicy<any> | FieldReadFunction<any>;
     flareSolverrUrl?: FieldPolicy<any> | FieldReadFunction<any>;
     globalUpdateCron?: FieldPolicy<any> | FieldReadFunction<any>;
-    globalUpdateInterval?: FieldPolicy<any> | FieldReadFunction<any>;
     gqlDebugLogsEnabled?: FieldPolicy<any> | FieldReadFunction<any>;
     initialOpenInBrowserEnabled?: FieldPolicy<any> | FieldReadFunction<any>;
     ip?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -2158,6 +2171,17 @@ export type SettingsTypeFieldPolicy = {
     webUIFlavor?: FieldPolicy<any> | FieldReadFunction<any>;
     webUIInterface?: FieldPolicy<any> | FieldReadFunction<any>;
     webUIUpdateCheckInterval?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type SetupOwnerPayloadKeySpecifier = (
+    | 'accessToken'
+    | 'clientMutationId'
+    | 'refreshToken'
+    | SetupOwnerPayloadKeySpecifier
+)[];
+export type SetupOwnerPayloadFieldPolicy = {
+    accessToken?: FieldPolicy<any> | FieldReadFunction<any>;
+    clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+    refreshToken?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type SortFilterKeySpecifier = ('default' | 'name' | 'values' | SortFilterKeySpecifier)[];
 export type SortFilterFieldPolicy = {
@@ -2772,6 +2796,10 @@ export type StrictTypedTypePolicies = {
         keyFields?: false | BindTrackRecordPayloadKeySpecifier | (() => undefined | BindTrackRecordPayloadKeySpecifier);
         fields?: BindTrackRecordPayloadFieldPolicy;
     };
+    CategoryAccessType?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | CategoryAccessTypeKeySpecifier | (() => undefined | CategoryAccessTypeKeySpecifier);
+        fields?: CategoryAccessTypeFieldPolicy;
+    };
     CategoryEdge?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | CategoryEdgeKeySpecifier | (() => undefined | CategoryEdgeKeySpecifier);
         fields?: CategoryEdgeFieldPolicy;
@@ -3362,6 +3390,10 @@ export type StrictTypedTypePolicies = {
     SettingsType?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | SettingsTypeKeySpecifier | (() => undefined | SettingsTypeKeySpecifier);
         fields?: SettingsTypeFieldPolicy;
+    };
+    SetupOwnerPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | SetupOwnerPayloadKeySpecifier | (() => undefined | SetupOwnerPayloadKeySpecifier);
+        fields?: SetupOwnerPayloadFieldPolicy;
     };
     SortFilter?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | SortFilterKeySpecifier | (() => undefined | SortFilterKeySpecifier);

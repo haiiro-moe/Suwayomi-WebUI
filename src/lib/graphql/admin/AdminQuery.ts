@@ -8,6 +8,17 @@
 
 import gql from 'graphql-tag';
 
+export const GET_CATEGORY_ACCESS = gql`
+    query GET_CATEGORY_ACCESS($userId: Int!) {
+        categoryAccess(userId: $userId) {
+            userId
+            categoryId
+            canRead
+            canEdit
+        }
+    }
+`;
+
 export const GET_ADMIN_USERS = gql`
     query GET_ADMIN_USERS {
         users {

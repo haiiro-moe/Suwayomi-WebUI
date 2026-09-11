@@ -8,6 +8,14 @@
 
 import gql from 'graphql-tag';
 
+export const SET_CATEGORY_ACCESS = gql`
+    mutation SET_CATEGORY_ACCESS($input: SetCategoryAccessInput!) {
+        setCategoryAccess(input: $input) {
+            updated
+        }
+    }
+`;
+
 export const CREATE_USER = gql`
     mutation CREATE_USER($input: CreateUserInput!) {
         createUser(input: $input) {

@@ -113,6 +113,14 @@ export type BooleanFilterInput = {
     notIn?: InputMaybe<Array<Scalars['Boolean']['input']>>;
 };
 
+export type CategoryAccessType = {
+    __typename?: 'CategoryAccessType';
+    canEdit: Scalars['Boolean']['output'];
+    canRead: Scalars['Boolean']['output'];
+    categoryId: Scalars['Int']['output'];
+    userId: Scalars['Int']['output'];
+};
+
 export type CategoryConditionInput = {
     default?: InputMaybe<Scalars['Boolean']['input']>;
     id?: InputMaybe<Scalars['Int']['input']>;
@@ -1582,6 +1590,7 @@ export type Mutation = {
     setSourceMeta?: Maybe<SetSourceMetaPayload>;
     setSourceMetas?: Maybe<SetSourceMetasPayload>;
     setUserSettings: SetUserSettingsPayload;
+    setupOwner: SetupOwnerPayload;
     startDownloader?: Maybe<StartDownloaderPayload>;
     startSync: StartSyncPayload;
     stopDownloader?: Maybe<StopDownloaderPayload>;
@@ -1886,6 +1895,10 @@ export type MutationSetUserSettingsArgs = {
     input: SetUserSettingsInput;
 };
 
+export type MutationSetupOwnerArgs = {
+    input: SetupOwnerInput;
+};
+
 export type MutationStartDownloaderArgs = {
     input: StartDownloaderInput;
 };
@@ -2104,8 +2117,6 @@ export type PartialSettingsType = Settings & {
     flareSolverrTimeout?: Maybe<Scalars['Int']['output']>;
     flareSolverrUrl?: Maybe<Scalars['String']['output']>;
     globalUpdateCron?: Maybe<Scalars['String']['output']>;
-    /** @deprecated Use a cron expression for automated library updates, replace with globalUpdateCron */
-    globalUpdateInterval?: Maybe<Scalars['Float']['output']>;
     /** @deprecated Removed - does not do anything */
     gqlDebugLogsEnabled?: Maybe<Scalars['Boolean']['output']>;
     initialOpenInBrowserEnabled?: Maybe<Scalars['Boolean']['output']>;
@@ -2307,6 +2318,7 @@ export type Query = {
     aboutWebUI: AboutWebUi;
     categories: CategoryNodeList;
     category: CategoryType;
+    categoryAccess: Array<CategoryAccessType>;
     chapter: ChapterType;
     chapters: ChapterNodeList;
     checkForServerUpdates: Array<CheckForServerUpdatesPayload>;
@@ -2328,6 +2340,7 @@ export type Query = {
     mangas: MangaNodeList;
     meta: GlobalMetaType;
     metas: GlobalMetaNodeList;
+    onboardingStatus: Scalars['Boolean']['output'];
     permissionNodes: Array<Scalars['String']['output']>;
     profile?: Maybe<UserProfile>;
     restoreStatus?: Maybe<BackupRestoreStatus>;
@@ -2362,6 +2375,10 @@ export type QueryCategoriesArgs = {
 
 export type QueryCategoryArgs = {
     id: Scalars['Int']['input'];
+};
+
+export type QueryCategoryAccessArgs = {
+    userId: Scalars['Int']['input'];
 };
 
 export type QueryChapterArgs = {
@@ -2835,8 +2852,6 @@ export type Settings = {
     flareSolverrTimeout?: Maybe<Scalars['Int']['output']>;
     flareSolverrUrl?: Maybe<Scalars['String']['output']>;
     globalUpdateCron?: Maybe<Scalars['String']['output']>;
-    /** @deprecated Use a cron expression for automated library updates, replace with globalUpdateCron */
-    globalUpdateInterval?: Maybe<Scalars['Float']['output']>;
     /** @deprecated Removed - does not do anything */
     gqlDebugLogsEnabled?: Maybe<Scalars['Boolean']['output']>;
     initialOpenInBrowserEnabled?: Maybe<Scalars['Boolean']['output']>;
@@ -2992,8 +3007,6 @@ export type SettingsType = Settings & {
     flareSolverrTimeout: Scalars['Int']['output'];
     flareSolverrUrl: Scalars['String']['output'];
     globalUpdateCron: Scalars['String']['output'];
-    /** @deprecated Use a cron expression for automated library updates, replace with globalUpdateCron */
-    globalUpdateInterval: Scalars['Float']['output'];
     /** @deprecated Removed - does not do anything */
     gqlDebugLogsEnabled: Scalars['Boolean']['output'];
     initialOpenInBrowserEnabled: Scalars['Boolean']['output'];
@@ -3054,6 +3067,19 @@ export type SettingsType = Settings & {
     webUIFlavor: WebUiFlavor;
     webUIInterface: WebUiInterface;
     webUIUpdateCheckInterval: Scalars['Float']['output'];
+};
+
+export type SetupOwnerInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    password: Scalars['String']['input'];
+    username: Scalars['String']['input'];
+};
+
+export type SetupOwnerPayload = {
+    __typename?: 'SetupOwnerPayload';
+    accessToken: Scalars['String']['output'];
+    clientMutationId?: Maybe<Scalars['String']['output']>;
+    refreshToken: Scalars['String']['output'];
 };
 
 export type SortFilter = {
@@ -3744,8 +3770,10 @@ export type UpdateMangasPayload = {
 };
 
 export type UpdateProfileInput = {
+    avatarUrl?: InputMaybe<Scalars['String']['input']>;
     clientMutationId?: InputMaybe<Scalars['String']['input']>;
     description: Scalars['String']['input'];
+    displayName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateRoleInput = {

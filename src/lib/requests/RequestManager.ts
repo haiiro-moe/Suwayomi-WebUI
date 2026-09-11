@@ -68,6 +68,10 @@ import type {
     GetAdminRolesQueryVariables,
     GetAdminUsersQuery,
     GetAdminUsersQueryVariables,
+    GetCategoryAccessQuery,
+    GetCategoryAccessQueryVariables,
+    SetCategoryAccessMutation,
+    SetCategoryAccessMutationVariables,
     GetCurrentUserProfileQuery,
     GetCurrentUserProfileQueryVariables,
     GetUserDirectoryQuery,
@@ -232,6 +236,10 @@ import type {
     UpdateUserMutationVariables,
     UpdateProfileMutation,
     UpdateProfileMutationVariables,
+    AddFavoriteMutation,
+    AddFavoriteMutationVariables,
+    RemoveFavoriteMutation,
+    RemoveFavoriteMutationVariables,
     UserLoginMutation,
     UserLoginMutationVariables,
     UserRefreshMutation,
@@ -383,7 +391,14 @@ import { CHAPTER_META_FIELDS } from '@/lib/graphql/chapter/ChapterFragments.ts';
 import type { MetadataMigrationSettings } from '@/features/migration/Migration.types.ts';
 import type { MangaIdInfo } from '@/features/manga/Manga.types.ts';
 import { updateMetadataList } from '@/features/metadata/services/MetadataApolloCacheHandler.ts';
-import { SETUP_OWNER, UPDATE_PROFILE, USER_LOGIN, USER_REFRESH } from '@/lib/graphql/user/UserMutation.ts';
+import {
+    ADD_FAVORITE,
+    REMOVE_FAVORITE,
+    SETUP_OWNER,
+    UPDATE_PROFILE,
+    USER_LOGIN,
+    USER_REFRESH,
+} from '@/lib/graphql/user/UserMutation.ts';
 import { GET_CURRENT_USER_PROFILE, ONBOARDING_STATUS } from '@/lib/graphql/user/UserQuery.ts';
 import {
     GET_CONVERSATION,
@@ -399,10 +414,11 @@ import {
     CREATE_USER,
     DELETE_ROLE,
     DELETE_USER,
+    SET_CATEGORY_ACCESS,
     UPDATE_ROLE,
     UPDATE_USER,
 } from '@/lib/graphql/admin/AdminMutation.ts';
-import { GET_ADMIN_ROLES, GET_ADMIN_USERS } from '@/lib/graphql/admin/AdminQuery.ts';
+import { GET_ADMIN_ROLES, GET_ADMIN_USERS, GET_CATEGORY_ACCESS } from '@/lib/graphql/admin/AdminQuery.ts';
 import { AuthManager } from '@/features/authentication/AuthManager.ts';
 import { useLocalStorage } from '@/base/hooks/useStorage.tsx';
 import { KO_SYNC_LOGIN, KO_SYNC_LOGOUT } from '@/lib/graphql/koreader/KoreaderSyncMutation.ts';
@@ -1535,6 +1551,29 @@ export class RequestManager {
         options?: QueryHookOptions<GetAdminUsersQuery, GetAdminUsersQueryVariables>,
     ): AbortableApolloUseQueryResponse<GetAdminUsersQuery, GetAdminUsersQueryVariables> {
         return this.doRequest(GQLMethod.USE_QUERY, GET_ADMIN_USERS, {}, options);
+    }
+
+    public useGetCategoryAccess(
+        userId: number | undefined,
+        options?: QueryHookOptions<GetCategoryAccessQuery, GetCategoryAccessQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetCategoryAccessQuery, GetCategoryAccessQueryVariables> {
+        return this.doRequest<GetCategoryAccessQuery, GetCategoryAccessQueryVariables>(
+            GQLMethod.USE_QUERY,
+            GET_CATEGORY_ACCESS,
+            { userId: userId ?? 0 },
+            { skip: userId === undefined, ...options },
+        ) as AbortableApolloUseQueryResponse<GetCategoryAccessQuery, GetCategoryAccessQueryVariables>;
+    }
+
+    public useSetCategoryAccess(
+        options?: MutationHookOptions<SetCategoryAccessMutation, SetCategoryAccessMutationVariables>,
+    ): AbortableApolloUseMutationResponse<SetCategoryAccessMutation, SetCategoryAccessMutationVariables> {
+        return this.doRequest<SetCategoryAccessMutation, SetCategoryAccessMutationVariables>(
+            GQLMethod.USE_MUTATION,
+            SET_CATEGORY_ACCESS,
+            undefined,
+            options,
+        ) as AbortableApolloUseMutationResponse<SetCategoryAccessMutation, SetCategoryAccessMutationVariables>;
     }
 
     public useGetAdminRoles(
@@ -4125,6 +4164,18 @@ export class RequestManager {
         options?: MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>,
     ): AbortableApolloUseMutationResponse<UpdateProfileMutation, UpdateProfileMutationVariables> {
         return this.doRequest(GQLMethod.USE_MUTATION, UPDATE_PROFILE, undefined, options);
+    }
+
+    public useAddFavorite(
+        options?: MutationHookOptions<AddFavoriteMutation, AddFavoriteMutationVariables>,
+    ): AbortableApolloUseMutationResponse<AddFavoriteMutation, AddFavoriteMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, ADD_FAVORITE, undefined, options);
+    }
+
+    public useRemoveFavorite(
+        options?: MutationHookOptions<RemoveFavoriteMutation, RemoveFavoriteMutationVariables>,
+    ): AbortableApolloUseMutationResponse<RemoveFavoriteMutation, RemoveFavoriteMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, REMOVE_FAVORITE, undefined, options);
     }
 
     public useOnboardingStatus(

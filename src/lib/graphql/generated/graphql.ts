@@ -4,6 +4,15 @@ type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import type * as Types from './graphql-base.types';
 
+export type SetCategoryAccessMutationVariables = Exact<{
+    input: Types.SetCategoryAccessInput;
+}>;
+
+export type SetCategoryAccessMutation = {
+    __typename: 'Mutation';
+    setCategoryAccess: { __typename: 'SetCategoryAccessPayload'; updated: boolean };
+};
+
 export type CreateUserMutationVariables = Exact<{
     input: Types.CreateUserInput;
 }>;
@@ -50,6 +59,21 @@ export type DeleteRoleMutationVariables = Exact<{
 export type DeleteRoleMutation = {
     __typename: 'Mutation';
     deleteRole: { __typename: 'OperationPayload'; success: boolean };
+};
+
+export type GetCategoryAccessQueryVariables = Exact<{
+    userId: number;
+}>;
+
+export type GetCategoryAccessQuery = {
+    __typename: 'Query';
+    categoryAccess: Array<{
+        __typename: 'CategoryAccessType';
+        userId: number;
+        categoryId: number;
+        canRead: boolean;
+        canEdit: boolean;
+    }>;
 };
 
 export type GetAdminUsersQueryVariables = Exact<{ [key: string]: never }>;
@@ -3173,10 +3197,7 @@ export type ServerSettingsFragment = {
     autoDownloadNewChaptersLimit: number;
     autoDownloadIgnoreReUploads: boolean;
     maxSourcesInParallel: number;
-    excludeUnreadChapters: boolean;
-    excludeNotStarted: boolean;
-    excludeCompleted: boolean;
-    globalUpdateInterval: number;
+    globalUpdateCron: string;
     updateMangas: boolean;
     authMode: Types.AuthMode;
     authPassword: string;
@@ -3286,10 +3307,7 @@ export type ResetServerSettingsMutation = {
             autoDownloadNewChaptersLimit: number;
             autoDownloadIgnoreReUploads: boolean;
             maxSourcesInParallel: number;
-            excludeUnreadChapters: boolean;
-            excludeNotStarted: boolean;
-            excludeCompleted: boolean;
-            globalUpdateInterval: number;
+            globalUpdateCron: string;
             updateMangas: boolean;
             authMode: Types.AuthMode;
             authPassword: string;
@@ -3409,10 +3427,7 @@ export type UpdateServerSettingsMutation = {
             autoDownloadNewChaptersLimit: number;
             autoDownloadIgnoreReUploads: boolean;
             maxSourcesInParallel: number;
-            excludeUnreadChapters: boolean;
-            excludeNotStarted: boolean;
-            excludeCompleted: boolean;
-            globalUpdateInterval: number;
+            globalUpdateCron: string;
             updateMangas: boolean;
             authMode: Types.AuthMode;
             authPassword: string;
@@ -3528,10 +3543,7 @@ export type GetServerSettingsQuery = {
         autoDownloadNewChaptersLimit: number;
         autoDownloadIgnoreReUploads: boolean;
         maxSourcesInParallel: number;
-        excludeUnreadChapters: boolean;
-        excludeNotStarted: boolean;
-        excludeCompleted: boolean;
-        globalUpdateInterval: number;
+        globalUpdateCron: string;
         updateMangas: boolean;
         authMode: Types.AuthMode;
         authPassword: string;
@@ -5278,6 +5290,16 @@ export type UserLoginMutation = {
     login: { __typename: 'LoginPayload'; accessToken: string; refreshToken: string };
 };
 
+export type SetupOwnerMutationVariables = Exact<{
+    password: string;
+    username: string;
+}>;
+
+export type SetupOwnerMutation = {
+    __typename: 'Mutation';
+    setupOwner: { __typename: 'SetupOwnerPayload'; accessToken: string; refreshToken: string };
+};
+
 export type UserRefreshMutationVariables = Exact<{
     refreshToken: string;
 }>;
@@ -5295,6 +5317,28 @@ export type UpdateProfileMutation = {
     __typename: 'Mutation';
     updateProfile: { __typename: 'ProfileMutationPayload'; updated: boolean };
 };
+
+export type AddFavoriteMutationVariables = Exact<{
+    input: Types.FavoriteMangaInput;
+}>;
+
+export type AddFavoriteMutation = {
+    __typename: 'Mutation';
+    addFavorite: { __typename: 'ProfileMutationPayload'; updated: boolean };
+};
+
+export type RemoveFavoriteMutationVariables = Exact<{
+    input: Types.FavoriteMangaInput;
+}>;
+
+export type RemoveFavoriteMutation = {
+    __typename: 'Mutation';
+    removeFavorite: { __typename: 'ProfileMutationPayload'; updated: boolean };
+};
+
+export type OnboardingStatusQueryVariables = Exact<{ [key: string]: never }>;
+
+export type OnboardingStatusQuery = { __typename: 'Query'; onboardingStatus: boolean };
 
 export type GetCurrentUserProfileQueryVariables = Exact<{ [key: string]: never }>;
 
