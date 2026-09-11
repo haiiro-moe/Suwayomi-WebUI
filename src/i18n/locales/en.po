@@ -1186,8 +1186,8 @@ msgid "Could not log in to {trackerName}"
 msgstr "Could not log in to {trackerName}"
 
 #: src/features/authentication/screens/LoginPage.tsx
-msgid "Could not log in to Suwayomi"
-msgstr "Could not log in to Suwayomi"
+msgid "Could not log in to Suwairo"
+msgstr "Could not log in to Suwairo"
 
 #. placeholder {0}: tracker.name
 #: src/features/tracker/components/cards/SettingsTrackerCard.tsx

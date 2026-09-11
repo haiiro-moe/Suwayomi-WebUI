@@ -27,8 +27,19 @@ import { SearchParam } from '@/base/Base.types.ts';
 import { SplashScreen } from '@/features/authentication/components/SplashScreen.tsx';
 import { ServerAddressSetting } from '@/features/settings/components/ServerAddressSetting.tsx';
 
-const ONBOARDING_STATUS = gql`query ONBOARDING_STATUS { onboardingStatus }`;
-const SETUP_OWNER = gql`mutation SETUP_OWNER($username: String!, $password: String!) { setupOwner(input: { username: $username, password: $password }) { accessToken refreshToken } }`;
+const ONBOARDING_STATUS = gql`
+    query ONBOARDING_STATUS {
+        onboardingStatus
+    }
+`;
+const SETUP_OWNER = gql`
+    mutation SETUP_OWNER($username: String!, $password: String!) {
+        setupOwner(input: { username: $username, password: $password }) {
+            accessToken
+            refreshToken
+        }
+    }
+`;
 
 export const LoginPage = () => {
     const theme = useTheme();
@@ -76,7 +87,7 @@ export const LoginPage = () => {
                 navigate(redirect ?? AppRoutes.root.path);
             }
         } catch (e) {
-            makeToast(t`Could not log in to Suwayomi`, 'error', getErrorMessage(e));
+            makeToast(t`Could not log in to Suwairo`, 'error', getErrorMessage(e));
         }
     };
 
