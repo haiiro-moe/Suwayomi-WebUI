@@ -940,6 +940,13 @@ export type ExtensionType = {
     versionName: Scalars['String']['output'];
 };
 
+export type FavoriteMangaEntryType = {
+    __typename?: 'FavoriteMangaEntryType';
+    accessible: Scalars['Boolean']['output'];
+    manga?: Maybe<MangaType>;
+    mangaId: Scalars['Int']['output'];
+};
+
 export type FavoriteMangaInput = {
     clientMutationId?: InputMaybe<Scalars['String']['input']>;
     mangaId: Scalars['Int']['input'];
@@ -3907,6 +3914,7 @@ export type UserProfile = {
     avatarUrl?: Maybe<Scalars['String']['output']>;
     description: Scalars['String']['output'];
     displayName: Scalars['String']['output'];
+    favoriteManga: Array<FavoriteMangaEntryType>;
     favoriteMangaIds: Array<Scalars['Int']['output']>;
     id: Scalars['Int']['output'];
     permissions: Array<Scalars['String']['output']>;

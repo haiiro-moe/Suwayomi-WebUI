@@ -135,7 +135,6 @@ msgid "{0} / {1}{2}"
 msgstr "{0} / {1}{2}"
 
 #. placeholder {0}: profile.favoriteMangaIds.length
-#: src/features/community/screens/UserProfile.tsx
 #: src/features/profile/screens/Profile.tsx
 msgid "{0} manga"
 msgstr "{0} manga"
@@ -2874,6 +2873,10 @@ msgstr "Next page"
 msgid "Next:"
 msgstr "Next:"
 
+#: src/features/community/screens/UserProfile.tsx
+msgid "No access"
+msgstr "No access"
+
 #: src/features/admin/screens/Admin.tsx
 msgid "No categories found."
 msgstr "No categories found."
@@ -2893,6 +2896,10 @@ msgstr "No description"
 #: src/features/downloads/screens/DownloadQueue.tsx
 msgid "No downloads"
 msgstr "No downloads"
+
+#: src/features/community/screens/UserProfile.tsx
+msgid "No favorites yet."
+msgstr "No favorites yet."
 
 #: src/features/global-search/screens/SearchAll.tsx
 #: src/features/manga/components/MangaGrid.tsx

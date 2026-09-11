@@ -32,6 +32,18 @@ export const GET_USER_PROFILE = gql`
             role
             description
             favoriteMangaIds
+            favoriteManga {
+                mangaId
+                accessible
+                manga {
+                    id
+                    title
+                    sourceId
+                    inLibrary
+                    thumbnailUrl
+                    thumbnailUrlLastFetched
+                }
+            }
         }
     }
 `;

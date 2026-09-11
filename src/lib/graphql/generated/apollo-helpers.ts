@@ -628,6 +628,17 @@ export type ExtensionTypeFieldPolicy = {
     versionCodeLong?: FieldPolicy<any> | FieldReadFunction<any>;
     versionName?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type FavoriteMangaEntryTypeKeySpecifier = (
+    | 'accessible'
+    | 'manga'
+    | 'mangaId'
+    | FavoriteMangaEntryTypeKeySpecifier
+)[];
+export type FavoriteMangaEntryTypeFieldPolicy = {
+    accessible?: FieldPolicy<any> | FieldReadFunction<any>;
+    manga?: FieldPolicy<any> | FieldReadFunction<any>;
+    mangaId?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type FetchChapterPagesPayloadKeySpecifier = (
     | 'chapter'
     | 'clientMutationId'
@@ -2706,6 +2717,7 @@ export type UserProfileKeySpecifier = (
     | 'avatarUrl'
     | 'description'
     | 'displayName'
+    | 'favoriteManga'
     | 'favoriteMangaIds'
     | 'id'
     | 'permissions'
@@ -2717,6 +2729,7 @@ export type UserProfileFieldPolicy = {
     avatarUrl?: FieldPolicy<any> | FieldReadFunction<any>;
     description?: FieldPolicy<any> | FieldReadFunction<any>;
     displayName?: FieldPolicy<any> | FieldReadFunction<any>;
+    favoriteManga?: FieldPolicy<any> | FieldReadFunction<any>;
     favoriteMangaIds?: FieldPolicy<any> | FieldReadFunction<any>;
     id?: FieldPolicy<any> | FieldReadFunction<any>;
     permissions?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -3045,6 +3058,10 @@ export type StrictTypedTypePolicies = {
     ExtensionType?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | ExtensionTypeKeySpecifier | (() => undefined | ExtensionTypeKeySpecifier);
         fields?: ExtensionTypeFieldPolicy;
+    };
+    FavoriteMangaEntryType?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | FavoriteMangaEntryTypeKeySpecifier | (() => undefined | FavoriteMangaEntryTypeKeySpecifier);
+        fields?: FavoriteMangaEntryTypeFieldPolicy;
     };
     FetchChapterPagesPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?:

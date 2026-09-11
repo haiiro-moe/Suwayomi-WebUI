@@ -5237,6 +5237,20 @@ export type GetUserProfileQuery = {
         role: string;
         description: string;
         favoriteMangaIds: Array<number>;
+        favoriteManga: Array<{
+            __typename: 'FavoriteMangaEntryType';
+            mangaId: number;
+            accessible: boolean;
+            manga: {
+                __typename: 'MangaType';
+                id: number;
+                title: string;
+                sourceId: string;
+                inLibrary: boolean;
+                thumbnailUrl: string | null;
+                thumbnailUrlLastFetched: string | null;
+            } | null;
+        }>;
     } | null;
 };
 
