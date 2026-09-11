@@ -54,11 +54,6 @@ export type WebUISettingsType = Pick<
     | 'webUIUpdateCheckInterval'
 >;
 
-export type GlobalUpdateSkipEntriesSettings = Pick<
-    ServerSettings,
-    'excludeUnreadChapters' | 'excludeNotStarted' | 'excludeCompleted'
->;
-
 export type LibrarySettingsType = Pick<ServerSettings, 'updateMangas'>;
 
 export enum ImageProcessingTargetMode {

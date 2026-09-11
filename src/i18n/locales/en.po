@@ -792,7 +792,6 @@ msgstr "Can't migrate an entry to itself"
 #: src/features/migration/components/MigrationBulkSearchOptionsDialog.tsx
 #: src/features/migration/components/MigrationOptionsDialog.tsx
 #: src/features/reader/hotkeys/settings/components/RecordHotkey.tsx
-#: src/features/settings/components/globalUpdate/GlobalUpdateSettingsEntries.tsx
 #: src/features/source/browse/components/SourceOptions.tsx
 #: src/features/source/components/SourceLanguageSelect.tsx
 #: src/features/source/configuration/components/EditTextPreference.tsx
@@ -1009,6 +1008,10 @@ msgstr "Compression level"
 #: src/features/admin/screens/Admin.tsx
 msgid "Confirm"
 msgstr "Confirm"
+
+#: src/features/authentication/screens/LoginPage.tsx
+msgid "Confirm password"
+msgstr "Confirm password"
 
 #: src/features/settings/components/images/Processing.tsx
 msgid "Connect timeout"
@@ -1261,6 +1264,10 @@ msgstr "Could not save theme changes"
 msgid "Could not search source"
 msgstr "Could not search source"
 
+#: src/features/authentication/screens/LoginPage.tsx
+msgid "Could not set up the owner account"
+msgstr "Could not set up the owner account"
+
 #: src/features/settings/screens/ServerSettings.tsx
 #: src/features/sync/components/SyncButton.tsx
 msgid "Could not start sync"
@@ -1301,6 +1308,10 @@ msgstr "Create a role and choose the permissions it should have."
 #: src/features/backup/screens/Backup.tsx
 msgid "Create backup"
 msgstr "Create backup"
+
+#: src/features/authentication/screens/LoginPage.tsx
+msgid "Create owner account"
+msgstr "Create owner account"
 
 #: src/features/admin/screens/Admin.tsx
 msgid "Create role"
@@ -1879,7 +1890,6 @@ msgstr "Failed to disconnect from KOReader Sync server."
 #: src/features/library/components/LibraryOptionsPanel.tsx
 #: src/features/migration/screens/MigrationSelectSource.tsx
 #: src/features/settings/components/globalUpdate/GlobalUpdateSettings.tsx
-#: src/features/settings/components/globalUpdate/GlobalUpdateSettingsEntries.tsx
 #: src/features/settings/components/webUI/WebUIUpdateIntervalSetting.tsx
 #: src/features/settings/screens/Appearance.tsx
 #: src/features/settings/screens/ImageProcessingSetting.tsx
@@ -2869,7 +2879,6 @@ msgstr "No sources installed"
 #: src/features/category/components/CategoriesInclusionSetting.tsx
 #: src/features/downloads/screens/DownloadSettings.tsx
 #: src/features/reader/settings/layout/components/ReaderSettingTapZoneInvertMode.tsx
-#: src/features/settings/components/globalUpdate/GlobalUpdateSettingsEntries.tsx
 #: src/features/settings/Settings.constants.ts
 msgid "None"
 msgstr "None"
@@ -2938,7 +2947,6 @@ msgstr "Offset double spreads"
 #: src/features/category/components/CategorySelect.tsx
 #: src/features/chapter/services/Chapters.ts
 #: src/features/manga/services/Mangas.ts
-#: src/features/settings/components/globalUpdate/GlobalUpdateSettingsEntries.tsx
 #: src/features/source/browse/components/SourceOptions.tsx
 #: src/features/source/components/SourceLanguageSelect.tsx
 #: src/features/source/configuration/components/EditTextPreference.tsx
@@ -3058,6 +3066,10 @@ msgstr "Parallel source requests"
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "Password"
 msgstr "Password"
+
+#: src/features/authentication/screens/LoginPage.tsx
+msgid "Passwords do not match"
+msgstr "Passwords do not match"
 
 #: src/features/navigation-bar/NavigationBar.constants.ts
 msgid "Paused — {count} remaining"
@@ -3730,10 +3742,6 @@ msgstr "Skip duplicate chapters"
 msgid "Skip filtered chapters"
 msgstr "Skip filtered chapters"
 
-#: src/features/settings/components/globalUpdate/GlobalUpdateSettingsEntries.tsx
-msgid "Skip updating entries"
-msgstr "Skip updating entries"
-
 #: src/features/reader/settings/behaviour/components/ReaderSettingScrollAmount.tsx
 msgid "Small"
 msgstr "Small"
@@ -3970,10 +3978,6 @@ msgstr "Tap zones"
 #: src/features/settings/components/images/Processing.tsx
 msgid "Target mode"
 msgstr "Target mode"
-
-#: src/features/settings/Settings.constants.ts
-msgid "That haven't been started"
-msgstr "That haven't been started"
 
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "The address of the FlareSolverr server"
@@ -4494,14 +4498,6 @@ msgstr "Where to start the WebUI when starting the server"
 #: src/features/reader/settings/general/components/ReaderSettingBackgroundColor.tsx
 msgid "White"
 msgstr "White"
-
-#: src/features/settings/Settings.constants.ts
-msgid "With \"Completed\" status"
-msgstr "With \"Completed\" status"
-
-#: src/features/settings/Settings.constants.ts
-msgid "With unread chapter(s)"
-msgstr "With unread chapter(s)"
 
 #: src/features/community/screens/Conversation.tsx
 msgid "Write a message"

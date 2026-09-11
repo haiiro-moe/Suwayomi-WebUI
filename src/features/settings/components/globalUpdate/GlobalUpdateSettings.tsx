@@ -14,7 +14,6 @@ import Switch from '@mui/material/Switch';
 import { useLingui } from '@lingui/react/macro';
 import type { CategoriesInclusionSettingProps } from '@/features/category/components/CategoriesInclusionSetting.tsx';
 import { CategoriesInclusionSetting } from '@/features/category/components/CategoriesInclusionSetting.tsx';
-import { GlobalUpdateSettingsEntries } from '@/features/settings/components/globalUpdate/GlobalUpdateSettingsEntries.tsx';
 import { GlobalUpdateSettingsInterval } from '@/features/settings/components/globalUpdate/GlobalUpdateSettingsInterval.tsx';
 import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { makeToast } from '@/base/utils/Toast.ts';
@@ -53,7 +52,6 @@ export const GlobalUpdateSettings = ({
             }
         >
             <GlobalUpdateSettingsInterval globalUpdateCron={serverSettings.globalUpdateCron} />
-            <GlobalUpdateSettingsEntries serverSettings={serverSettings} />
             <CategoriesInclusionSetting
                 categories={categories}
                 includeField="includeInUpdate"

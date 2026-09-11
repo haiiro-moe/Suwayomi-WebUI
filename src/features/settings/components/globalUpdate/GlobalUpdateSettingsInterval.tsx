@@ -17,11 +17,13 @@ import { NumberSetting } from '@/base/components/settings/NumberSetting.tsx';
 import { getPersistedServerSetting, usePersistedValue } from '@/base/hooks/usePersistedValue.tsx';
 import type { ServerSettings } from '@/features/settings/Settings.types.ts';
 
-import { GLOBAL_UPDATE_INTERVAL } from '@/features/settings/Settings.constants.ts';
+const DEFAULT_UPDATE_INTERVAL_HOURS = 12;
+const MIN_UPDATE_INTERVAL_HOURS = 6;
+const MAX_UPDATE_INTERVAL_HOURS = 24 * 31;
 
 const cronToIntervalHours = (cron: string | null | undefined): number => {
     const match = cron?.match(/^0 \*\/(\d+) \* \* \*$/);
-    return match ? Number(match[1]) : GLOBAL_UPDATE_INTERVAL.default;
+    return match ? Number(match[1]) : DEFAULT_UPDATE_INTERVAL_HOURS;
 };
 
 export const GlobalUpdateSettingsInterval = ({
@@ -36,7 +38,7 @@ export const GlobalUpdateSettingsInterval = ({
     const [mutateSettings] = requestManager.useUpdateServerSettings();
     const [currentAutoUpdateIntervalHours, persistAutoUpdateIntervalHours] = usePersistedValue(
         'lastGlobalUpdateInterval',
-        GLOBAL_UPDATE_INTERVAL.default,
+        DEFAULT_UPDATE_INTERVAL_HOURS,
         autoUpdateIntervalHours,
         getPersistedServerSetting,
     );
@@ -75,9 +77,9 @@ export const GlobalUpdateSettingsInterval = ({
                 settingTitle={t`Automatic update interval`}
                 settingValue={t`${currentAutoUpdateIntervalHours}h`}
                 value={currentAutoUpdateIntervalHours}
-                minValue={GLOBAL_UPDATE_INTERVAL.min}
-                maxValue={GLOBAL_UPDATE_INTERVAL.max}
-                defaultValue={GLOBAL_UPDATE_INTERVAL.default}
+                minValue={MIN_UPDATE_INTERVAL_HOURS}
+                maxValue={MAX_UPDATE_INTERVAL_HOURS}
+                defaultValue={DEFAULT_UPDATE_INTERVAL_HOURS}
                 showSlider
                 valueUnit={t`h`}
                 handleUpdate={updateSetting}
