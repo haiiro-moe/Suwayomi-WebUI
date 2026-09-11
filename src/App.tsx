@@ -29,7 +29,6 @@ import { BrowseTab } from '@/features/browse/Browse.types.ts';
 import { LoginPage } from '@/features/authentication/screens/LoginPage.tsx';
 import { AuthGuard } from '@/features/authentication/components/AuthGuard.tsx';
 import { PermissionGuard } from '@/features/authentication/components/PermissionGuard.tsx';
-import { SearchParam } from '@/base/Base.types.ts';
 import { defaultPromiseErrorHandler } from '@/lib/DefaultPromiseErrorHandler.ts';
 import { ReactRouter } from '@/lib/react-router/ReactRouter.ts';
 import { AuthManager } from '@/features/authentication/AuthManager.ts';
@@ -235,15 +234,7 @@ const PrivateRoutes = () => {
     const isAuthenticated = AuthManager.useIsAuthenticated();
 
     if (!isAuthenticated) {
-        return (
-            <Navigate
-                to={{
-                    pathname: AppRoutes.authentication.children.login.path,
-                    search: `${SearchParam.REDIRECT}=${encodeURIComponent(window.location.pathname + window.location.search + window.location.hash)}`,
-                }}
-                replace
-            />
-        );
+        return <LoginPage />;
     }
 
     return <Outlet />;
@@ -466,6 +457,37 @@ const OffsetContainerRoot = ({ children }: { children?: ReactNode }) => {
     return <OffsetContainer topOffset={appBarHeight}>{children}</OffsetContainer>;
 };
 
+const AuthenticatedApp = () => {
+    const isAuthenticated = AuthManager.useIsAuthenticated();
+
+    if (!isAuthenticated) {
+        return <LoginPage />;
+    }
+
+    return (
+        <InitializeGuard>
+            <ServerUpdateChecker />
+            <WebUIUpdateChecker />
+            <InitialBackgroundRequests />
+            <BackgroundSubscriptions />
+            <ResumeMigration />
+
+            <Box sx={{ display: 'flex' }}>
+                <OffsetContainerRoot>
+                    <Box sx={{ flexShrink: 0, position: 'relative', height: '100vh' }}>
+                        <DefaultNavBar />
+                    </Box>
+                    <Routes>
+                        <Route path={AppRoutes.matchAll.match} element={<MainApp />} />
+                        <Route path={AppRoutes.reader.match} element={<ReaderApp />} />
+                    </Routes>
+                </OffsetContainerRoot>
+            </Box>
+            <MigrationFABIndicator />
+        </InitializeGuard>
+    );
+};
+
 export const App: React.FC = () => (
     <AppContext>
         <ScrollToTop />
@@ -476,26 +498,7 @@ export const App: React.FC = () => (
         <CssBaseline enableColorScheme />
 
         <AuthGuard>
-            <InitializeGuard>
-                <ServerUpdateChecker />
-                <WebUIUpdateChecker />
-                <InitialBackgroundRequests />
-                <BackgroundSubscriptions />
-                <ResumeMigration />
-
-                <Box sx={{ display: 'flex' }}>
-                    <OffsetContainerRoot>
-                        <Box sx={{ flexShrink: 0, position: 'relative', height: '100vh' }}>
-                            <DefaultNavBar />
-                        </Box>
-                        <Routes>
-                            <Route path={AppRoutes.matchAll.match} element={<MainApp />} />
-                            <Route path={AppRoutes.reader.match} element={<ReaderApp />} />
-                        </Routes>
-                    </OffsetContainerRoot>
-                </Box>
-                <MigrationFABIndicator />
-            </InitializeGuard>
+            <AuthenticatedApp />
         </AuthGuard>
     </AppContext>
 );
