@@ -29,7 +29,7 @@ export function UserProfile() {
     const navigate = useNavigate();
     const { userId } = useParams();
     const parsedUserId = Number(userId);
-    const { data, loading, error } = requestManager.useGetUserProfile({ userId: parsedUserId });
+    const { data, loading, error } = requestManager.useGetUserProfile({ profileUserId: parsedUserId });
     if (loading && !data) {
         return <LoadingPlaceholder />;
     }

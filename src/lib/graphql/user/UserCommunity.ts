@@ -23,8 +23,8 @@ export const GET_USER_DIRECTORY = gql`
 `;
 
 export const GET_USER_PROFILE = gql`
-    query GET_USER_PROFILE($userId: Int!) {
-        profile(userId: $userId) {
+    query GET_USER_PROFILE($profileUserId: Int!) {
+        profile(profileUserId: $profileUserId) {
             id
             username
             displayName

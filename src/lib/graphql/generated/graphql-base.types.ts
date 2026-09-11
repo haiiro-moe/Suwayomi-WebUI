@@ -2465,7 +2465,7 @@ export type QueryMetasArgs = {
 };
 
 export type QueryProfileArgs = {
-    userId: Scalars['Int']['input'];
+    profileUserId: Scalars['Int']['input'];
 };
 
 export type QueryRestoreStatusArgs = {

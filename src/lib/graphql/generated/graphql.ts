@@ -5223,7 +5223,7 @@ export type GetUserDirectoryQuery = {
 };
 
 export type GetUserProfileQueryVariables = Exact<{
-    userId: number;
+    profileUserId: number;
 }>;
 
 export type GetUserProfileQuery = {
