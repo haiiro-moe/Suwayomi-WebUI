@@ -24,80 +24,107 @@ import { useLingui } from '@lingui/react/macro';
 import { ListItemLink } from '@/base/components/lists/ListItemLink.tsx';
 import { AppRoutes } from '@/base/AppRoute.constants.ts';
 import { useAppTitle } from '@/features/navigation-bar/hooks/useAppTitle.ts';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 
 export function Settings() {
     const { t } = useLingui();
+    const permissions = usePermissions();
 
     useAppTitle(t`Settings`);
 
+    const canEdit = permissions.has('settings.edit');
+    const canSee = (permission: string) => canEdit && permissions.has(permission);
+
     return (
         <List sx={{ padding: 0 }}>
-            <ListItemLink to={AppRoutes.settings.children.appearance.path}>
-                <ListItemIcon>
-                    <PaletteIcon />
-                </ListItemIcon>
-                <ListItemText primary={t`Appearance`} />
-            </ListItemLink>
-            <ListItemLink to={AppRoutes.settings.children.reader.path}>
-                <ListItemIcon>
-                    <AutoStoriesIcon />
-                </ListItemIcon>
-                <ListItemText primary={t`Reader`} />
-            </ListItemLink>
-            <ListItemLink to={AppRoutes.settings.children.library.path}>
-                <ListItemIcon>
-                    <CollectionsOutlinedBookmarkIcon />
-                </ListItemIcon>
-                <ListItemText primary={t`Library`} />
-            </ListItemLink>
-            <ListItemLink to={AppRoutes.settings.children.download.path}>
-                <ListItemIcon>
-                    <GetAppOutlinedIcon />
-                </ListItemIcon>
-                <ListItemText primary={t`Downloads`} />
-            </ListItemLink>
-            <ListItemLink to={AppRoutes.settings.children.images.path}>
-                <ListItemIcon>
-                    <ImageIcon />
-                </ListItemIcon>
-                <ListItemText primary={t`Images`} />
-            </ListItemLink>
-            <ListItemLink to={AppRoutes.settings.children.backup.path}>
-                <ListItemIcon>
-                    <BackupIcon />
-                </ListItemIcon>
-                <ListItemText primary={t`Backup`} />
-            </ListItemLink>
-            <ListItemLink to={AppRoutes.settings.children.browse.path}>
-                <ListItemIcon>
-                    <ExploreOutlinedIcon />
-                </ListItemIcon>
-                <ListItemText primary={t`Browse`} />
-            </ListItemLink>
-            <ListItemLink to={AppRoutes.settings.children.history.path}>
-                <ListItemIcon>
-                    <HistoryIcon />
-                </ListItemIcon>
-                <ListItemText primary={t`History`} />
-            </ListItemLink>
-            <ListItemLink to={AppRoutes.settings.children.device.path}>
-                <ListItemIcon>
-                    <DevicesIcon />
-                </ListItemIcon>
-                <ListItemText primary={t`Device`} />
-            </ListItemLink>
-            <ListItemLink to={AppRoutes.settings.children.webui.path}>
-                <ListItemIcon>
-                    <WebIcon />
-                </ListItemIcon>
-                <ListItemText primary={t`WebUI`} />
-            </ListItemLink>
-            <ListItemLink to={AppRoutes.settings.children.server.path}>
-                <ListItemIcon>
-                    <DnsIcon />
-                </ListItemIcon>
-                <ListItemText primary={t`Server`} />
-            </ListItemLink>
+            {canSee('settings.misc') && (
+                <ListItemLink to={AppRoutes.settings.children.appearance.path}>
+                    <ListItemIcon>
+                        <PaletteIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={t`Appearance`} />
+                </ListItemLink>
+            )}
+            {canSee('settings.misc') && (
+                <ListItemLink to={AppRoutes.settings.children.reader.path}>
+                    <ListItemIcon>
+                        <AutoStoriesIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={t`Reader`} />
+                </ListItemLink>
+            )}
+            {canSee('settings.library_updates') && (
+                <ListItemLink to={AppRoutes.settings.children.library.path}>
+                    <ListItemIcon>
+                        <CollectionsOutlinedBookmarkIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={t`Library`} />
+                </ListItemLink>
+            )}
+            {canSee('settings.downloader') && (
+                <ListItemLink to={AppRoutes.settings.children.download.path}>
+                    <ListItemIcon>
+                        <GetAppOutlinedIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={t`Downloads`} />
+                </ListItemLink>
+            )}
+            {canSee('settings.downloader') && (
+                <ListItemLink to={AppRoutes.settings.children.images.path}>
+                    <ListItemIcon>
+                        <ImageIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={t`Images`} />
+                </ListItemLink>
+            )}
+            {canSee('settings.backup') && (
+                <ListItemLink to={AppRoutes.settings.children.backup.path}>
+                    <ListItemIcon>
+                        <BackupIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={t`Backup`} />
+                </ListItemLink>
+            )}
+            {canSee('settings.extension') && (
+                <ListItemLink to={AppRoutes.settings.children.browse.path}>
+                    <ListItemIcon>
+                        <ExploreOutlinedIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={t`Browse`} />
+                </ListItemLink>
+            )}
+            {canSee('settings.misc') && (
+                <ListItemLink to={AppRoutes.settings.children.history.path}>
+                    <ListItemIcon>
+                        <HistoryIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={t`History`} />
+                </ListItemLink>
+            )}
+            {canSee('settings.misc') && (
+                <ListItemLink to={AppRoutes.settings.children.device.path}>
+                    <ListItemIcon>
+                        <DevicesIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={t`Device`} />
+                </ListItemLink>
+            )}
+            {canSee('settings.web_ui') && (
+                <ListItemLink to={AppRoutes.settings.children.webui.path}>
+                    <ListItemIcon>
+                        <WebIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={t`WebUI`} />
+                </ListItemLink>
+            )}
+            {canSee('settings.network') && (
+                <ListItemLink to={AppRoutes.settings.children.server.path}>
+                    <ListItemIcon>
+                        <DnsIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={t`Server`} />
+                </ListItemLink>
+            )}
         </List>
     );
 }

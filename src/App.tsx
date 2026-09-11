@@ -298,72 +298,133 @@ const MainApp = () => {
                         <Route element={<PermissionGuard permission="admin.users.manage" />}>
                             <Route path={AppRoutes.admin.match} element={<Admin />} />
                         </Route>
-                        <Route path={AppRoutes.settings.match}>
-                            <Route index element={<Settings />} />
-                            <Route path={AppRoutes.settings.children.categories.match} element={<CategorySettings />} />
-                            <Route path={AppRoutes.settings.children.reader.match} element={<GlobalReaderSettings />} />
-                            <Route path={AppRoutes.settings.children.library.match}>
-                                <Route index element={<LibrarySettings />} />
-                                <Route
-                                    path={AppRoutes.settings.children.library.children.duplicates.match}
-                                    element={<LibraryDuplicates />}
-                                />
-                            </Route>
-                            <Route path={AppRoutes.settings.children.download.match}>
-                                <Route index element={<DownloadSettings />} />
-                                {/* TODO: deprecated - got moved to "settings/images/processing/downloads" */}
-                                <Route
-                                    path={AppRoutes.settings.children.download.children.conversions.match}
-                                    element={
-                                        <Navigate
-                                            to={AppRoutes.settings.children.images.children.processingDownloads.path}
-                                            replace
+                        <Route element={<PermissionGuard permission="settings.edit" />}>
+                            <Route path={AppRoutes.settings.match}>
+                                <Route index element={<Settings />} />
+                                <Route element={<PermissionGuard permission="settings.library_updates" />}>
+                                    <Route
+                                        path={AppRoutes.settings.children.categories.match}
+                                        element={<CategorySettings />}
+                                    />
+                                    <Route path={AppRoutes.settings.children.library.match}>
+                                        <Route index element={<LibrarySettings />} />
+                                        <Route
+                                            path={AppRoutes.settings.children.library.children.duplicates.match}
+                                            element={<LibraryDuplicates />}
                                         />
-                                    }
-                                />
+                                    </Route>
+                                </Route>
+                                <Route element={<PermissionGuard permission="settings.misc" />}>
+                                    <Route
+                                        path={AppRoutes.settings.children.reader.match}
+                                        element={<GlobalReaderSettings />}
+                                    />
+                                    <Route
+                                        path={AppRoutes.settings.children.history.match}
+                                        element={<HistorySettings />}
+                                    />
+                                    <Route
+                                        path={AppRoutes.settings.children.device.match}
+                                        element={<DeviceSetting />}
+                                    />
+                                    <Route
+                                        path={AppRoutes.settings.children.appearance.match}
+                                        element={<Appearance />}
+                                    />
+                                </Route>
+                                <Route element={<PermissionGuard permission="settings.downloader" />}>
+                                    <Route path={AppRoutes.settings.children.download.match}>
+                                        <Route index element={<DownloadSettings />} />
+                                        {/* TODO: deprecated - got moved to "settings/images/processing/downloads" */}
+                                        <Route
+                                            path={AppRoutes.settings.children.download.children.conversions.match}
+                                            element={
+                                                <Navigate
+                                                    to={
+                                                        AppRoutes.settings.children.images.children.processingDownloads
+                                                            .path
+                                                    }
+                                                    replace
+                                                />
+                                            }
+                                        />
+                                    </Route>
+                                    <Route path={AppRoutes.settings.children.images.match}>
+                                        <Route index element={<ImagesSettings />} />
+                                        <Route
+                                            path={AppRoutes.settings.children.images.children.processingDownloads.match}
+                                            element={<ImageProcessingSetting type={ImageProcessingType.DOWNLOAD} />}
+                                        />
+                                        <Route
+                                            path={AppRoutes.settings.children.images.children.processingServe.match}
+                                            element={<ImageProcessingSetting type={ImageProcessingType.SERVE} />}
+                                        />
+                                    </Route>
+                                </Route>
+                                <Route element={<PermissionGuard permission="settings.backup" />}>
+                                    <Route path={AppRoutes.settings.children.backup.match} element={<Backup />} />
+                                </Route>
+                                <Route element={<PermissionGuard permission="settings.network" />}>
+                                    <Route
+                                        path={AppRoutes.settings.children.server.match}
+                                        element={<ServerSettings />}
+                                    />
+                                </Route>
+                                <Route element={<PermissionGuard permission="settings.web_ui" />}>
+                                    <Route path={AppRoutes.settings.children.webui.match} element={<WebUISettings />} />
+                                </Route>
+                                <Route element={<PermissionGuard permission="browse.read" />}>
+                                    <Route element={<PermissionGuard permission="settings.extension" />}>
+                                        <Route path={AppRoutes.settings.children.browse.match}>
+                                            <Route index element={<BrowseSettings />} />
+                                            <Route
+                                                path={AppRoutes.settings.children.browse.children.extensionStores.match}
+                                                element={<ExtensionStores />}
+                                            />
+                                        </Route>
+                                    </Route>
+                                </Route>
                             </Route>
-                            <Route path={AppRoutes.settings.children.images.match}>
-                                <Route index element={<ImagesSettings />} />
-                                <Route
-                                    path={AppRoutes.settings.children.images.children.processingDownloads.match}
-                                    element={<ImageProcessingSetting type={ImageProcessingType.DOWNLOAD} />}
-                                />
-                                <Route
-                                    path={AppRoutes.settings.children.images.children.processingServe.match}
-                                    element={<ImageProcessingSetting type={ImageProcessingType.SERVE} />}
-                                />
-                            </Route>
-                            <Route path={AppRoutes.settings.children.backup.match} element={<Backup />} />
-                            <Route path={AppRoutes.settings.children.server.match} element={<ServerSettings />} />
-                            <Route path={AppRoutes.settings.children.webui.match} element={<WebUISettings />} />
-                            <Route path={AppRoutes.settings.children.browse.match}>
-                                <Route index element={<BrowseSettings />} />
-                                <Route
-                                    path={AppRoutes.settings.children.browse.children.extensionStores.match}
-                                    element={<ExtensionStores />}
-                                />
-                            </Route>
-                            <Route path={AppRoutes.settings.children.history.match} element={<HistorySettings />} />
-                            <Route path={AppRoutes.settings.children.device.match} element={<DeviceSetting />} />
-                            <Route path={AppRoutes.settings.children.appearance.match} element={<Appearance />} />
                         </Route>
 
                         {/* Manga Routes */}
 
-                        <Route path={AppRoutes.sources.match}>
-                            {/* TODO: deprecated - "source" and "extension" page got merged into "browse" */}
-                            <Route index element={<Navigate to={AppRoutes.browse.path(BrowseTab.SOURCES)} replace />} />
-                            <Route path={AppRoutes.sources.children.browse.match} element={<SourceMangas />} />
-                            <Route path={AppRoutes.sources.children.configure.match} element={<SourceConfigure />} />
-                            <Route path={AppRoutes.sources.children.searchAll.match} element={<SearchAll />} />
+                        <Route element={<PermissionGuard permission="browse.read" />}>
+                            <Route path={AppRoutes.sources.match}>
+                                {/* TODO: deprecated - "source" and "extension" page got merged into "browse" */}
+                                <Route
+                                    index
+                                    element={<Navigate to={AppRoutes.browse.path(BrowseTab.SOURCES)} replace />}
+                                />
+                                <Route path={AppRoutes.sources.children.browse.match} element={<SourceMangas />} />
+                                <Route
+                                    path={AppRoutes.sources.children.configure.match}
+                                    element={<SourceConfigure />}
+                                />
+                                <Route path={AppRoutes.sources.children.searchAll.match} element={<SearchAll />} />
+                            </Route>
+                            <Route path={AppRoutes.extension.match}>
+                                {/* TODO: deprecated - "source" and "extension" page got merged into "browse" */}
+                                <Route
+                                    index
+                                    element={<Navigate to={AppRoutes.browse.path(BrowseTab.EXTENSIONS)} replace />}
+                                />
+                                <Route path={AppRoutes.extension.children.info.match} element={<ExtensionInfo />} />
+                            </Route>
+                            <Route path={AppRoutes.browse.match} element={<Browse />} />
                         </Route>
-                        <Route path={AppRoutes.extension.match}>
-                            {/* TODO: deprecated - "source" and "extension" page got merged into "browse" */}
-                            <Route
-                                index
-                                element={<Navigate to={AppRoutes.browse.path(BrowseTab.EXTENSIONS)} replace />}
-                            />
-                            <Route path={AppRoutes.extension.children.info.match} element={<ExtensionInfo />} />
+                        <Route element={<PermissionGuard permission="migrate.access" />}>
+                            <Route path={AppRoutes.migrate.match}>
+                                <Route index element={<Migration />} />
+                                <Route
+                                    path={AppRoutes.migrate.children.singleMangaSearch.match}
+                                    element={<SearchAll />}
+                                />
+                                <Route
+                                    path={AppRoutes.migrate.children.manualSearch.match}
+                                    element={<MigrationManualSearch />}
+                                />
+                            </Route>
                         </Route>
                         <Route path={AppRoutes.downloads.match} element={<DownloadQueue />} />
                         <Route path={AppRoutes.manga.match}>
