@@ -7,13 +7,17 @@
  */
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 import { useLingui } from '@lingui/react/macro';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { LoadingPlaceholder } from '@/base/components/feedback/LoadingPlaceholder.tsx';
 import { EmptyViewAbsoluteCentered } from '@/base/components/feedback/EmptyViewAbsoluteCentered.tsx';
@@ -34,11 +38,24 @@ export function Profile() {
         refetchQueries: ['GET_CURRENT_USER_PROFILE'],
     });
 
-    if (loading && !data) {
+    const [displayName, setDisplayName] = useState('');
+    const [avatarUrl, setAvatarUrl] = useState('');
+    const [description, setDescription] = useState('');
+
+    const profile = data?.currentUserProfile;
+    useEffect(() => {
+        if (profile) {
+            setDisplayName(profile.displayName);
+            setAvatarUrl(profile.avatarUrl ?? '');
+            setDescription(profile.description);
+        }
+    }, [profile?.id, profile?.displayName, profile?.avatarUrl, profile?.description]);
+
+    if (loading && !profile) {
         return <LoadingPlaceholder />;
     }
 
-    if (error || !data?.currentUserProfile) {
+    if (error || !profile) {
         return (
             <EmptyViewAbsoluteCentered
                 message={t`Unable to load profile`}
@@ -48,11 +65,19 @@ export function Profile() {
         );
     }
 
-    const profile = data.currentUserProfile;
-    const updateDescription = async (description: string) => {
+    const save = async () => {
         setIsSaving(true);
         try {
-            await updateProfile({ variables: { input: { description } } });
+            await updateProfile({
+                variables: {
+                    input: {
+                        displayName: displayName.trim() || profile.displayName,
+                        avatarUrl,
+                        description,
+                    },
+                },
+            });
+            makeToast(t`Profile saved`, 'success');
         } catch (saveError) {
             makeToast(t`Failed to save profile`, 'error', getErrorMessage(saveError));
         } finally {
@@ -60,12 +85,26 @@ export function Profile() {
         }
     };
 
+    const dirty =
+        displayName !== profile.displayName ||
+        avatarUrl !== (profile.avatarUrl ?? '') ||
+        description !== profile.description;
+
     return (
         <List sx={{ pt: 0 }}>
             <ListSubheader component="div">{t`Profile`}</ListSubheader>
             <ListItem>
                 <ListItemIcon>
-                    <AccountCircleIcon />
+                    {profile.avatarUrl ? (
+                        <Box
+                            component="img"
+                            src={profile.avatarUrl}
+                            alt={profile.displayName}
+                            sx={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }}
+                        />
+                    ) : (
+                        <AccountCircleIcon />
+                    )}
                 </ListItemIcon>
                 <ListItemText primary={profile.displayName} secondary={`@${profile.username}`} />
             </ListItem>
@@ -73,12 +112,26 @@ export function Profile() {
                 <ListItemText primary={t`Role`} secondary={profile.role} />
             </ListItem>
             <ListItem>
-                <ListItemText primary={t`Favorites`} secondary={profile.favoriteMangaIds.length.toString()} />
+                <ListItemText primary={t`Favorites`} secondary={t`${profile.favoriteMangaIds.length} manga`} />
             </ListItem>
+            <Stack spacing={2} sx={{ p: 2 }}>
+                <TextField
+                    label={t`Display name`}
+                    value={displayName}
+                    onChange={(event) => setDisplayName(event.target.value)}
+                />
+                <TextField
+                    label={t`Avatar URL`}
+                    value={avatarUrl}
+                    onChange={(event) => setAvatarUrl(event.target.value)}
+                    placeholder="https://…"
+                />
+                <Button variant="contained" onClick={save} disabled={isSaving || !dirty}>{t`Save profile`}</Button>
+            </Stack>
             <TextSetting
                 settingName={t`About`}
-                value={profile.description}
-                handleChange={updateDescription}
+                value={description}
+                handleChange={setDescription}
                 disabled={isSaving}
                 dialogDescription={t`Describe yourself to other users.`}
             />
