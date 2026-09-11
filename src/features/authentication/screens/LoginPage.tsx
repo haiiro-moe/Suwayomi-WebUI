@@ -19,27 +19,11 @@ import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { makeToast } from '@/base/utils/Toast.ts';
 import { getErrorMessage } from '@/lib/HelperFunctions.ts';
 import { AuthManager } from '@/features/authentication/AuthManager.ts';
-import gql from 'graphql-tag';
-import { useMutation, useQuery } from '@apollo/client/react';
 import { AppRoutes } from '@/base/AppRoute.constants.ts';
 import { useNavBarContext } from '@/features/navigation-bar/NavbarContext.tsx';
 import { SearchParam } from '@/base/Base.types.ts';
 import { SplashScreen } from '@/features/authentication/components/SplashScreen.tsx';
 import { ServerAddressSetting } from '@/features/settings/components/ServerAddressSetting.tsx';
-
-const ONBOARDING_STATUS = gql`
-    query ONBOARDING_STATUS {
-        onboardingStatus
-    }
-`;
-const SETUP_OWNER = gql`
-    mutation SETUP_OWNER($username: String!, $password: String!) {
-        setupOwner(input: { username: $username, password: $password }) {
-            accessToken
-            refreshToken
-        }
-    }
-`;
 
 export const LoginPage = () => {
     const theme = useTheme();
@@ -50,11 +34,8 @@ export const LoginPage = () => {
 
     const [redirect] = useQueryParam(SearchParam.REDIRECT, StringParam);
     const [loginUser, { loading: isLoading }] = requestManager.useLoginUser();
-    const { data: onboardingData } = useQuery<{ onboardingStatus: boolean }>(ONBOARDING_STATUS);
-    const [setupOwner, { loading: isSettingUp }] = useMutation<
-        { setupOwner: { accessToken: string; refreshToken: string } },
-        { username: string; password: string }
-    >(SETUP_OWNER);
+    const { data: onboardingData } = requestManager.useOnboardingStatus();
+    const [setupOwner, { loading: isSettingUp }] = requestManager.useSetupOwner();
     const onboardingRequired = onboardingData?.onboardingStatus === true;
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

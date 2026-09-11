@@ -383,8 +383,8 @@ import { CHAPTER_META_FIELDS } from '@/lib/graphql/chapter/ChapterFragments.ts';
 import type { MetadataMigrationSettings } from '@/features/migration/Migration.types.ts';
 import type { MangaIdInfo } from '@/features/manga/Manga.types.ts';
 import { updateMetadataList } from '@/features/metadata/services/MetadataApolloCacheHandler.ts';
-import { UPDATE_PROFILE, USER_LOGIN, USER_REFRESH } from '@/lib/graphql/user/UserMutation.ts';
-import { GET_CURRENT_USER_PROFILE } from '@/lib/graphql/user/UserQuery.ts';
+import { SETUP_OWNER, UPDATE_PROFILE, USER_LOGIN, USER_REFRESH } from '@/lib/graphql/user/UserMutation.ts';
+import { GET_CURRENT_USER_PROFILE, ONBOARDING_STATUS } from '@/lib/graphql/user/UserQuery.ts';
 import {
     GET_CONVERSATION,
     GET_UNREAD_MESSAGE_COUNT,
@@ -4125,6 +4125,24 @@ export class RequestManager {
         options?: MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>,
     ): AbortableApolloUseMutationResponse<UpdateProfileMutation, UpdateProfileMutationVariables> {
         return this.doRequest(GQLMethod.USE_MUTATION, UPDATE_PROFILE, undefined, options);
+    }
+
+    public useOnboardingStatus(
+        options?: QueryHookOptions<{ onboardingStatus: boolean }, Record<string, never>>,
+    ): AbortableApolloUseQueryResponse<{ onboardingStatus: boolean }, Record<string, never>> {
+        return this.doRequest(GQLMethod.USE_QUERY, ONBOARDING_STATUS, {}, options);
+    }
+
+    public useSetupOwner(
+        options?: MutationHookOptions<
+            { setupOwner: { accessToken: string; refreshToken: string } },
+            { username: string; password: string }
+        >,
+    ): AbortableApolloUseMutationResponse<
+        { setupOwner: { accessToken: string; refreshToken: string } },
+        { username: string; password: string }
+    > {
+        return this.doRequest(GQLMethod.USE_MUTATION, SETUP_OWNER, undefined, options);
     }
 
     public useGetUserSettings(

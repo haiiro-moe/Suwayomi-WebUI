@@ -8,6 +8,12 @@
 
 import gql from 'graphql-tag';
 
+export const ONBOARDING_STATUS = gql`
+    query ONBOARDING_STATUS {
+        onboardingStatus
+    }
+`;
+
 export const GET_CURRENT_USER_PROFILE = gql`
     query GET_CURRENT_USER_PROFILE {
         currentUserProfile {
