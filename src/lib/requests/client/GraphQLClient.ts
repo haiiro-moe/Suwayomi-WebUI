@@ -304,9 +304,10 @@ export class GraphQLClient extends BaseClient<ApolloClient, ApolloClient.Options
     }
 
     private isAuthError(errors: readonly GraphQLFormattedError[]): boolean {
-        return errors.some((graphQLError) =>
-            graphQLError.message.includes('suwayomi.tachidesk.server.user.UnauthorizedException'),
-        );
+        return errors.some((graphQLError) => {
+            const message = graphQLError.message.toLowerCase();
+            return message.includes('unauthorized') || message.includes('authentication');
+        });
     }
 
     private createErrorLink() {
