@@ -157,6 +157,10 @@ msgstr "{availableUpdates, plural, one {# update available} other {# updates ava
 msgid "{categoryCount, plural, one {# category} other {# categories}}"
 msgstr "{categoryCount, plural, one {# category} other {# categories}}"
 
+#: src/features/navigation-bar/NavigationBar.constants.ts
+msgid "{count, plural, one {# unread message} other {# unread messages}}"
+msgstr "{count, plural, one {# unread message} other {# unread messages}}"
+
 #: src/features/manga/Manga.constants.ts
 msgid "{count, plural, one {Changed categories of manga} other {Changed categories of # manga}}"
 msgstr "{count, plural, one {Changed categories of manga} other {Changed categories of # manga}}"
@@ -1062,6 +1066,10 @@ msgstr "Controls the MimeType that Suwayomi sends in OPDS entries for CBZ archiv
 #: src/features/community/screens/Conversation.tsx
 msgid "Conversation"
 msgstr "Conversation"
+
+#: src/features/community/screens/Inbox.tsx
+msgid "Conversations"
+msgstr "Conversations"
 
 #: src/features/settings/Settings.constants.ts
 msgid "Convert images to different formats"
@@ -2486,6 +2494,10 @@ msgstr "Links"
 msgid "List"
 msgstr "List"
 
+#: src/features/community/screens/Inbox.tsx
+msgid "Loading conversation…"
+msgstr "Loading conversation…"
+
 #: src/features/theme/components/ThemePreview.tsx
 msgid "Loading theme fonts…"
 msgstr "Loading theme fonts…"
@@ -3825,10 +3837,6 @@ msgstr "Standard"
 #: src/features/manga/components/ResumeFAB.tsx
 msgid "Start"
 msgstr "Start"
-
-#: src/features/community/screens/Inbox.tsx
-msgid "Start a conversation"
-msgstr "Start a conversation"
 
 #: src/features/tracker/components/cards/TrackerActiveCard.tsx
 msgid "Start date"

@@ -155,6 +155,15 @@ const NAVIGATION_BAR_DESKTOP_ITEMS = [
         IconComponent: AccountCircleIcon,
         show: 'desktop',
         moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+        useBadge: () => {
+            const { data } = requestManager.useGetUnreadMessageCount({ pollInterval: 15000 });
+            const count = Number(data?.unreadMessageCount ?? 0);
+
+            return {
+                count,
+                title: count ? plural(count, { one: '# unread message', other: '# unread messages' }) : '',
+            };
+        },
     },
     {
         path: AppRoutes.profile.path,
