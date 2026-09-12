@@ -40,7 +40,8 @@ export const Manga: React.FC = () => {
     const { mode } = useLocation<MangaLocationState>().state ?? STABLE_EMPTY_OBJECT;
 
     const permissions = usePermissions();
-    const canRead = permissions.has('library.read') || permissions.has('browse.read');
+    // "can read manga" = add-to-library access (library members) — NOT browse.read, which request-only users also have
+    const canRead = permissions.has('browse.add_to_library');
     const canRequest = permissions.has('browse.request');
     const isRequestOnly = !canRead && canRequest;
     const [isRequestDialogOpen, setIsRequestDialogOpen] = useState(false);

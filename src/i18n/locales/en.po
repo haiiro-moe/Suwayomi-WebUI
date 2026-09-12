@@ -3411,6 +3411,7 @@ msgstr "Remove selected from the library"
 msgid "Removed non library manga from categories"
 msgstr "Removed non library manga from categories"
 
+#: src/features/browse/screens/Browse.tsx
 #: src/features/manga/components/MangaRequestDialog.tsx
 msgid "Request"
 msgstr "Request"
