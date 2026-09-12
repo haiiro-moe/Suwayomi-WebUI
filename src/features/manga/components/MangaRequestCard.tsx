@@ -22,8 +22,10 @@ import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { makeToast } from '@/base/utils/Toast.ts';
 import { getErrorMessage, markdownToSafeHtml } from '@/lib/HelperFunctions.ts';
 import { Mangas } from '@/features/manga/services/Mangas.ts';
+import { MANGA_STATUS_TO_TRANSLATION } from '@/features/manga/Manga.constants.ts';
 import { MarkdownViewer } from '@/lib/mui-tiptap/MarkdownViewer.tsx';
 import { LoadingPlaceholder } from '@/base/components/feedback/LoadingPlaceholder.tsx';
+import { MangaStatus } from '@/lib/graphql/generated/graphql-base.types.ts';
 
 export const MangaRequestCard = ({ mangaId }: { mangaId: number }) => {
     const { t } = useLingui();
@@ -87,11 +89,11 @@ export const MangaRequestCard = ({ mangaId }: { mangaId: number }) => {
                             {manga.artist && manga.artist !== manga.author ? ` · ${manga.artist}` : ''}
                         </Typography>
                     )}
-                    {manga.status != null && (
+                    {manga.status != null && manga.status !== MangaStatus.Unknown && (
                         <Chip
                             size="small"
-                            label={manga.status}
-                            sx={{ alignSelf: 'flex-start', textTransform: 'capitalize' }}
+                            label={t(MANGA_STATUS_TO_TRANSLATION[manga.status])}
+                            sx={{ alignSelf: 'flex-start' }}
                         />
                     )}
                     {!!manga.genre.length && (
