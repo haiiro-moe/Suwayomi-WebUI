@@ -16,6 +16,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useLingui } from '@lingui/react/macro';
 import dayjs from 'dayjs';
+import { AwaitableComponent } from 'awaitable-component';
 import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { LoadingPlaceholder } from '@/base/components/feedback/LoadingPlaceholder.tsx';
 import { EmptyViewAbsoluteCentered } from '@/base/components/feedback/EmptyViewAbsoluteCentered.tsx';
@@ -23,6 +24,7 @@ import { getErrorMessage } from '@/lib/HelperFunctions.ts';
 import { makeToast } from '@/base/utils/Toast.ts';
 import { useAppTitle } from '@/features/navigation-bar/hooks/useAppTitle.ts';
 import { usePermissions } from '@/features/authentication/usePermissions.ts';
+import { CategorySelect } from '@/features/category/components/CategorySelect';
 
 const STATUS_TO_COLOR = {
     PENDING: 'warning',
@@ -38,6 +40,7 @@ export function MangaRequests() {
 
     const { data, loading, error, refetch } = requestManager.useGetMangaRequests({ pollInterval: 30000 });
     const [decideRequest] = requestManager.useDecideMangaRequest();
+    const [updateMangaCategories] = requestManager.useUpdateMangaCategories();
 
     if (loading && !data) {
         return <LoadingPlaceholder />;
@@ -52,9 +55,34 @@ export function MangaRequests() {
         );
     }
 
-    const decide = async (requestId: number, approve: boolean) => {
+    const decide = async (requestId: number, approve: boolean, mangaId?: number) => {
         try {
             await decideRequest({ variables: { input: { requestId, approve } } });
+
+            if (approve && mangaId !== undefined) {
+                // let the approver pick categories, mirroring the add-to-library flow
+                const { addToCategories = [], removeFromCategories = [] } = await AwaitableComponent.show(
+                    CategorySelect,
+                    { mangaId, addToLibrary: false },
+                    { id: `manga-request-approve-categories-${requestId}` },
+                );
+
+                if (addToCategories.length || removeFromCategories.length) {
+                    await updateMangaCategories({
+                        variables: {
+                            input: {
+                                id: mangaId,
+                                patch: { addToCategories, removeFromCategories },
+                            },
+                        },
+                    });
+                }
+
+                // the approved manga just entered the library - invalidate library queries so it shows up without a reload
+                requestManager.graphQLClient.client.cache.evict({ fieldName: 'mangas' });
+                requestManager.graphQLClient.client.cache.evict({ fieldName: 'categories' });
+            }
+
             await refetch();
         } catch (decideError) {
             makeToast(
@@ -122,7 +150,7 @@ export function MangaRequests() {
                                     <Button color="error" onClick={() => decide(request.id, false)}>{t`Deny`}</Button>
                                     <Button
                                         variant="contained"
-                                        onClick={() => decide(request.id, true)}
+                                        onClick={() => decide(request.id, true, request.mangaId)}
                                     >{t`Approve`}</Button>
                                 </CardActions>
                             )}
