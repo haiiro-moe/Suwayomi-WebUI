@@ -17,12 +17,13 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useLingui } from '@lingui/react/macro';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { makeToast } from '@/base/utils/Toast.ts';
 import { getErrorMessage, markdownToSafeHtml } from '@/lib/HelperFunctions.ts';
 import { Mangas } from '@/features/manga/services/Mangas.ts';
 import { MANGA_STATUS_TO_TRANSLATION } from '@/features/manga/Manga.constants.ts';
+import { SpinnerImage } from '@/base/components/SpinnerImage.tsx';
 import { MarkdownViewer } from '@/lib/mui-tiptap/MarkdownViewer.tsx';
 import { LoadingPlaceholder } from '@/base/components/feedback/LoadingPlaceholder.tsx';
 import { MangaStatus } from '@/lib/graphql/generated/graphql-base.types.ts';
@@ -33,9 +34,17 @@ export const MangaRequestCard = ({ mangaId }: { mangaId: number }) => {
     const [requestManga] = requestManager.useRequestManga();
     const [isRequesting, setIsRequesting] = useState(false);
     const [requested, setRequested] = useState(false);
+    // bumped when the preview arrives so a cover that failed during the first server fetch gets retried
+    const [previewLoadKey, setPreviewLoadKey] = useState(0);
 
     const { data, loading, error } = requestManager.useGetRequestPreview(mangaId);
     const preview = data?.requestPreview;
+
+    useEffect(() => {
+        if (preview) {
+            setPreviewLoadKey((current) => current + 1);
+        }
+    }, [preview?.manga.id, preview?.manga.thumbnailUrlLastFetched]);
 
     if (loading && !preview) {
         return <LoadingPlaceholder />;
@@ -66,19 +75,20 @@ export const MangaRequestCard = ({ mangaId }: { mangaId: number }) => {
     return (
         <Paper variant="outlined" sx={{ maxWidth: 720, width: '100%', mx: 'auto', overflow: 'hidden' }}>
             <Stack direction="row" spacing={2} sx={{ p: 2 }}>
-                <Box
-                    component="img"
-                    src={thumbnailUrl}
-                    alt={manga.title}
-                    sx={{
-                        width: 140,
-                        height: 210,
-                        objectFit: 'cover',
-                        borderRadius: 2,
-                        flexShrink: 0,
-                        bgcolor: 'action.hover',
-                    }}
-                />
+                <Box sx={{ width: 140, height: 210, flexShrink: 0 }}>
+                    <SpinnerImage
+                        src={thumbnailUrl}
+                        alt={manga.title}
+                        retryKeyPrefix={`${thumbnailUrl}:${previewLoadKey}`}
+                        imgStyle={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            borderRadius: 2,
+                            bgcolor: 'action.hover',
+                        }}
+                    />
+                </Box>
                 <Stack spacing={1} sx={{ minWidth: 0, flex: 1 }}>
                     <Typography variant="h6" component="h1" sx={{ wordBreak: 'break-word' }}>
                         {manga.title}
