@@ -252,6 +252,8 @@ import type {
     GetMangaRequestsQueryVariables,
     DecideMangaRequestMutation,
     DecideMangaRequestMutationVariables,
+    GetRequestPreviewQuery,
+    GetRequestPreviewQueryVariables,
     UserLoginMutation,
     UserLoginMutationVariables,
     UserRefreshMutation,
@@ -409,6 +411,7 @@ import {
     GET_MANGA_REQUESTS,
     GET_MY_MANGA_NOTE,
     GET_OTHER_USER_MANGA_NOTES,
+    GET_REQUEST_PREVIEW,
     REMOVE_FAVORITE,
     REQUEST_MANGA,
     SET_MANGA_NOTE,
@@ -4242,6 +4245,18 @@ export class RequestManager {
         options?: MutationHookOptions<DecideMangaRequestMutation, DecideMangaRequestMutationVariables>,
     ): AbortableApolloUseMutationResponse<DecideMangaRequestMutation, DecideMangaRequestMutationVariables> {
         return this.doRequest(GQLMethod.USE_MUTATION, DECIDE_MANGA_REQUEST, undefined, options);
+    }
+
+    public useGetRequestPreview(
+        mangaId: number,
+        options?: QueryHookOptions<GetRequestPreviewQuery, GetRequestPreviewQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetRequestPreviewQuery, GetRequestPreviewQueryVariables> {
+        return this.doRequest<GetRequestPreviewQuery, GetRequestPreviewQueryVariables>(
+            GQLMethod.USE_QUERY,
+            GET_REQUEST_PREVIEW,
+            { mangaId },
+            options,
+        ) as AbortableApolloUseQueryResponse<GetRequestPreviewQuery, GetRequestPreviewQueryVariables>;
     }
 
     public useOnboardingStatus(

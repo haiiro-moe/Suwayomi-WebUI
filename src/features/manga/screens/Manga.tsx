@@ -9,11 +9,9 @@
 import Warning from '@mui/icons-material/Warning';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { isNetworkRequestInFlight } from '@apollo/client/utilities';
 import { useLingui } from '@lingui/react/macro';
@@ -23,7 +21,7 @@ import { ChapterList } from '@/features/chapter/components/ChapterList.tsx';
 import { useRefreshManga } from '@/features/manga/hooks/useRefreshManga.ts';
 import { MangaDetails } from '@/features/manga/components/details/MangaDetails.tsx';
 import { MangaToolbarMenu } from '@/features/manga/components/MangaToolbarMenu.tsx';
-import { MangaRequestDialog } from '@/features/manga/components/MangaRequestDialog.tsx';
+import { MangaRequestCard } from '@/features/manga/components/MangaRequestCard.tsx';
 import { usePermissions } from '@/features/authentication/usePermissions.ts';
 import { EmptyViewAbsoluteCentered } from '@/base/components/feedback/EmptyViewAbsoluteCentered.tsx';
 import { LoadingPlaceholder } from '@/base/components/feedback/LoadingPlaceholder.tsx';
@@ -44,7 +42,6 @@ export const Manga: React.FC = () => {
     const canRead = permissions.has('browse.add_to_library');
     const canRequest = permissions.has('browse.request');
     const isRequestOnly = !canRead && canRequest;
-    const [isRequestDialogOpen, setIsRequestDialogOpen] = useState(false);
 
     const autofetchedRef = useRef(false);
 
@@ -107,35 +104,14 @@ export const Manga: React.FC = () => {
         [t, error, isValidating, refreshing, manga, refresh],
     );
 
-    if (error && !manga) {
+    if (error && !manga && !isRequestOnly) {
         return <EmptyViewAbsoluteCentered message={t`Could not load manga`} messageExtra={getErrorMessage(error)} />;
     }
 
-    if (isRequestOnly && manga) {
+    if (isRequestOnly) {
         return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    minHeight: '60vh',
-                    gap: 2,
-                    p: 2,
-                }}
-            >
-                <MangaRequestDialog
-                    manga={manga}
-                    open={isRequestDialogOpen || !autofetchedRef.current}
-                    onClose={() => setIsRequestDialogOpen(false)}
-                />
-                <Typography variant="h6" sx={{ textAlign: 'center', wordBreak: 'break-word' }}>
-                    {manga.title}
-                </Typography>
-                <Button
-                    variant="contained"
-                    onClick={() => setIsRequestDialogOpen(true)}
-                >{t`Request this manga`}</Button>
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 4, px: 2 }}>
+                <MangaRequestCard mangaId={Number(id)} />
             </Box>
         );
     }

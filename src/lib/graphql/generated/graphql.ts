@@ -5393,6 +5393,37 @@ export type RequestMangaMutation = {
     requestManga: { __typename: 'RequestMangaPayload'; requestId: number };
 };
 
+export type GetRequestPreviewQueryVariables = Exact<{
+    mangaId: number;
+}>;
+
+export type GetRequestPreviewQuery = {
+    __typename: 'Query';
+    requestPreview: {
+        __typename: 'RequestPreview';
+        manga: {
+            __typename: 'MangaType';
+            id: number;
+            title: string;
+            author: string | null;
+            artist: string | null;
+            status: Types.MangaStatus;
+            genre: Array<string>;
+            description: string | null;
+            thumbnailUrl: string | null;
+            thumbnailUrlLastFetched: string | null;
+            sourceId: string;
+            inLibrary: boolean;
+        };
+        chapters: Array<{
+            __typename: 'ChapterPreview';
+            name: string;
+            chapterNumber: number | null;
+            scanlator: string | null;
+        }>;
+    };
+};
+
 export type GetMangaRequestsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetMangaRequestsQuery = {

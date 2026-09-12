@@ -157,6 +157,12 @@ export type ChapterNodeListFieldPolicy = {
     pageInfo?: FieldPolicy<any> | FieldReadFunction<any>;
     totalCount?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type ChapterPreviewKeySpecifier = ('chapterNumber' | 'name' | 'scanlator' | ChapterPreviewKeySpecifier)[];
+export type ChapterPreviewFieldPolicy = {
+    chapterNumber?: FieldPolicy<any> | FieldReadFunction<any>;
+    name?: FieldPolicy<any> | FieldReadFunction<any>;
+    scanlator?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type ChapterTypeKeySpecifier = (
     | 'chapterNumber'
     | 'fetchedAt'
@@ -1556,6 +1562,7 @@ export type QueryKeySpecifier = (
     | 'otherUserMangaNotes'
     | 'permissionNodes'
     | 'profile'
+    | 'requestPreview'
     | 'restoreStatus'
     | 'roles'
     | 'searchTracker'
@@ -1607,6 +1614,7 @@ export type QueryFieldPolicy = {
     otherUserMangaNotes?: FieldPolicy<any> | FieldReadFunction<any>;
     permissionNodes?: FieldPolicy<any> | FieldReadFunction<any>;
     profile?: FieldPolicy<any> | FieldReadFunction<any>;
+    requestPreview?: FieldPolicy<any> | FieldReadFunction<any>;
     restoreStatus?: FieldPolicy<any> | FieldReadFunction<any>;
     roles?: FieldPolicy<any> | FieldReadFunction<any>;
     searchTracker?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1651,6 +1659,11 @@ export type RequestMangaPayloadKeySpecifier = ('clientMutationId' | 'requestId' 
 export type RequestMangaPayloadFieldPolicy = {
     clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
     requestId?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type RequestPreviewKeySpecifier = ('chapters' | 'manga' | RequestPreviewKeySpecifier)[];
+export type RequestPreviewFieldPolicy = {
+    chapters?: FieldPolicy<any> | FieldReadFunction<any>;
+    manga?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type ResetSettingsPayloadKeySpecifier = ('clientMutationId' | 'settings' | ResetSettingsPayloadKeySpecifier)[];
 export type ResetSettingsPayloadFieldPolicy = {
@@ -2915,6 +2928,10 @@ export type StrictTypedTypePolicies = {
         keyFields?: false | ChapterNodeListKeySpecifier | (() => undefined | ChapterNodeListKeySpecifier);
         fields?: ChapterNodeListFieldPolicy;
     };
+    ChapterPreview?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | ChapterPreviewKeySpecifier | (() => undefined | ChapterPreviewKeySpecifier);
+        fields?: ChapterPreviewFieldPolicy;
+    };
     ChapterType?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | ChapterTypeKeySpecifier | (() => undefined | ChapterTypeKeySpecifier);
         fields?: ChapterTypeFieldPolicy;
@@ -3374,6 +3391,10 @@ export type StrictTypedTypePolicies = {
     RequestMangaPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | RequestMangaPayloadKeySpecifier | (() => undefined | RequestMangaPayloadKeySpecifier);
         fields?: RequestMangaPayloadFieldPolicy;
+    };
+    RequestPreview?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | RequestPreviewKeySpecifier | (() => undefined | RequestPreviewKeySpecifier);
+        fields?: RequestPreviewFieldPolicy;
     };
     ResetSettingsPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | ResetSettingsPayloadKeySpecifier | (() => undefined | ResetSettingsPayloadKeySpecifier);

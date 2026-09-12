@@ -297,6 +297,13 @@ export type ChapterOrderInput = {
     byType?: InputMaybe<SortOrder>;
 };
 
+export type ChapterPreview = {
+    __typename?: 'ChapterPreview';
+    chapterNumber?: Maybe<Scalars['Float']['output']>;
+    name: Scalars['String']['output'];
+    scanlator?: Maybe<Scalars['String']['output']>;
+};
+
 export type ChapterType = {
     __typename?: 'ChapterType';
     chapterNumber: Scalars['Float']['output'];
@@ -2393,6 +2400,7 @@ export type Query = {
     otherUserMangaNotes: Array<UserMangaNoteType>;
     permissionNodes: Array<Scalars['String']['output']>;
     profile?: Maybe<UserProfile>;
+    requestPreview: RequestPreview;
     restoreStatus?: Maybe<BackupRestoreStatus>;
     roles: Array<RoleType>;
     searchTracker: SearchTrackerPayload;
@@ -2526,6 +2534,10 @@ export type QueryProfileArgs = {
     profileUserId: Scalars['Int']['input'];
 };
 
+export type QueryRequestPreviewArgs = {
+    mangaId: Scalars['Int']['input'];
+};
+
 export type QueryRestoreStatusArgs = {
     id: Scalars['String']['input'];
 };
@@ -2630,6 +2642,12 @@ export type RequestMangaPayload = {
     __typename?: 'RequestMangaPayload';
     clientMutationId?: Maybe<Scalars['String']['output']>;
     requestId: Scalars['Int']['output'];
+};
+
+export type RequestPreview = {
+    __typename?: 'RequestPreview';
+    chapters: Array<ChapterPreview>;
+    manga: MangaType;
 };
 
 export type ResetSettingsInput = {

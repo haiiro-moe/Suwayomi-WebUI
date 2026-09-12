@@ -134,6 +134,11 @@ msgstr "{0} / {1}"
 msgid "{0} / {1}{2}"
 msgstr "{0} / {1}{2}"
 
+#. placeholder {0}: chapters.length
+#: src/features/manga/components/MangaRequestCard.tsx
+msgid "{0} chapters"
+msgstr "{0} chapters"
+
 #. placeholder {0}: profile.favoriteMangaIds.length
 #: src/features/profile/screens/Profile.tsx
 msgid "{0} manga"
@@ -492,9 +497,9 @@ msgstr "Alpha"
 msgid "Also remove from {0}"
 msgstr "Also remove from {0}"
 
-#: src/features/manga/components/MangaRequestDialog.tsx
-msgid "An administrator will review your request. The manga will be added to the library if approved."
-msgstr "An administrator will review your request. The manga will be added to the library if approved."
+#: src/features/manga/components/MangaRequestCard.tsx
+msgid "An administrator will review your request."
+msgstr "An administrator will review your request."
 
 #: src/features/library/components/LibraryOptionsPanel.tsx
 msgid "and"
@@ -807,7 +812,6 @@ msgstr "Can't migrate an entry to itself"
 #: src/features/category/components/CreateOrEditCategoryDialog.tsx
 #: src/features/downloads/components/DownloadQueueChapterCard.tsx
 #: src/features/manga/components/details/MangaNotes.tsx
-#: src/features/manga/components/MangaRequestDialog.tsx
 #: src/features/migration/components/MigrationBulkSearchOptionsDialog.tsx
 #: src/features/migration/components/MigrationOptionsDialog.tsx
 #: src/features/reader/hotkeys/settings/components/RecordHotkey.tsx
@@ -923,6 +927,7 @@ msgid "Chapter transition warning"
 msgstr "Chapter transition warning"
 
 #: src/features/backup/Backup.constants.ts
+#: src/features/manga/components/MangaRequestCard.tsx
 msgid "Chapters"
 msgstr "Chapters"
 
@@ -989,7 +994,6 @@ msgstr "Client data"
 
 #: src/base/components/feedback/SnackbarWithDescription.tsx
 #: src/features/app-updates/components/VersionUpdateInfoDialog.tsx
-#: src/features/manga/components/MangaRequestDialog.tsx
 #: src/features/migration/components/migration-entry/MigrationDestinationEntry.tsx
 msgid "Close"
 msgstr "Close"
@@ -1322,7 +1326,7 @@ msgstr "Could not start sync"
 msgid "Could not stop global update"
 msgstr "Could not stop global update"
 
-#: src/features/manga/components/MangaRequestDialog.tsx
+#: src/features/manga/components/MangaRequestCard.tsx
 msgid "Could not submit request"
 msgstr "Could not submit request"
 
@@ -2637,6 +2641,10 @@ msgstr "Manga"
 msgid "entry-type-detection-manga"
 msgstr "Manga"
 
+#: src/features/manga/components/MangaRequestCard.tsx
+msgid "Manga does not exist"
+msgstr "Manga does not exist"
+
 #: src/features/settings/screens/Appearance.tsx
 msgid "Manga item width"
 msgstr "Manga item width"
@@ -2917,6 +2925,10 @@ msgstr "No categories found."
 #: src/features/chapter/components/ChapterList.tsx
 msgid "No chapters found"
 msgstr "No chapters found"
+
+#: src/features/manga/components/MangaRequestCard.tsx
+msgid "No chapters found."
+msgstr "No chapters found."
 
 #: src/features/chapter/components/ChapterList.tsx
 msgid "No chapters matching filter"
@@ -3412,19 +3424,14 @@ msgid "Removed non library manga from categories"
 msgstr "Removed non library manga from categories"
 
 #: src/features/browse/screens/Browse.tsx
-#: src/features/manga/components/MangaRequestDialog.tsx
 msgid "Request"
 msgstr "Request"
 
-#: src/features/manga/components/MangaRequestDialog.tsx
-msgid "Request manga"
-msgstr "Request manga"
-
-#: src/features/manga/components/MangaRequestDialog.tsx
+#: src/features/manga/components/MangaRequestCard.tsx
 msgid "Request submitted"
 msgstr "Request submitted"
 
-#: src/features/manga/screens/Manga.tsx
+#: src/features/manga/components/MangaRequestCard.tsx
 msgid "Request this manga"
 msgstr "Request this manga"
 
@@ -4676,10 +4683,6 @@ msgstr "You are about to remove \"{name}\" from the extension stores"
 #: src/features/backup/screens/Backup.tsx
 msgid "You can also drag and drop the backup file here to restore it"
 msgstr "You can also drag and drop the backup file here to restore it"
-
-#: src/features/manga/components/MangaRequestDialog.tsx
-msgid "You do not have access to read this manga. You can request it to be added to the library."
-msgstr "You do not have access to read this manga. You can request it to be added to the library."
 
 #: src/features/category/components/CategorySelect.tsx
 msgid "You don't have any categories yet."

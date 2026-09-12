@@ -91,6 +91,31 @@ export const REQUEST_MANGA = gql`
     }
 `;
 
+export const GET_REQUEST_PREVIEW = gql`
+    query GET_REQUEST_PREVIEW($mangaId: Int!) {
+        requestPreview(mangaId: $mangaId) {
+            manga {
+                id
+                title
+                author
+                artist
+                status
+                genre
+                description
+                thumbnailUrl
+                thumbnailUrlLastFetched
+                sourceId
+                inLibrary
+            }
+            chapters {
+                name
+                chapterNumber
+                scanlator
+            }
+        }
+    }
+`;
+
 export const GET_MANGA_REQUESTS = gql`
     query GET_MANGA_REQUESTS {
         mangaRequests {
