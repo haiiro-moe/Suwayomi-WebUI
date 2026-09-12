@@ -269,6 +269,15 @@ export type CreateCategoryPayloadFieldPolicy = {
     category?: FieldPolicy<any> | FieldReadFunction<any>;
     clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type DecideMangaRequestPayloadKeySpecifier = (
+    | 'clientMutationId'
+    | 'success'
+    | DecideMangaRequestPayloadKeySpecifier
+)[];
+export type DecideMangaRequestPayloadFieldPolicy = {
+    clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+    success?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type DeleteCategoryMetaPayloadKeySpecifier = (
     | 'category'
     | 'clientMutationId'
@@ -875,6 +884,29 @@ export type MangaNodeListFieldPolicy = {
     pageInfo?: FieldPolicy<any> | FieldReadFunction<any>;
     totalCount?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type MangaRequestTypeKeySpecifier = (
+    | 'createdAt'
+    | 'displayName'
+    | 'id'
+    | 'mangaId'
+    | 'mangaThumbnailUrl'
+    | 'mangaTitle'
+    | 'status'
+    | 'userId'
+    | 'username'
+    | MangaRequestTypeKeySpecifier
+)[];
+export type MangaRequestTypeFieldPolicy = {
+    createdAt?: FieldPolicy<any> | FieldReadFunction<any>;
+    displayName?: FieldPolicy<any> | FieldReadFunction<any>;
+    id?: FieldPolicy<any> | FieldReadFunction<any>;
+    mangaId?: FieldPolicy<any> | FieldReadFunction<any>;
+    mangaThumbnailUrl?: FieldPolicy<any> | FieldReadFunction<any>;
+    mangaTitle?: FieldPolicy<any> | FieldReadFunction<any>;
+    status?: FieldPolicy<any> | FieldReadFunction<any>;
+    userId?: FieldPolicy<any> | FieldReadFunction<any>;
+    username?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type MangaTypeKeySpecifier = (
     | 'age'
     | 'artist'
@@ -1033,6 +1065,7 @@ export type MutationKeySpecifier = (
     | 'createCategory'
     | 'createRole'
     | 'createUser'
+    | 'decideMangaRequest'
     | 'deleteCategory'
     | 'deleteCategoryMeta'
     | 'deleteCategoryMetas'
@@ -1073,6 +1106,7 @@ export type MutationKeySpecifier = (
     | 'removeFavorite'
     | 'reorderChapterDownload'
     | 'reorderChapterDownloads'
+    | 'requestManga'
     | 'resetSettings'
     | 'resetUserSettings'
     | 'resetWebUIUpdateStatus'
@@ -1134,6 +1168,7 @@ export type MutationFieldPolicy = {
     createCategory?: FieldPolicy<any> | FieldReadFunction<any>;
     createRole?: FieldPolicy<any> | FieldReadFunction<any>;
     createUser?: FieldPolicy<any> | FieldReadFunction<any>;
+    decideMangaRequest?: FieldPolicy<any> | FieldReadFunction<any>;
     deleteCategory?: FieldPolicy<any> | FieldReadFunction<any>;
     deleteCategoryMeta?: FieldPolicy<any> | FieldReadFunction<any>;
     deleteCategoryMetas?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1174,6 +1209,7 @@ export type MutationFieldPolicy = {
     removeFavorite?: FieldPolicy<any> | FieldReadFunction<any>;
     reorderChapterDownload?: FieldPolicy<any> | FieldReadFunction<any>;
     reorderChapterDownloads?: FieldPolicy<any> | FieldReadFunction<any>;
+    requestManga?: FieldPolicy<any> | FieldReadFunction<any>;
     resetSettings?: FieldPolicy<any> | FieldReadFunction<any>;
     resetUserSettings?: FieldPolicy<any> | FieldReadFunction<any>;
     resetWebUIUpdateStatus?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1511,6 +1547,7 @@ export type QueryKeySpecifier = (
     | 'lastUpdateTimestamp'
     | 'libraryUpdateStatus'
     | 'manga'
+    | 'mangaRequests'
     | 'mangas'
     | 'meta'
     | 'metas'
@@ -1561,6 +1598,7 @@ export type QueryFieldPolicy = {
     lastUpdateTimestamp?: FieldPolicy<any> | FieldReadFunction<any>;
     libraryUpdateStatus?: FieldPolicy<any> | FieldReadFunction<any>;
     manga?: FieldPolicy<any> | FieldReadFunction<any>;
+    mangaRequests?: FieldPolicy<any> | FieldReadFunction<any>;
     mangas?: FieldPolicy<any> | FieldReadFunction<any>;
     meta?: FieldPolicy<any> | FieldReadFunction<any>;
     metas?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1608,6 +1646,11 @@ export type ReorderChapterDownloadPayloadKeySpecifier = (
 export type ReorderChapterDownloadPayloadFieldPolicy = {
     clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
     downloadStatus?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type RequestMangaPayloadKeySpecifier = ('clientMutationId' | 'requestId' | RequestMangaPayloadKeySpecifier)[];
+export type RequestMangaPayloadFieldPolicy = {
+    clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+    requestId?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type ResetSettingsPayloadKeySpecifier = ('clientMutationId' | 'settings' | ResetSettingsPayloadKeySpecifier)[];
 export type ResetSettingsPayloadFieldPolicy = {
@@ -2917,6 +2960,13 @@ export type StrictTypedTypePolicies = {
         keyFields?: false | CreateCategoryPayloadKeySpecifier | (() => undefined | CreateCategoryPayloadKeySpecifier);
         fields?: CreateCategoryPayloadFieldPolicy;
     };
+    DecideMangaRequestPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?:
+            | false
+            | DecideMangaRequestPayloadKeySpecifier
+            | (() => undefined | DecideMangaRequestPayloadKeySpecifier);
+        fields?: DecideMangaRequestPayloadFieldPolicy;
+    };
     DeleteCategoryMetaPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?:
             | false
@@ -3218,6 +3268,10 @@ export type StrictTypedTypePolicies = {
         keyFields?: false | MangaNodeListKeySpecifier | (() => undefined | MangaNodeListKeySpecifier);
         fields?: MangaNodeListFieldPolicy;
     };
+    MangaRequestType?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | MangaRequestTypeKeySpecifier | (() => undefined | MangaRequestTypeKeySpecifier);
+        fields?: MangaRequestTypeFieldPolicy;
+    };
     MangaType?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | MangaTypeKeySpecifier | (() => undefined | MangaTypeKeySpecifier);
         fields?: MangaTypeFieldPolicy;
@@ -3316,6 +3370,10 @@ export type StrictTypedTypePolicies = {
             | ReorderChapterDownloadPayloadKeySpecifier
             | (() => undefined | ReorderChapterDownloadPayloadKeySpecifier);
         fields?: ReorderChapterDownloadPayloadFieldPolicy;
+    };
+    RequestMangaPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | RequestMangaPayloadKeySpecifier | (() => undefined | RequestMangaPayloadKeySpecifier);
+        fields?: RequestMangaPayloadFieldPolicy;
     };
     ResetSettingsPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | ResetSettingsPayloadKeySpecifier | (() => undefined | ResetSettingsPayloadKeySpecifier);

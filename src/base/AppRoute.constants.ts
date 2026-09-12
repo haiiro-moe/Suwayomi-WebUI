@@ -70,6 +70,10 @@ export const AppRoutes = {
         match: 'admin',
         path: '/admin',
     },
+    requests: {
+        match: 'requests',
+        path: '/requests',
+    },
     settings: {
         match: 'settings',
         path: '/settings',

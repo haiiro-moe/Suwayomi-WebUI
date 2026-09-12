@@ -5384,6 +5384,42 @@ export type GetOtherUserMangaNotesQuery = {
     }>;
 };
 
+export type RequestMangaMutationVariables = Exact<{
+    input: Types.RequestMangaInput;
+}>;
+
+export type RequestMangaMutation = {
+    __typename: 'Mutation';
+    requestManga: { __typename: 'RequestMangaPayload'; requestId: number };
+};
+
+export type GetMangaRequestsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetMangaRequestsQuery = {
+    __typename: 'Query';
+    mangaRequests: Array<{
+        __typename: 'MangaRequestType';
+        id: number;
+        userId: number;
+        username: string;
+        displayName: string;
+        mangaId: number;
+        mangaTitle: string | null;
+        mangaThumbnailUrl: string | null;
+        createdAt: string;
+        status: string;
+    }>;
+};
+
+export type DecideMangaRequestMutationVariables = Exact<{
+    input: Types.DecideMangaRequestInput;
+}>;
+
+export type DecideMangaRequestMutation = {
+    __typename: 'Mutation';
+    decideMangaRequest: { __typename: 'DecideMangaRequestPayload'; success: boolean };
+};
+
 export type OnboardingStatusQueryVariables = Exact<{ [key: string]: never }>;
 
 export type OnboardingStatusQuery = { __typename: 'Query'; onboardingStatus: boolean };

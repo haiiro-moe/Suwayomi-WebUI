@@ -9,9 +9,11 @@
 import Warning from '@mui/icons-material/Warning';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { isNetworkRequestInFlight } from '@apollo/client/utilities';
 import { useLingui } from '@lingui/react/macro';
@@ -21,6 +23,8 @@ import { ChapterList } from '@/features/chapter/components/ChapterList.tsx';
 import { useRefreshManga } from '@/features/manga/hooks/useRefreshManga.ts';
 import { MangaDetails } from '@/features/manga/components/details/MangaDetails.tsx';
 import { MangaToolbarMenu } from '@/features/manga/components/MangaToolbarMenu.tsx';
+import { MangaRequestDialog } from '@/features/manga/components/MangaRequestDialog.tsx';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 import { EmptyViewAbsoluteCentered } from '@/base/components/feedback/EmptyViewAbsoluteCentered.tsx';
 import { LoadingPlaceholder } from '@/base/components/feedback/LoadingPlaceholder.tsx';
 import type { GetMangaScreenQuery } from '@/lib/graphql/generated/graphql.ts';
@@ -34,6 +38,12 @@ export const Manga: React.FC = () => {
     const { t } = useLingui();
     const { id } = useParams<{ id: string }>();
     const { mode } = useLocation<MangaLocationState>().state ?? STABLE_EMPTY_OBJECT;
+
+    const permissions = usePermissions();
+    const canRead = permissions.has('library.read') || permissions.has('browse.read');
+    const canRequest = permissions.has('browse.request');
+    const isRequestOnly = !canRead && canRequest;
+    const [isRequestDialogOpen, setIsRequestDialogOpen] = useState(false);
 
     const autofetchedRef = useRef(false);
 
@@ -99,6 +109,36 @@ export const Manga: React.FC = () => {
     if (error && !manga) {
         return <EmptyViewAbsoluteCentered message={t`Could not load manga`} messageExtra={getErrorMessage(error)} />;
     }
+
+    if (isRequestOnly && manga) {
+        return (
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    minHeight: '60vh',
+                    gap: 2,
+                    p: 2,
+                }}
+            >
+                <MangaRequestDialog
+                    manga={manga}
+                    open={isRequestDialogOpen || !autofetchedRef.current}
+                    onClose={() => setIsRequestDialogOpen(false)}
+                />
+                <Typography variant="h6" sx={{ textAlign: 'center', wordBreak: 'break-word' }}>
+                    {manga.title}
+                </Typography>
+                <Button
+                    variant="contained"
+                    onClick={() => setIsRequestDialogOpen(true)}
+                >{t`Request this manga`}</Button>
+            </Box>
+        );
+    }
+
     return (
         <Box sx={{ display: { md: 'flex' }, overflow: 'hidden' }}>
             {isLoading && <LoadingPlaceholder />}

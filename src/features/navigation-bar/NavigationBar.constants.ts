@@ -17,6 +17,8 @@ import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import GetAppOutlinedIcon from '@mui/icons-material/GetAppOutlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
+import PendingActionsOutlinedIcon from '@mui/icons-material/PendingActionsOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -181,6 +183,15 @@ const NAVIGATION_BAR_DESKTOP_ITEMS = [
         show: 'desktop',
         moreGroup: NavBarItemMoreGroup.SETTING_INFO,
         requiredPermission: 'admin.users.manage',
+    },
+    {
+        path: AppRoutes.requests.path,
+        title: msg`Requests`,
+        SelectedIconComponent: PendingActionsIcon,
+        IconComponent: PendingActionsOutlinedIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+        requiredPermission: 'requests.read',
     },
 ] as const satisfies RestrictedNavBarItem<'desktop'>[];
 

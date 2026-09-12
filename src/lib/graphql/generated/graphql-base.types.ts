@@ -447,6 +447,18 @@ export enum DatabaseType {
     Postgresql = 'POSTGRESQL',
 }
 
+export type DecideMangaRequestInput = {
+    approve: Scalars['Boolean']['input'];
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    requestId: Scalars['Int']['input'];
+};
+
+export type DecideMangaRequestPayload = {
+    __typename?: 'DecideMangaRequestPayload';
+    clientMutationId?: Maybe<Scalars['String']['output']>;
+    success: Scalars['Boolean']['output'];
+};
+
 export type DeleteCategoryInput = {
     categoryId: Scalars['Int']['input'];
     clientMutationId?: InputMaybe<Scalars['String']['input']>;
@@ -1374,6 +1386,19 @@ export type MangaOrderInput = {
     byType?: InputMaybe<SortOrder>;
 };
 
+export type MangaRequestType = {
+    __typename?: 'MangaRequestType';
+    createdAt: Scalars['LongString']['output'];
+    displayName: Scalars['String']['output'];
+    id: Scalars['Int']['output'];
+    mangaId: Scalars['Int']['output'];
+    mangaThumbnailUrl?: Maybe<Scalars['String']['output']>;
+    mangaTitle?: Maybe<Scalars['String']['output']>;
+    status: Scalars['String']['output'];
+    userId: Scalars['Int']['output'];
+    username: Scalars['String']['output'];
+};
+
 export enum MangaStatus {
     Cancelled = 'CANCELLED',
     Completed = 'COMPLETED',
@@ -1537,6 +1562,7 @@ export type Mutation = {
     createCategory?: Maybe<CreateCategoryPayload>;
     createRole: UserAdminPayload;
     createUser: UserAdminPayload;
+    decideMangaRequest: DecideMangaRequestPayload;
     deleteCategory?: Maybe<DeleteCategoryPayload>;
     deleteCategoryMeta?: Maybe<DeleteCategoryMetaPayload>;
     deleteCategoryMetas?: Maybe<DeleteCategoryMetasPayload>;
@@ -1579,6 +1605,7 @@ export type Mutation = {
     removeFavorite: ProfileMutationPayload;
     reorderChapterDownload?: Maybe<ReorderChapterDownloadPayload>;
     reorderChapterDownloads?: Maybe<ReorderChapterDownloadPayload>;
+    requestManga: RequestMangaPayload;
     resetSettings: ResetSettingsPayload;
     resetUserSettings: SetUserSettingsPayload;
     resetWebUIUpdateStatus?: Maybe<WebUiUpdateStatus>;
@@ -1673,6 +1700,10 @@ export type MutationCreateRoleArgs = {
 
 export type MutationCreateUserArgs = {
     input: CreateUserInput;
+};
+
+export type MutationDecideMangaRequestArgs = {
+    input: DecideMangaRequestInput;
 };
 
 export type MutationDeleteCategoryArgs = {
@@ -1833,6 +1864,10 @@ export type MutationReorderChapterDownloadArgs = {
 
 export type MutationReorderChapterDownloadsArgs = {
     input: ReorderChapterDownloadsInput;
+};
+
+export type MutationRequestMangaArgs = {
+    input: RequestMangaInput;
 };
 
 export type MutationResetSettingsArgs = {
@@ -2349,6 +2384,7 @@ export type Query = {
     lastUpdateTimestamp: LastUpdateTimestampPayload;
     libraryUpdateStatus: LibraryUpdateStatus;
     manga: MangaType;
+    mangaRequests: Array<MangaRequestType>;
     mangas: MangaNodeList;
     meta: GlobalMetaType;
     metas: GlobalMetaNodeList;
@@ -2583,6 +2619,17 @@ export type ReorderChapterDownloadPayload = {
 export type ReorderChapterDownloadsInput = {
     clientMutationId?: InputMaybe<Scalars['String']['input']>;
     reorders: Array<ChapterDownloadReorderInput>;
+};
+
+export type RequestMangaInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    mangaId: Scalars['Int']['input'];
+};
+
+export type RequestMangaPayload = {
+    __typename?: 'RequestMangaPayload';
+    clientMutationId?: Maybe<Scalars['String']['output']>;
+    requestId: Scalars['Int']['output'];
 };
 
 export type ResetSettingsInput = {

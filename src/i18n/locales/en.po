@@ -492,6 +492,10 @@ msgstr "Alpha"
 msgid "Also remove from {0}"
 msgstr "Also remove from {0}"
 
+#: src/features/manga/components/MangaRequestDialog.tsx
+msgid "An administrator will review your request. The manga will be added to the library if approved."
+msgstr "An administrator will review your request. The manga will be added to the library if approved."
+
 #: src/features/library/components/LibraryOptionsPanel.tsx
 msgid "and"
 msgstr "and"
@@ -499,6 +503,10 @@ msgstr "and"
 #: src/features/reader/settings/general/components/ReaderSettingSafeAreaInset.tsx
 msgid "Apply safe area padding"
 msgstr "Apply safe area padding"
+
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Approve"
+msgstr "Approve"
 
 #: src/features/migration/MigrationManager.ts
 msgid "Are you sure you want to abort the migration?"
@@ -799,6 +807,7 @@ msgstr "Can't migrate an entry to itself"
 #: src/features/category/components/CreateOrEditCategoryDialog.tsx
 #: src/features/downloads/components/DownloadQueueChapterCard.tsx
 #: src/features/manga/components/details/MangaNotes.tsx
+#: src/features/manga/components/MangaRequestDialog.tsx
 #: src/features/migration/components/MigrationBulkSearchOptionsDialog.tsx
 #: src/features/migration/components/MigrationOptionsDialog.tsx
 #: src/features/reader/hotkeys/settings/components/RecordHotkey.tsx
@@ -980,6 +989,7 @@ msgstr "Client data"
 
 #: src/base/components/feedback/SnackbarWithDescription.tsx
 #: src/features/app-updates/components/VersionUpdateInfoDialog.tsx
+#: src/features/manga/components/MangaRequestDialog.tsx
 #: src/features/migration/components/migration-entry/MigrationDestinationEntry.tsx
 msgid "Close"
 msgstr "Close"
@@ -1112,6 +1122,10 @@ msgstr "Could not add favorite"
 msgid "Could not add manga to library!"
 msgstr "Could not add manga to library!"
 
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Could not approve request"
+msgstr "Could not approve request"
+
 #: src/features/manga/hooks/useManageMangaLibraryState.tsx
 msgid "Could not check for duplicated manga in your library.\n"
 "\n"
@@ -1160,6 +1174,10 @@ msgstr "Could not delete category"
 #: src/features/theme/components/ThemeList.tsx
 msgid "Could not delete theme \"{0}\""
 msgstr "Could not delete theme \"{0}\""
+
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Could not deny request"
+msgstr "Could not deny request"
 
 #: src/features/manga/components/details/MangaDetails.tsx
 msgid "Could not find source. Check your installed extensions."
@@ -1303,6 +1321,10 @@ msgstr "Could not start sync"
 #: src/features/updates/components/UpdateChecker.tsx
 msgid "Could not stop global update"
 msgstr "Could not stop global update"
+
+#: src/features/manga/components/MangaRequestDialog.tsx
+msgid "Could not submit request"
+msgstr "Could not submit request"
 
 #: src/features/manga/Manga.constants.ts
 #: src/features/tracker/components/TrackerSearch.tsx
@@ -1529,6 +1551,10 @@ msgstr "Deleted theme \"{0}\""
 #: src/features/theme/components/ThemeList.tsx
 msgid "Deleting theme \"{0}\"…"
 msgstr "Deleting theme \"{0}\"…"
+
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Deny"
+msgstr "Deny"
 
 #: src/features/migration/Migration.constants.ts
 #: src/features/settings/screens/ServerSettings.tsx
@@ -2615,9 +2641,17 @@ msgstr "Manga"
 msgid "Manga item width"
 msgstr "Manga item width"
 
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Manga requests"
+msgstr "Manga requests"
+
 #: src/features/settings/screens/Appearance.tsx
 msgid "Manga thumbnail as background"
 msgstr "Manga thumbnail as background"
+
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Manga you cannot see"
+msgstr "Manga you cannot see"
 
 #: src/features/tracker/Tracker.constants.ts
 msgid "Manhua"
@@ -2923,6 +2957,10 @@ msgstr "No messages yet."
 #: src/features/reader/viewer/ReaderChapterViewer.tsx
 msgid "No pages found"
 msgstr "No pages found"
+
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "No requests yet."
+msgstr "No requests yet."
 
 #: src/features/migration/components/MigrationDestinationSourceList.tsx
 msgid "No sources available to migrate to"
@@ -3372,6 +3410,26 @@ msgstr "Remove selected from the library"
 #: src/features/library/screens/LibrarySettings.tsx
 msgid "Removed non library manga from categories"
 msgstr "Removed non library manga from categories"
+
+#: src/features/manga/components/MangaRequestDialog.tsx
+msgid "Request"
+msgstr "Request"
+
+#: src/features/manga/components/MangaRequestDialog.tsx
+msgid "Request manga"
+msgstr "Request manga"
+
+#: src/features/manga/components/MangaRequestDialog.tsx
+msgid "Request submitted"
+msgstr "Request submitted"
+
+#: src/features/manga/screens/Manga.tsx
+msgid "Request this manga"
+msgstr "Request this manga"
+
+#: src/features/navigation-bar/NavigationBar.constants.ts
+msgid "Requests"
+msgstr "Requests"
 
 #: src/base/components/buttons/ResetButton.tsx
 #: src/base/components/settings/CheckboxListSetting.tsx
@@ -4315,6 +4373,10 @@ msgstr "Unable to load extension stores"
 msgid "Unable to load profile"
 msgstr "Unable to load profile"
 
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Unable to load requests"
+msgstr "Unable to load requests"
+
 #: src/features/migration/screens/MigrationSelectDestinationSources.tsx
 msgid "Unable to load sources"
 msgstr "Unable to load sources"
@@ -4613,6 +4675,10 @@ msgstr "You are about to remove \"{name}\" from the extension stores"
 #: src/features/backup/screens/Backup.tsx
 msgid "You can also drag and drop the backup file here to restore it"
 msgstr "You can also drag and drop the backup file here to restore it"
+
+#: src/features/manga/components/MangaRequestDialog.tsx
+msgid "You do not have access to read this manga. You can request it to be added to the library."
+msgstr "You do not have access to read this manga. You can request it to be added to the library."
 
 #: src/features/category/components/CategorySelect.tsx
 msgid "You don't have any categories yet."

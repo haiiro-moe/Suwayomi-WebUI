@@ -37,14 +37,19 @@ export function Settings() {
 
     return (
         <List sx={{ padding: 0 }}>
-            {canSee('settings.misc') && (
-                <ListItemLink to={AppRoutes.settings.children.appearance.path}>
-                    <ListItemIcon>
-                        <PaletteIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={t`Profile and Site theme`} />
-                </ListItemLink>
-            )}
+            {/* user-scoped settings - visible to everyone */}
+            <ListItemLink to={AppRoutes.settings.children.appearance.path}>
+                <ListItemIcon>
+                    <PaletteIcon />
+                </ListItemIcon>
+                <ListItemText primary={t`Profile and Site theme`} />
+            </ListItemLink>
+            <ListItemLink to={AppRoutes.settings.children.device.path}>
+                <ListItemIcon>
+                    <DevicesIcon />
+                </ListItemIcon>
+                <ListItemText primary={t`Device`} />
+            </ListItemLink>
             {canSee('settings.misc') && (
                 <ListItemLink to={AppRoutes.settings.children.reader.path}>
                     <ListItemIcon>
@@ -99,14 +104,6 @@ export function Settings() {
                         <HistoryIcon />
                     </ListItemIcon>
                     <ListItemText primary={t`History`} />
-                </ListItemLink>
-            )}
-            {canSee('settings.misc') && (
-                <ListItemLink to={AppRoutes.settings.children.device.path}>
-                    <ListItemIcon>
-                        <DevicesIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={t`Device`} />
                 </ListItemLink>
             )}
             {canSee('settings.web_ui') && (

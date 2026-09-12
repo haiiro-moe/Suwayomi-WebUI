@@ -246,6 +246,12 @@ import type {
     GetMyMangaNoteQueryVariables,
     GetOtherUserMangaNotesQuery,
     GetOtherUserMangaNotesQueryVariables,
+    RequestMangaMutation,
+    RequestMangaMutationVariables,
+    GetMangaRequestsQuery,
+    GetMangaRequestsQueryVariables,
+    DecideMangaRequestMutation,
+    DecideMangaRequestMutationVariables,
     UserLoginMutation,
     UserLoginMutationVariables,
     UserRefreshMutation,
@@ -399,9 +405,12 @@ import type { MangaIdInfo } from '@/features/manga/Manga.types.ts';
 import { updateMetadataList } from '@/features/metadata/services/MetadataApolloCacheHandler.ts';
 import {
     ADD_FAVORITE,
+    DECIDE_MANGA_REQUEST,
+    GET_MANGA_REQUESTS,
     GET_MY_MANGA_NOTE,
     GET_OTHER_USER_MANGA_NOTES,
     REMOVE_FAVORITE,
+    REQUEST_MANGA,
     SET_MANGA_NOTE,
     SETUP_OWNER,
     UPDATE_PROFILE,
@@ -4215,6 +4224,24 @@ export class RequestManager {
             { mangaId },
             options,
         ) as AbortableApolloUseQueryResponse<GetOtherUserMangaNotesQuery, GetOtherUserMangaNotesQueryVariables>;
+    }
+
+    public useRequestManga(
+        options?: MutationHookOptions<RequestMangaMutation, RequestMangaMutationVariables>,
+    ): AbortableApolloUseMutationResponse<RequestMangaMutation, RequestMangaMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, REQUEST_MANGA, undefined, options);
+    }
+
+    public useGetMangaRequests(
+        options?: QueryHookOptions<GetMangaRequestsQuery, GetMangaRequestsQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetMangaRequestsQuery, GetMangaRequestsQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_MANGA_REQUESTS, {}, options);
+    }
+
+    public useDecideMangaRequest(
+        options?: MutationHookOptions<DecideMangaRequestMutation, DecideMangaRequestMutationVariables>,
+    ): AbortableApolloUseMutationResponse<DecideMangaRequestMutation, DecideMangaRequestMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, DECIDE_MANGA_REQUEST, undefined, options);
     }
 
     public useOnboardingStatus(

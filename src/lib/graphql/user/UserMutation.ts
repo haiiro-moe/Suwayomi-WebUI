@@ -82,3 +82,35 @@ export const GET_OTHER_USER_MANGA_NOTES = gql`
         }
     }
 `;
+
+export const REQUEST_MANGA = gql`
+    mutation REQUEST_MANGA($input: RequestMangaInput!) {
+        requestManga(input: $input) {
+            requestId
+        }
+    }
+`;
+
+export const GET_MANGA_REQUESTS = gql`
+    query GET_MANGA_REQUESTS {
+        mangaRequests {
+            id
+            userId
+            username
+            displayName
+            mangaId
+            mangaTitle
+            mangaThumbnailUrl
+            createdAt
+            status
+        }
+    }
+`;
+
+export const DECIDE_MANGA_REQUEST = gql`
+    mutation DECIDE_MANGA_REQUEST($input: DecideMangaRequestInput!) {
+        decideMangaRequest(input: $input) {
+            success
+        }
+    }
+`;

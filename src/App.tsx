@@ -92,6 +92,7 @@ const { LibraryDuplicates } = loadable(
     lazyLoadFallback,
 );
 const { Appearance } = loadable(() => import('@/features/settings/screens/Appearance.tsx'), lazyLoadFallback);
+const { MangaRequests } = loadable(() => import('@/features/requests/screens/MangaRequests.tsx'), lazyLoadFallback);
 const { GlobalReaderSettings } = loadable(
     () => import('@/features/reader/settings/screens/GlobalReaderSettings.tsx'),
     lazyLoadFallback,
@@ -289,9 +290,15 @@ const MainApp = () => {
                         <Route element={<PermissionGuard permission="admin.users.manage" />}>
                             <Route path={AppRoutes.admin.match} element={<Admin />} />
                         </Route>
-                        <Route element={<PermissionGuard permission="settings.edit" />}>
-                            <Route path={AppRoutes.settings.match}>
-                                <Route index element={<Settings />} />
+                        <Route element={<PermissionGuard permission="requests.read" />}>
+                            <Route path={AppRoutes.requests.match} element={<MangaRequests />} />
+                        </Route>
+                        <Route path={AppRoutes.settings.match}>
+                            <Route index element={<Settings />} />
+                            {/* user-scoped settings everyone can reach */}
+                            <Route path={AppRoutes.settings.children.appearance.match} element={<Appearance />} />
+                            <Route path={AppRoutes.settings.children.device.match} element={<DeviceSetting />} />
+                            <Route element={<PermissionGuard permission="settings.edit" />}>
                                 <Route element={<PermissionGuard permission="settings.library_updates" />}>
                                     <Route
                                         path={AppRoutes.settings.children.categories.match}
@@ -313,14 +320,6 @@ const MainApp = () => {
                                     <Route
                                         path={AppRoutes.settings.children.history.match}
                                         element={<HistorySettings />}
-                                    />
-                                    <Route
-                                        path={AppRoutes.settings.children.device.match}
-                                        element={<DeviceSetting />}
-                                    />
-                                    <Route
-                                        path={AppRoutes.settings.children.appearance.match}
-                                        element={<Appearance />}
                                     />
                                 </Route>
                                 <Route element={<PermissionGuard permission="settings.downloader" />}>
