@@ -10,6 +10,8 @@ import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { StringParam, useQueryParam } from 'use-query-params';
@@ -18,6 +20,7 @@ import { PasswordTextField } from '@/base/components/inputs/PasswordTextField.ts
 import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { makeToast } from '@/base/utils/Toast.ts';
 import { getErrorMessage } from '@/lib/HelperFunctions.ts';
+import { SubpathUtil } from '@/lib/utils/SubpathUtil.ts';
 import { AuthManager } from '@/features/authentication/AuthManager.ts';
 import { AppRoutes } from '@/base/AppRoute.constants.ts';
 import { useNavBarContext } from '@/features/navigation-bar/NavbarContext.tsx';
@@ -40,6 +43,9 @@ export const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+
+    const { data: aboutData } = requestManager.useGetAbout();
+    const ssoEnabled = aboutData?.aboutServer.ssoEnabled === true;
 
     const doSetup = async () => {
         if (password !== confirmPassword) {
@@ -162,6 +168,24 @@ export const LoginPage = () => {
                     >
                         {onboardingRequired ? t`Create owner account` : t`Log in`}
                     </Button>
+                    {ssoEnabled && (
+                        <>
+                            <Divider>
+                                <Typography color="text.secondary" variant="caption">{t`or`}</Typography>
+                            </Divider>
+                            <Button
+                                variant="outlined"
+                                onClick={() => {
+                                    const subpath = SubpathUtil.getSubpath();
+                                    const ssoUrl = `${window.location.origin}${subpath}/sso/login`;
+                                    const redirectParam = redirect ? `?redirect=${encodeURIComponent(redirect)}` : '';
+                                    window.location.href = `${ssoUrl}${redirectParam}`;
+                                }}
+                            >
+                                {t`Sign in with SSO`}
+                            </Button>
+                        </>
+                    )}
                     <Stack sx={{ position: 'absolute', left: 0, bottom: 0 }}>
                         <ServerAddressSetting />
                     </Stack>

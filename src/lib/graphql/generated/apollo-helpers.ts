@@ -7,6 +7,7 @@ export type AboutServerPayloadKeySpecifier = (
     | 'name'
     | 'platformInfo'
     | 'revision'
+    | 'ssoEnabled'
     | 'version'
     | AboutServerPayloadKeySpecifier
 )[];
@@ -18,6 +19,7 @@ export type AboutServerPayloadFieldPolicy = {
     name?: FieldPolicy<any> | FieldReadFunction<any>;
     platformInfo?: FieldPolicy<any> | FieldReadFunction<any>;
     revision?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoEnabled?: FieldPolicy<any> | FieldReadFunction<any>;
     version?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type AboutWebUIKeySpecifier = ('channel' | 'tag' | 'updateTimestamp' | AboutWebUIKeySpecifier)[];
@@ -1375,6 +1377,11 @@ export type PartialSettingsTypeKeySpecifier = (
     | 'socksProxyPort'
     | 'socksProxyUsername'
     | 'socksProxyVersion'
+    | 'ssoClientId'
+    | 'ssoClientSecret'
+    | 'ssoDefaultRole'
+    | 'ssoIssuerUrl'
+    | 'ssoScope'
     | 'syncDataCategories'
     | 'syncDataChapters'
     | 'syncDataHistory'
@@ -1474,6 +1481,11 @@ export type PartialSettingsTypeFieldPolicy = {
     socksProxyPort?: FieldPolicy<any> | FieldReadFunction<any>;
     socksProxyUsername?: FieldPolicy<any> | FieldReadFunction<any>;
     socksProxyVersion?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoClientId?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoClientSecret?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoDefaultRole?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoIssuerUrl?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoScope?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataCategories?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataChapters?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataHistory?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1880,6 +1892,11 @@ export type SettingsKeySpecifier = (
     | 'socksProxyPort'
     | 'socksProxyUsername'
     | 'socksProxyVersion'
+    | 'ssoClientId'
+    | 'ssoClientSecret'
+    | 'ssoDefaultRole'
+    | 'ssoIssuerUrl'
+    | 'ssoScope'
     | 'syncDataCategories'
     | 'syncDataChapters'
     | 'syncDataHistory'
@@ -1979,6 +1996,11 @@ export type SettingsFieldPolicy = {
     socksProxyPort?: FieldPolicy<any> | FieldReadFunction<any>;
     socksProxyUsername?: FieldPolicy<any> | FieldReadFunction<any>;
     socksProxyVersion?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoClientId?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoClientSecret?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoDefaultRole?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoIssuerUrl?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoScope?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataCategories?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataChapters?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataHistory?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -2129,6 +2151,11 @@ export type SettingsTypeKeySpecifier = (
     | 'socksProxyPort'
     | 'socksProxyUsername'
     | 'socksProxyVersion'
+    | 'ssoClientId'
+    | 'ssoClientSecret'
+    | 'ssoDefaultRole'
+    | 'ssoIssuerUrl'
+    | 'ssoScope'
     | 'syncDataCategories'
     | 'syncDataChapters'
     | 'syncDataHistory'
@@ -2228,6 +2255,11 @@ export type SettingsTypeFieldPolicy = {
     socksProxyPort?: FieldPolicy<any> | FieldReadFunction<any>;
     socksProxyUsername?: FieldPolicy<any> | FieldReadFunction<any>;
     socksProxyVersion?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoClientId?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoClientSecret?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoDefaultRole?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoIssuerUrl?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoScope?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataCategories?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataChapters?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataHistory?: FieldPolicy<any> | FieldReadFunction<any>;

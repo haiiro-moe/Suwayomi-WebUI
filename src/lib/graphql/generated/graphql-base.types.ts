@@ -23,6 +23,7 @@ export type AboutServerPayload = {
     platformInfo: PlatformInfo;
     /** @deprecated The version includes the revision as the patch number */
     revision: Scalars['String']['output'];
+    ssoEnabled: Scalars['Boolean']['output'];
     version: Scalars['String']['output'];
 };
 
@@ -48,6 +49,7 @@ export enum AuthMode {
     BasicAuth = 'BASIC_AUTH',
     None = 'NONE',
     SimpleLogin = 'SIMPLE_LOGIN',
+    Sso = 'SSO',
     UiLogin = 'UI_LOGIN',
 }
 
@@ -2215,6 +2217,11 @@ export type PartialSettingsType = Settings & {
     socksProxyPort?: Maybe<Scalars['String']['output']>;
     socksProxyUsername?: Maybe<Scalars['String']['output']>;
     socksProxyVersion?: Maybe<Scalars['Int']['output']>;
+    ssoClientId?: Maybe<Scalars['String']['output']>;
+    ssoClientSecret?: Maybe<Scalars['String']['output']>;
+    ssoDefaultRole?: Maybe<Scalars['String']['output']>;
+    ssoIssuerUrl?: Maybe<Scalars['String']['output']>;
+    ssoScope?: Maybe<Scalars['String']['output']>;
     syncDataCategories?: Maybe<Scalars['Boolean']['output']>;
     syncDataChapters?: Maybe<Scalars['Boolean']['output']>;
     syncDataHistory?: Maybe<Scalars['Boolean']['output']>;
@@ -2303,6 +2310,11 @@ export type PartialSettingsTypeInput = {
     socksProxyPort?: InputMaybe<Scalars['String']['input']>;
     socksProxyUsername?: InputMaybe<Scalars['String']['input']>;
     socksProxyVersion?: InputMaybe<Scalars['Int']['input']>;
+    ssoClientId?: InputMaybe<Scalars['String']['input']>;
+    ssoClientSecret?: InputMaybe<Scalars['String']['input']>;
+    ssoDefaultRole?: InputMaybe<Scalars['String']['input']>;
+    ssoIssuerUrl?: InputMaybe<Scalars['String']['input']>;
+    ssoScope?: InputMaybe<Scalars['String']['input']>;
     syncDataCategories?: InputMaybe<Scalars['Boolean']['input']>;
     syncDataChapters?: InputMaybe<Scalars['Boolean']['input']>;
     syncDataHistory?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2989,6 +3001,11 @@ export type Settings = {
     socksProxyPort?: Maybe<Scalars['String']['output']>;
     socksProxyUsername?: Maybe<Scalars['String']['output']>;
     socksProxyVersion?: Maybe<Scalars['Int']['output']>;
+    ssoClientId?: Maybe<Scalars['String']['output']>;
+    ssoClientSecret?: Maybe<Scalars['String']['output']>;
+    ssoDefaultRole?: Maybe<Scalars['String']['output']>;
+    ssoIssuerUrl?: Maybe<Scalars['String']['output']>;
+    ssoScope?: Maybe<Scalars['String']['output']>;
     syncDataCategories?: Maybe<Scalars['Boolean']['output']>;
     syncDataChapters?: Maybe<Scalars['Boolean']['output']>;
     syncDataHistory?: Maybe<Scalars['Boolean']['output']>;
@@ -3144,6 +3161,11 @@ export type SettingsType = Settings & {
     socksProxyPort: Scalars['String']['output'];
     socksProxyUsername: Scalars['String']['output'];
     socksProxyVersion: Scalars['Int']['output'];
+    ssoClientId: Scalars['String']['output'];
+    ssoClientSecret: Scalars['String']['output'];
+    ssoDefaultRole: Scalars['String']['output'];
+    ssoIssuerUrl: Scalars['String']['output'];
+    ssoScope: Scalars['String']['output'];
     syncDataCategories: Scalars['Boolean']['output'];
     syncDataChapters: Scalars['Boolean']['output'];
     syncDataHistory: Scalars['Boolean']['output'];

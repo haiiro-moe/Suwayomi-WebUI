@@ -2615,6 +2615,10 @@ msgstr "Logged in"
 msgid "Logging in to {trackerName}…"
 msgstr "Logging in to {trackerName}…"
 
+#: src/features/settings/Settings.constants.ts
+msgid "Login is handled by an external OIDC provider (e.g. Tinyauth with LLDAP). Configure the issuer URL, client id, and client secret in the server config."
+msgstr "Login is handled by an external OIDC provider (e.g. Tinyauth with LLDAP). Configure the issuer URL, client id, and client secret in the server config."
+
 #. Used to detect the type of an entry by using it to check if the genre/tags of an entry includes this string. This is NOT shown to any user. Do NOT include any unnecessary text or characters, this will break the type detection (e.g. "MangaInMyLanguage (Manga)")
 #. js-lingui-explicit-id
 #: src/features/manga/Manga.constants.ts
@@ -2896,6 +2900,10 @@ msgstr "New category"
 msgid "New password"
 msgstr "New password"
 
+#: src/features/settings/Settings.constants.ts
+msgid "New SSO users are auto-provisioned with the configured default role. Local password login remains available for existing accounts."
+msgstr "New SSO users are auto-provisioned with the configured default role. Local password login remains available for existing accounts."
+
 #: src/features/reader/tap-zones/ReaderTapZone.constants.ts
 msgid "Next"
 msgstr "Next"
@@ -3137,6 +3145,7 @@ msgstr "Open website"
 msgid "Options"
 msgstr "Options"
 
+#: src/features/authentication/screens/LoginPage.tsx
 #: src/features/library/components/LibraryOptionsPanel.tsx
 msgid "or"
 msgstr "or"
@@ -3869,6 +3878,10 @@ msgstr "Shows a dialog in case the version got updated. This dialog will be show
 msgid "Shows a dialog in case the version of the server has changed"
 msgstr "Shows a dialog in case the version of the server has changed"
 
+#: src/features/authentication/screens/LoginPage.tsx
+msgid "Sign in with SSO"
+msgstr "Sign in with SSO"
+
 #: src/features/settings/Settings.constants.ts
 msgid "Simple Login"
 msgstr "Simple Login"
@@ -3959,6 +3972,10 @@ msgstr "Source title"
 #: src/features/browse/screens/BrowseSettings.tsx
 msgid "Sources"
 msgstr "Sources"
+
+#: src/features/settings/Settings.constants.ts
+msgid "SSO (OIDC)"
+msgstr "SSO (OIDC)"
 
 #: src/features/settings/Settings.constants.ts
 msgid "Stable"

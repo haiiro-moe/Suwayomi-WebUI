@@ -3115,6 +3115,7 @@ export type GetAboutQuery = {
         github: string;
         name: string;
         version: string;
+        ssoEnabled: boolean;
         platformInfo: {
             __typename: 'PlatformInfo';
             arch: string;

@@ -116,6 +116,11 @@ const AUTH_MODES_TO_TRANSLATION: { [mode in AuthMode]: SelectSettingValueDisplay
         text: msg`UI Login`,
         description: msg`The login will be handled by the client.`,
     },
+    [AuthMode.Sso]: {
+        text: msg`SSO (OIDC)`,
+        description: msg`Login is handled by an external OIDC provider (e.g. Tinyauth with LLDAP). Configure the issuer URL, client id, and client secret in the server config.`,
+        disclaimer: msg`New SSO users are auto-provisioned with the configured default role. Local password login remains available for existing accounts.`,
+    },
 };
 export const AUTH_MODES_SELECT_VALUES: SelectSettingValue<AuthMode>[] = AUTH_MODES.map((mode) => [
     mode,
