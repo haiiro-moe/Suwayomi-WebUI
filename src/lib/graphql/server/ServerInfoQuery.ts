@@ -42,6 +42,14 @@ export const GET_ABOUT = gql`
     }
 `;
 
+export const GET_LOGIN_INFO = gql`
+    query GET_LOGIN_INFO {
+        aboutServer {
+            ssoEnabled
+        }
+    }
+`;
+
 export const CHECK_FOR_SERVER_UPDATES = gql`
     query CHECK_FOR_SERVER_UPDATES {
         checkForServerUpdates {

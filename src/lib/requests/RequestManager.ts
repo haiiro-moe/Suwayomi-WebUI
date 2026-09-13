@@ -304,6 +304,7 @@ import {
     CHECK_FOR_SERVER_UPDATES,
     CHECK_FOR_WEBUI_UPDATE,
     GET_ABOUT,
+    GET_LOGIN_INFO,
     GET_WEBUI_UPDATE_STATUS,
 } from '@/lib/graphql/server/ServerInfoQuery.ts';
 import { GET_EXTENSION, GET_EXTENSIONS } from '@/lib/graphql/extension/ExtensionQuery.ts';
@@ -1522,6 +1523,21 @@ export class RequestManager {
         options?: QueryHookOptions<GetAboutQuery, GetAboutQueryVariables>,
     ): AbortableApolloUseQueryResponse<GetAboutQuery, GetAboutQueryVariables> {
         return this.doRequest(GQLMethod.USE_QUERY, GET_ABOUT, {}, options);
+    }
+
+    /**
+     * Lightweight, unauthenticated counterpart to {@link useGetAbout}.
+     *
+     * GET_ABOUT also fetches `aboutWebUI`, which requires auth (see AuthGuard's usage of
+     * GET_ABOUT as its "am I logged in" probe) - before login, that field always errors and,
+     * per the GraphQL spec, blanks out the whole response. Anything the login screen itself
+     * needs (like whether SSO is enabled) has to come from a query that can't be poisoned by
+     * that unrelated auth-gated field.
+     */
+    public useGetLoginInfo(
+        options?: QueryHookOptions<{ aboutServer: { ssoEnabled: boolean } }, Record<string, never>>,
+    ): AbortableApolloUseQueryResponse<{ aboutServer: { ssoEnabled: boolean } }, Record<string, never>> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_LOGIN_INFO, {}, options);
     }
 
     public useGetCurrentUserProfile(

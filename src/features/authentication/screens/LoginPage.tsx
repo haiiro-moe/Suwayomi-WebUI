@@ -45,8 +45,8 @@ export const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const { data: aboutData } = requestManager.useGetAbout();
-    const ssoEnabled = aboutData?.aboutServer.ssoEnabled === true;
+    const { data: loginInfoData } = requestManager.useGetLoginInfo();
+    const ssoEnabled = loginInfoData?.aboutServer.ssoEnabled === true;
 
     const doSetup = async () => {
         if (password !== confirmPassword) {
