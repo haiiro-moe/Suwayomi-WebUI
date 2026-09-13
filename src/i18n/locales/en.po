@@ -3902,8 +3902,8 @@ msgid "Shows a dialog in case the version of the server has changed"
 msgstr "Shows a dialog in case the version of the server has changed"
 
 #: src/features/authentication/screens/LoginPage.tsx
-msgid "Sign in with SSO"
-msgstr "Sign in with SSO"
+msgid "Sign in with Haiiro Auth"
+msgstr "Sign in with Haiiro Auth"
 
 #: src/features/settings/Settings.constants.ts
 msgid "Simple Login"

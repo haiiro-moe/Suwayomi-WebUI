@@ -184,7 +184,7 @@ export const LoginPage = () => {
                                     window.location.href = `${ssoUrl}${redirectParam}`;
                                 }}
                             >
-                                {t`Sign in with SSO`}
+                                {t`Sign in with Haiiro Auth`}
                             </Button>
                         </>
                     )}
