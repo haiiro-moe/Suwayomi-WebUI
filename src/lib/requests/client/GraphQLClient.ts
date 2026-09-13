@@ -258,7 +258,14 @@ export class GraphQLClient extends BaseClient<ApolloClient, ApolloClient.Options
     }
 
     protected override shouldQueueRequest(operationName: string | undefined): boolean {
-        const authOperations = ['GET_ABOUT', 'ONBOARDING_STATUS', 'SETUP_OWNER', 'USER_LOGIN', 'USER_REFRESH'];
+        const authOperations = [
+            'GET_ABOUT',
+            'GET_LOGIN_INFO',
+            'ONBOARDING_STATUS',
+            'SETUP_OWNER',
+            'USER_LOGIN',
+            'USER_REFRESH',
+        ];
         if (authOperations.includes(operationName!)) {
             return false;
         }
