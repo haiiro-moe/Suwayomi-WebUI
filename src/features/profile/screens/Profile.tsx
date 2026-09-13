@@ -114,10 +114,8 @@ export function Profile() {
                         sx={{
                             height: 96,
                             width: '100%',
-                            backgroundImage: bannerUrl
-                                ? `url(${bannerUrl})`
-                                : (theme) =>
-                                      `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 45%, ${theme.palette.secondary.main} 100%)`,
+                            backgroundImage: bannerUrl ? `url(${bannerUrl})` : undefined,
+                            bgcolor: bannerUrl ? undefined : 'primary.main',
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                         }}

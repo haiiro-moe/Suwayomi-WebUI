@@ -68,10 +68,8 @@ export function UserProfile() {
                         position: 'relative',
                         height: { xs: 160, sm: 220 },
                         width: '100%',
-                        backgroundImage: profile.bannerUrl
-                            ? `url(${profile.bannerUrl})`
-                            : (theme) =>
-                                  `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 45%, ${theme.palette.secondary.main} 100%)`,
+                        backgroundImage: profile.bannerUrl ? `url(${profile.bannerUrl})` : undefined,
+                        bgcolor: profile.bannerUrl ? undefined : 'primary.main',
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                     }}
@@ -107,7 +105,9 @@ export function UserProfile() {
                             border: 4,
                             borderColor: 'background.default',
                             bgcolor: 'background.paper',
-                            boxShadow: 4,
+                            boxShadow: 3,
+                            zIndex: 10,
+                            position: 'relative',
                             transition: (theme) => theme.transitions.create(['box-shadow']),
                         }}
                     >
@@ -130,8 +130,7 @@ export function UserProfile() {
                                     height: '100%',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    background: (theme) =>
-                                        `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                                    bgcolor: 'primary.main',
                                 }}
                             >
                                 <Typography variant="h4" component="span" sx={{ color: 'primary.contrastText' }}>
