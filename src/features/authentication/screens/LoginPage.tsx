@@ -45,7 +45,7 @@ export const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const { data: loginInfoData } = requestManager.useGetLoginInfo();
+    const { data: loginInfoData } = requestManager.useGetLoginInfo({ fetchPolicy: 'network-only' });
     const ssoEnabled = loginInfoData?.aboutServer.ssoEnabled === true;
 
     const doSetup = async () => {
