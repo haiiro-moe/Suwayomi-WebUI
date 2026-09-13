@@ -6,6 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Box from '@mui/material/Box';
@@ -73,9 +74,27 @@ export const MangaRequestCard = ({ mangaId }: { mangaId: number }) => {
     };
 
     return (
-        <Paper variant="outlined" sx={{ maxWidth: 720, width: '100%', mx: 'auto', overflow: 'hidden' }}>
+        <Paper
+            variant="outlined"
+            sx={{
+                maxWidth: 720,
+                width: '100%',
+                mx: 'auto',
+                overflow: 'hidden',
+                borderRadius: 3,
+            }}
+        >
             <Stack direction="row" spacing={2} sx={{ p: 2 }}>
-                <Box sx={{ width: 140, height: 210, flexShrink: 0 }}>
+                <Box
+                    sx={{
+                        width: 140,
+                        height: 210,
+                        flexShrink: 0,
+                        borderRadius: 2,
+                        overflow: 'hidden',
+                        boxShadow: 2,
+                    }}
+                >
                     <SpinnerImage
                         src={thumbnailUrl}
                         alt={manga.title}
@@ -84,7 +103,6 @@ export const MangaRequestCard = ({ mangaId }: { mangaId: number }) => {
                             width: '100%',
                             height: '100%',
                             objectFit: 'cover',
-                            borderRadius: 2,
                             bgcolor: 'action.hover',
                         }}
                     />
@@ -142,18 +160,32 @@ export const MangaRequestCard = ({ mangaId }: { mangaId: number }) => {
                     {chapters.length === 0 ? (
                         <Typography color="text.secondary" variant="body2">{t`No chapters found.`}</Typography>
                     ) : (
-                        chapters.map((chapter) => (
+                        chapters.map((chapter, chapterIndex) => (
                             <Stack
                                 key={`${chapter.name}-${chapter.chapterNumber ?? 'na'}-${chapter.scanlator ?? ''}`}
                                 direction="row"
                                 spacing={1}
-                                sx={{ alignItems: 'baseline', py: 0.5 }}
+                                sx={{
+                                    alignItems: 'baseline',
+                                    py: 0.75,
+                                    px: 1,
+                                    mx: -1,
+                                    borderRadius: 1,
+                                    '&:hover': { bgcolor: 'action.hover' },
+                                }}
                             >
-                                <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
+                                <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                    sx={{ minWidth: 28, textAlign: 'right', flexShrink: 0 }}
+                                >
+                                    {chapterIndex + 1}
+                                </Typography>
+                                <Typography variant="body2" sx={{ wordBreak: 'break-word', flex: 1 }}>
                                     {chapter.name}
                                 </Typography>
                                 {chapter.scanlator && (
-                                    <Typography color="text.secondary" variant="caption">
+                                    <Typography color="text.secondary" variant="caption" sx={{ flexShrink: 0 }}>
                                         {chapter.scanlator}
                                     </Typography>
                                 )}
@@ -164,7 +196,16 @@ export const MangaRequestCard = ({ mangaId }: { mangaId: number }) => {
             </Collapse>
             <Divider />
             <Box sx={{ p: 2 }}>
-                <Button fullWidth variant="contained" onClick={submit} disabled={isRequesting || requested}>
+                <Button
+                    fullWidth
+                    variant="contained"
+                    disableElevation
+                    color={requested ? 'success' : 'primary'}
+                    startIcon={requested ? <CheckCircleIcon /> : undefined}
+                    onClick={submit}
+                    disabled={isRequesting || requested}
+                    sx={{ borderRadius: 999 }}
+                >
                     {requested ? t`Request submitted` : t`Request this manga`}
                 </Button>
                 {requested && (

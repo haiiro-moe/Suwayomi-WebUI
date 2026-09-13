@@ -7,6 +7,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -175,6 +176,7 @@ export const LoginPage = () => {
                             </Divider>
                             <Button
                                 variant="outlined"
+                                startIcon={<VpnKeyOutlinedIcon />}
                                 onClick={() => {
                                     const subpath = SubpathUtil.getSubpath();
                                     const ssoUrl = `${window.location.origin}${subpath}/sso/login`;

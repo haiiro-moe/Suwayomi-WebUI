@@ -6,6 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import type { ReactElement } from 'react';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutlined';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -13,6 +18,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useLingui } from '@lingui/react/macro';
 import dayjs from 'dayjs';
@@ -32,13 +38,21 @@ const STATUS_TO_COLOR = {
     DENIED: 'error',
 } as const;
 
+const STATUS_TO_ICON: Record<string, ReactElement> = {
+    PENDING: <HourglassEmptyIcon fontSize="small" />,
+    APPROVED: <CheckCircleOutlineIcon fontSize="small" />,
+    DENIED: <HighlightOffIcon fontSize="small" />,
+};
+
 export function MangaRequests() {
     const { t } = useLingui();
     useAppTitle(t`Manga requests`);
     const permissions = usePermissions();
     const canManage = permissions.has('requests.manage');
 
-    const { data, loading, error, refetch } = requestManager.useGetMangaRequests({ pollInterval: 30000 });
+    const { data, loading, error, refetch } = requestManager.useGetMangaRequests({
+        pollInterval: 30000,
+    });
     const [decideRequest] = requestManager.useDecideMangaRequest();
     const [updateMangaCategories] = requestManager.useUpdateMangaCategories();
 
@@ -79,8 +93,12 @@ export function MangaRequests() {
                 }
 
                 // the approved manga just entered the library - invalidate library queries so it shows up without a reload
-                requestManager.graphQLClient.client.cache.evict({ fieldName: 'mangas' });
-                requestManager.graphQLClient.client.cache.evict({ fieldName: 'categories' });
+                requestManager.graphQLClient.client.cache.evict({
+                    fieldName: 'mangas',
+                });
+                requestManager.graphQLClient.client.cache.evict({
+                    fieldName: 'categories',
+                });
             }
 
             await refetch();
@@ -94,68 +112,118 @@ export function MangaRequests() {
     };
 
     const requests = data.mangaRequests;
+    const pendingCount = requests.filter((request) => request.status === 'PENDING').length;
+    // pending requests need attention first - surface them at the top without reordering ties
+    const sortedRequests = [...requests].sort((a, b) => {
+        const aPending = a.status === 'PENDING' ? 0 : 1;
+        const bPending = b.status === 'PENDING' ? 0 : 1;
+        return aPending - bPending;
+    });
 
     return (
         <Box sx={{ p: 2 }}>
-            <Typography variant="h5" component="h1" sx={{ mb: 2 }}>{t`Manga requests`}</Typography>
+            <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center', mb: 2 }}>
+                <Typography variant="h5" component="h1">
+                    {t`Manga requests`}
+                </Typography>
+                {pendingCount > 0 && (
+                    <Chip label={t`${pendingCount} pending`} color="warning" size="small" sx={{ fontWeight: 600 }} />
+                )}
+            </Stack>
             {requests.length === 0 ? (
-                <Typography color="text.secondary">{t`No requests yet.`}</Typography>
+                <Stack sx={{ alignItems: 'center', py: 6, gap: 1 }}>
+                    <InboxOutlinedIcon sx={{ fontSize: 40 }} color="disabled" />
+                    <Typography color="text.secondary">{t`No requests yet.`}</Typography>
+                </Stack>
             ) : (
                 <Stack spacing={1.5}>
-                    {requests.map((request) => (
-                        <Card key={request.id} variant="outlined">
-                            <CardContent sx={{ pb: 0 }}>
-                                <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
-                                    {request.mangaThumbnailUrl ? (
-                                        <Box
-                                            component="img"
-                                            src={request.mangaThumbnailUrl}
-                                            alt={request.mangaTitle ?? ''}
-                                            sx={{ width: 40, height: 60, objectFit: 'cover', borderRadius: 1 }}
+                    {sortedRequests.map((request) => {
+                        const isPending = request.status === 'PENDING';
+                        return (
+                            <Card
+                                key={request.id}
+                                variant="outlined"
+                                sx={{
+                                    borderRadius: 2.5,
+                                    opacity: isPending ? 1 : 0.72,
+                                    transition: (theme) => theme.transitions.create(['opacity', 'box-shadow']),
+                                    ...(isPending && { borderColor: 'warning.main' }),
+                                }}
+                            >
+                                <CardContent sx={{ pb: 0 }}>
+                                    <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
+                                        {request.mangaThumbnailUrl ? (
+                                            <Box
+                                                component="img"
+                                                src={request.mangaThumbnailUrl}
+                                                alt={request.mangaTitle ?? ''}
+                                                sx={{
+                                                    width: 42,
+                                                    height: 60,
+                                                    objectFit: 'cover',
+                                                    borderRadius: 1.5,
+                                                    boxShadow: 1,
+                                                    flexShrink: 0,
+                                                }}
+                                            />
+                                        ) : (
+                                            <Box
+                                                sx={{
+                                                    width: 42,
+                                                    height: 60,
+                                                    borderRadius: 1.5,
+                                                    bgcolor: 'action.hover',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    flexShrink: 0,
+                                                }}
+                                            >
+                                                <Typography variant="caption">?</Typography>
+                                            </Box>
+                                        )}
+                                        <Stack sx={{ flex: 1, minWidth: 0 }}>
+                                            <Typography variant="subtitle1" sx={{ wordBreak: 'break-word' }}>
+                                                {request.mangaTitle ?? t`Manga you cannot see`}
+                                            </Typography>
+                                            <Typography color="text.secondary" variant="body2" noWrap>
+                                                {request.displayName} (@{request.username})
+                                            </Typography>
+                                            <Tooltip title={dayjs(Number(request.createdAt)).format('LLL')}>
+                                                <Typography color="text.secondary" variant="caption">
+                                                    {dayjs(Number(request.createdAt)).fromNow()}
+                                                </Typography>
+                                            </Tooltip>
+                                        </Stack>
+                                        <Chip
+                                            icon={STATUS_TO_ICON[request.status]}
+                                            label={request.status}
+                                            color={
+                                                STATUS_TO_COLOR[request.status as keyof typeof STATUS_TO_COLOR] ??
+                                                'default'
+                                            }
+                                            size="small"
+                                            variant={isPending ? 'filled' : 'outlined'}
                                         />
-                                    ) : (
-                                        <Box
-                                            sx={{
-                                                width: 40,
-                                                height: 60,
-                                                borderRadius: 1,
-                                                bgcolor: 'action.hover',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                            }}
-                                        >
-                                            <Typography variant="caption">?</Typography>
-                                        </Box>
-                                    )}
-                                    <Stack sx={{ flex: 1, minWidth: 0 }}>
-                                        <Typography variant="subtitle1" sx={{ wordBreak: 'break-word' }}>
-                                            {request.mangaTitle ?? t`Manga you cannot see`}
-                                        </Typography>
-                                        <Typography color="text.secondary" variant="body2">
-                                            {`${request.displayName} (@${request.username}) · ${dayjs(Number(request.createdAt)).format('LLL')}`}
-                                        </Typography>
                                     </Stack>
-                                    <Chip
-                                        label={request.status}
-                                        color={
-                                            STATUS_TO_COLOR[request.status as keyof typeof STATUS_TO_COLOR] ?? 'default'
-                                        }
-                                        size="small"
-                                    />
-                                </Stack>
-                            </CardContent>
-                            {canManage && request.status === 'PENDING' && (
-                                <CardActions sx={{ justifyContent: 'flex-end' }}>
-                                    <Button color="error" onClick={() => decide(request.id, false)}>{t`Deny`}</Button>
-                                    <Button
-                                        variant="contained"
-                                        onClick={() => decide(request.id, true, request.mangaId)}
-                                    >{t`Approve`}</Button>
-                                </CardActions>
-                            )}
-                        </Card>
-                    ))}
+                                </CardContent>
+                                {canManage && isPending && (
+                                    <CardActions sx={{ justifyContent: 'flex-end' }}>
+                                        <Button color="error" onClick={() => decide(request.id, false)}>
+                                            {t`Deny`}
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            disableElevation
+                                            onClick={() => decide(request.id, true, request.mangaId)}
+                                        >
+                                            {t`Approve`}
+                                        </Button>
+                                    </CardActions>
+                                )}
+                            </Card>
+                        );
+                    })}
                 </Stack>
             )}
         </Box>

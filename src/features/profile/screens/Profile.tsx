@@ -7,15 +7,22 @@
  */
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import CircularProgress from '@mui/material/CircularProgress';
+import CollectionsBookmarkOutlinedIcon from '@mui/icons-material/CollectionsBookmarkOutlined';
+import Divider from '@mui/material/Divider';
+import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
+import LinkIcon from '@mui/icons-material/Link';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
+import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import InputAdornment from '@mui/material/InputAdornment';
 import { useLingui } from '@lingui/react/macro';
 import { useEffect, useState } from 'react';
 import { requestManager } from '@/lib/requests/RequestManager.ts';
@@ -26,6 +33,8 @@ import { defaultPromiseErrorHandler } from '@/lib/DefaultPromiseErrorHandler.ts'
 import { useAppTitle } from '@/features/navigation-bar/hooks/useAppTitle.ts';
 import { TextSetting } from '@/base/components/settings/text/TextSetting.tsx';
 import { makeToast } from '@/base/utils/Toast.ts';
+
+const PREVIEW_AVATAR_SIZE = 72;
 
 export function Profile() {
     const { t } = useLingui();
@@ -97,46 +106,135 @@ export function Profile() {
     return (
         <List sx={{ pt: 0 }}>
             <ListSubheader component="div">{t`Profile`}</ListSubheader>
-            <ListItem>
-                <ListItemIcon>
-                    {profile.avatarUrl ? (
+
+            {/* Live preview */}
+            <Box sx={{ px: 2, pb: 2 }}>
+                <Paper variant="outlined" sx={{ borderRadius: 3, overflow: 'hidden' }}>
+                    <Box
+                        sx={{
+                            height: 96,
+                            width: '100%',
+                            backgroundImage: bannerUrl
+                                ? `url(${bannerUrl})`
+                                : (theme) =>
+                                      `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 45%, ${theme.palette.secondary.main} 100%)`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                        }}
+                    />
+                    <Stack direction="row" spacing={2} sx={{ px: 2, pb: 2, alignItems: 'flex-end' }}>
                         <Box
-                            component="img"
-                            src={profile.avatarUrl}
-                            alt={profile.displayName}
-                            sx={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }}
+                            sx={{
+                                width: PREVIEW_AVATAR_SIZE,
+                                height: PREVIEW_AVATAR_SIZE,
+                                borderRadius: 3,
+                                overflow: 'hidden',
+                                flexShrink: 0,
+                                border: 3,
+                                borderColor: 'background.paper',
+                                bgcolor: 'action.hover',
+                                boxShadow: 2,
+                                mt: `-${PREVIEW_AVATAR_SIZE / 2}px`,
+                            }}
+                        >
+                            {avatarUrl ? (
+                                <Box
+                                    component="img"
+                                    src={avatarUrl}
+                                    alt={displayName || profile.displayName}
+                                    sx={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover',
+                                        display: 'block',
+                                    }}
+                                />
+                            ) : (
+                                <Stack
+                                    sx={{
+                                        width: '100%',
+                                        height: '100%',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <AccountCircleIcon sx={{ fontSize: 40 }} color="disabled" />
+                                </Stack>
+                            )}
+                        </Box>
+                        <Box sx={{ pb: 0.5, minWidth: 0 }}>
+                            <Typography variant="subtitle1" sx={{ fontWeight: 600, wordBreak: 'break-word' }}>
+                                {displayName || profile.displayName}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                @{profile.username}
+                            </Typography>
+                        </Box>
+                    </Stack>
+                    <Divider />
+                    <Stack direction="row" spacing={1} sx={{ px: 2, py: 1.5, flexWrap: 'wrap', gap: 1 }}>
+                        <Chip size="small" icon={<BadgeOutlinedIcon />} label={profile.role} variant="outlined" />
+                        <Chip
+                            size="small"
+                            icon={<CollectionsBookmarkOutlinedIcon />}
+                            label={t`${profile.favoriteMangaIds.length} favorites`}
+                            variant="outlined"
                         />
-                    ) : (
-                        <AccountCircleIcon />
-                    )}
-                </ListItemIcon>
-                <ListItemText primary={profile.displayName} secondary={`@${profile.username}`} />
-            </ListItem>
-            <ListItem>
-                <ListItemText primary={t`Role`} secondary={profile.role} />
-            </ListItem>
-            <ListItem>
-                <ListItemText primary={t`Favorites`} secondary={t`${profile.favoriteMangaIds.length} manga`} />
-            </ListItem>
-            <Stack spacing={2} sx={{ p: 2 }}>
+                    </Stack>
+                </Paper>
+            </Box>
+
+            <Stack spacing={2} sx={{ px: 2, pb: 2 }}>
                 <TextField
                     label={t`Display name`}
                     value={displayName}
                     onChange={(event) => setDisplayName(event.target.value)}
+                    fullWidth
                 />
                 <TextField
                     label={t`Avatar URL`}
                     value={avatarUrl}
                     onChange={(event) => setAvatarUrl(event.target.value)}
                     placeholder="https://…"
+                    fullWidth
+                    slotProps={{
+                        input: {
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <ImageOutlinedIcon fontSize="small" color="action" />
+                                </InputAdornment>
+                            ),
+                        },
+                    }}
                 />
                 <TextField
                     label={t`Banner URL`}
                     value={bannerUrl}
                     onChange={(event) => setBannerUrl(event.target.value)}
                     placeholder="https://…"
+                    fullWidth
+                    slotProps={{
+                        input: {
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <LinkIcon fontSize="small" color="action" />
+                                </InputAdornment>
+                            ),
+                        },
+                    }}
                 />
-                <Button variant="contained" onClick={save} disabled={isSaving || !dirty}>{t`Save profile`}</Button>
+                <Box>
+                    <Button
+                        variant="contained"
+                        disableElevation
+                        onClick={save}
+                        disabled={isSaving || !dirty}
+                        startIcon={isSaving ? <CircularProgress size={16} color="inherit" /> : undefined}
+                        sx={{ borderRadius: 999, px: 3 }}
+                    >
+                        {isSaving ? t`Saving…` : t`Save profile`}
+                    </Button>
+                </Box>
             </Stack>
             <TextSetting
                 settingName={t`About`}

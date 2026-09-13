@@ -8,15 +8,24 @@
 
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import Box from '@mui/material/Box';
+import { keyframes } from '@mui/material/styles';
 import { useLingui } from '@lingui/react/macro';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { FlexWrapButton } from '@/base/components/buttons/FlexWrapButton.tsx';
 import { makeToast } from '@/base/utils/Toast.ts';
 import { getErrorMessage } from '@/lib/HelperFunctions.ts';
 
+const popIn = keyframes`
+    0% { transform: scale(0.6); }
+    60% { transform: scale(1.25); }
+    100% { transform: scale(1); }
+`;
+
 export const FavoriteMangaButton = ({ mangaId }: { mangaId: number }) => {
     const { t } = useLingui();
+    const [isSaving, setIsSaving] = useState(false);
 
     const { data, refetch } = requestManager.useGetCurrentUserProfile();
     const isFavorite = useMemo(
@@ -28,6 +37,7 @@ export const FavoriteMangaButton = ({ mangaId }: { mangaId: number }) => {
     const [removeFavorite] = requestManager.useRemoveFavorite();
 
     const toggle = async () => {
+        setIsSaving(true);
         try {
             if (isFavorite) {
                 await removeFavorite({ variables: { input: { mangaId } } });
@@ -41,12 +51,27 @@ export const FavoriteMangaButton = ({ mangaId }: { mangaId: number }) => {
                 'error',
                 getErrorMessage(favoriteError),
             );
+        } finally {
+            setIsSaving(false);
         }
     };
 
     return (
-        <FlexWrapButton onClick={toggle} variant={isFavorite ? 'contained' : 'outlined'} color="secondary">
-            {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+        <FlexWrapButton
+            onClick={toggle}
+            disabled={isSaving}
+            variant={isFavorite ? 'contained' : 'outlined'}
+            color="secondary"
+        >
+            <Box
+                key={String(isFavorite)}
+                sx={{
+                    display: 'inline-flex',
+                    animation: `${popIn} 0.25s ease-out`,
+                }}
+            >
+                {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            </Box>
             {isFavorite ? t`Favorited` : t`Favorite`}
         </FlexWrapButton>
     );

@@ -6,11 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Chip from '@mui/material/Chip';
+import { Fragment } from 'react';
+import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import { useLingui } from '@lingui/react/macro';
@@ -22,12 +24,15 @@ import { getErrorMessage } from '@/lib/HelperFunctions.ts';
 import { defaultPromiseErrorHandler } from '@/lib/DefaultPromiseErrorHandler.ts';
 import { useAppTitle } from '@/features/navigation-bar/hooks/useAppTitle.ts';
 import { AppRoutes } from '@/base/AppRoute.constants.ts';
+import { UserAvatar } from '@/features/community/components/UserAvatar.tsx';
 
 export function UserDirectory() {
     const { t } = useLingui();
     useAppTitle(t`User directory`);
     const navigate = useNavigate();
-    const { data, loading, error, refetch } = requestManager.useGetUserDirectory({ fetchPolicy: 'cache-and-network' });
+    const { data, loading, error, refetch } = requestManager.useGetUserDirectory({
+        fetchPolicy: 'cache-and-network',
+    });
 
     if (loading && !data) {
         return <LoadingPlaceholder />;
@@ -42,18 +47,25 @@ export function UserDirectory() {
         );
     }
 
+    const users = data?.userDirectory ?? [];
+
     return (
         <List sx={{ pt: 0 }}>
             <ListSubheader component="div">{t`Users`}</ListSubheader>
-            {(data?.userDirectory ?? []).map((user) => (
-                <ListItem key={user.id} disablePadding>
-                    <ListItemButton onClick={() => navigate(AppRoutes.userProfile.path(user.id))}>
-                        <ListItemIcon>
-                            <AccountCircleIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={user.displayName} secondary={`@${user.username}`} />
-                    </ListItemButton>
-                </ListItem>
+            {users.length === 0 && <EmptyViewAbsoluteCentered message={t`No other users yet.`} />}
+            {users.map((user, index) => (
+                <Fragment key={user.id}>
+                    {index > 0 && <Divider component="li" variant="inset" sx={{ ml: 9 }} />}
+                    <ListItem disablePadding>
+                        <ListItemButton onClick={() => navigate(AppRoutes.userProfile.path(user.id))} sx={{ py: 1.25 }}>
+                            <ListItemAvatar>
+                                <UserAvatar avatarUrl={user.avatarUrl} displayName={user.displayName} size={44} />
+                            </ListItemAvatar>
+                            <ListItemText primary={user.displayName} secondary={`@${user.username}`} />
+                            <Chip label={user.role} size="small" variant="outlined" sx={{ ml: 1 }} />
+                        </ListItemButton>
+                    </ListItem>
+                </Fragment>
             ))}
         </List>
     );

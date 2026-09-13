@@ -141,8 +141,8 @@ msgstr "{0} chapters"
 
 #. placeholder {0}: profile.favoriteMangaIds.length
 #: src/features/profile/screens/Profile.tsx
-msgid "{0} manga"
-msgstr "{0} manga"
+msgid "{0} favorites"
+msgstr "{0} favorites"
 
 #. placeholder {0}: rolePermissions.length
 #: src/features/admin/screens/Admin.tsx
@@ -353,6 +353,10 @@ msgstr "{missingChapterCount, plural, one {Missing # chapter} other {Missing # c
 #: src/features/migration/components/migration-entry/MigrationEntrySearchExcludeActions.tsx
 msgid "{otherResultsCount, plural, one {# more match} other {# more matches}}"
 msgstr "{otherResultsCount, plural, one {# more match} other {# more matches}}"
+
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "{pendingCount} pending"
+msgstr "{pendingCount} pending"
 
 #: src/features/app-updates/components/VersionInfo.tsx
 msgid "{progress}% | Updating…"
@@ -629,6 +633,10 @@ msgstr "Available"
 #: src/features/profile/screens/Profile.tsx
 msgid "Avatar URL"
 msgstr "Avatar URL"
+
+#: src/features/community/screens/Conversation.tsx
+msgid "Back"
+msgstr "Back"
 
 #: src/features/backup/screens/Backup.tsx
 msgid "Back up library as a Tachiyomi backup"
@@ -1034,10 +1042,6 @@ msgstr "Completed"
 msgid "Compression level"
 msgstr "Compression level"
 
-#: src/features/admin/screens/Admin.tsx
-msgid "Confirm"
-msgstr "Confirm"
-
 #: src/features/authentication/screens/LoginPage.tsx
 msgid "Confirm password"
 msgstr "Confirm password"
@@ -1091,6 +1095,11 @@ msgstr "Controls the MimeType that Suwayomi sends in OPDS entries for CBZ archiv
 #: src/features/community/screens/Conversation.tsx
 msgid "Conversation"
 msgstr "Conversation"
+
+#. placeholder {0}: otherProfile.displayName
+#: src/features/community/screens/Conversation.tsx
+msgid "Conversation with {0}"
+msgstr "Conversation with {0}"
 
 #: src/features/community/screens/Inbox.tsx
 msgid "Conversations"
@@ -1988,7 +1997,6 @@ msgid "Favorited"
 msgstr "Favorited"
 
 #: src/features/community/screens/UserProfile.tsx
-#: src/features/profile/screens/Profile.tsx
 msgid "Favorites"
 msgstr "Favorites"
 
@@ -2904,6 +2912,10 @@ msgstr "New password"
 msgid "New SSO users are auto-provisioned with the configured default role. Local password login remains available for existing accounts."
 msgstr "New SSO users are auto-provisioned with the configured default role. Local password login remains available for existing accounts."
 
+#: src/features/admin/screens/Admin.tsx
+msgid "New user"
+msgstr "New user"
+
 #: src/features/reader/tap-zones/ReaderTapZone.constants.ts
 msgid "Next"
 msgstr "Next"
@@ -2971,8 +2983,16 @@ msgid "No match found"
 msgstr "No match found"
 
 #: src/features/community/screens/Conversation.tsx
-msgid "No messages yet."
-msgstr "No messages yet."
+msgid "No messages yet. Say hello!"
+msgstr "No messages yet. Say hello!"
+
+#: src/features/community/screens/Inbox.tsx
+msgid "No one else to message yet."
+msgstr "No one else to message yet."
+
+#: src/features/community/screens/UserDirectory.tsx
+msgid "No other users yet."
+msgstr "No other users yet."
 
 #: src/features/reader/viewer/ReaderChapterViewer.tsx
 msgid "No pages found"
@@ -3517,7 +3537,6 @@ msgid "Right to left"
 msgstr "Right to left"
 
 #: src/features/admin/screens/Admin.tsx
-#: src/features/profile/screens/Profile.tsx
 msgid "Role"
 msgstr "Role"
 
@@ -3572,6 +3591,10 @@ msgstr "Saved theme changes"
 #: src/features/theme/components/CreateThemeDialog.tsx
 msgid "Saving theme changes…"
 msgstr "Saving theme changes…"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "Saving…"
+msgstr "Saving…"
 
 #: src/features/reader/overlay/navigation/desktop/quick-settings/components/ReaderNavBarDesktopPageScale.tsx
 #: src/features/reader/settings/layout/components/ReaderSettingPageScaleMode.tsx
@@ -4237,6 +4260,10 @@ msgstr "These options are slow and dangerous and may lead to restrictions from s
 msgid "Third to last read chapter"
 msgstr "Third to last read chapter"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "This cannot be undone. The user will lose access immediately."
+msgstr "This cannot be undone. The user will lose access immediately."
+
 #: src/features/browse/screens/BrowseSettings.tsx
 msgid "This does not prevent unofficial or potentially incorrectly flagged extensions from surfacing NSFW (18+) content within the app."
 msgstr "This does not prevent unofficial or potentially incorrectly flagged extensions from surfacing NSFW (18+) content within the app."
@@ -4555,10 +4582,6 @@ msgstr "Use the version that was delivered with the server release"
 msgid "User"
 msgstr "User"
 
-#: src/features/admin/screens/Admin.tsx
-msgid "User administration"
-msgstr "User administration"
-
 #: src/features/community/screens/UserDirectory.tsx
 msgid "User directory"
 msgstr "User directory"
@@ -4574,6 +4597,7 @@ msgstr "User profile"
 msgid "Username"
 msgstr "Username"
 
+#: src/features/admin/screens/Admin.tsx
 #: src/features/community/screens/UserDirectory.tsx
 #: src/features/navigation-bar/NavigationBar.constants.ts
 msgid "Users"

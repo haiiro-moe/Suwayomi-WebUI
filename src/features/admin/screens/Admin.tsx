@@ -7,6 +7,8 @@
  */
 
 import AddIcon from '@mui/icons-material/Add';
+import GroupIcon from '@mui/icons-material/Group';
+import SecurityIcon from '@mui/icons-material/Security';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
@@ -17,12 +19,19 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Checkbox from '@mui/material/Checkbox';
+import Chip from '@mui/material/Chip';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -38,8 +47,11 @@ import { requestManager } from '@/lib/requests/RequestManager.ts';
 import type { GetCategoriesBaseQuery, GetCategoriesBaseQueryVariables } from '@/lib/graphql/generated/graphql.ts';
 import { GET_CATEGORIES_BASE } from '@/lib/graphql/category/CategoryQuery.ts';
 import { useAppTitle } from '@/features/navigation-bar/hooks/useAppTitle.ts';
+import { UserAvatar } from '@/features/community/components/UserAvatar.tsx';
 
-const ALL_CATEGORIES = { first: 1000 } satisfies GetCategoriesBaseQueryVariables;
+const ALL_CATEGORIES = {
+    first: 1000,
+} satisfies GetCategoriesBaseQueryVariables;
 
 export type CategoryAccessRow = {
     categoryId: number;
@@ -98,7 +110,7 @@ function CategoryAccessSection({
     };
 
     return (
-        <Card variant="outlined">
+        <Card variant="outlined" sx={{ borderRadius: 2.5 }}>
             <CardContent>
                 <Stack spacing={2}>
                     <Box>
@@ -169,21 +181,37 @@ function CategoryAccessSection({
                                             }}
                                         >
                                             <ListItemText primary={category.name} />
-                                            <Box sx={{ width: 80, display: 'flex', justifyContent: 'center' }}>
+                                            <Box
+                                                sx={{
+                                                    width: 80,
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                }}
+                                            >
                                                 <Checkbox
                                                     aria-label={`${t`Read`}: ${category.name}`}
                                                     checked={row.canRead}
                                                     onChange={(event) =>
-                                                        update(category.id, { canRead: event.target.checked })
+                                                        update(category.id, {
+                                                            canRead: event.target.checked,
+                                                        })
                                                     }
                                                 />
                                             </Box>
-                                            <Box sx={{ width: 80, display: 'flex', justifyContent: 'center' }}>
+                                            <Box
+                                                sx={{
+                                                    width: 80,
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                }}
+                                            >
                                                 <Checkbox
                                                     aria-label={`${t`Edit`}: ${category.name}`}
                                                     checked={row.canEdit}
                                                     onChange={(event) =>
-                                                        update(category.id, { canEdit: event.target.checked })
+                                                        update(category.id, {
+                                                            canEdit: event.target.checked,
+                                                        })
                                                     }
                                                 />
                                             </Box>
@@ -248,7 +276,9 @@ export function Admin() {
             return;
         }
         try {
-            await createUser({ variables: { input: { username, password, displayName, roleId } } });
+            await createUser({
+                variables: { input: { username, password, displayName, roleId } },
+            });
             setUsername('');
             setPassword('');
             setDisplayName('');
@@ -266,7 +296,11 @@ export function Admin() {
             if (editingRoleId === null) {
                 await createRole({
                     variables: {
-                        input: { name: roleName, description: roleDescription, permissions: rolePermissions },
+                        input: {
+                            name: roleName,
+                            description: roleDescription,
+                            permissions: rolePermissions,
+                        },
                     },
                 });
             } else {
@@ -359,59 +393,105 @@ export function Admin() {
     const requestDelete = (id: number) => setPendingDeleteId(id);
 
     return (
-        <Stack spacing={2} sx={{ p: 2 }}>
-            {pendingDeleteId !== null && (
-                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                    <span>{t`Delete this user?`}</span>
+        <Stack spacing={3} sx={{ p: 2 }}>
+            <Dialog open={pendingDeleteId !== null} onClose={() => setPendingDeleteId(null)}>
+                <DialogTitle>{t`Delete this user?`}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {t`This cannot be undone. The user will lose access immediately.`}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setPendingDeleteId(null)}>{t`Cancel`}</Button>
                     <Button
                         color="error"
                         variant="contained"
-                        onClick={() => remove(pendingDeleteId)}
-                    >{t`Confirm`}</Button>
-                    <Button onClick={() => setPendingDeleteId(null)}>{t`Cancel`}</Button>
-                </Box>
-            )}
-            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                <ManageAccountsIcon />
-                <strong>{t`User administration`}</strong>
-            </Box>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
-                <TextField label={t`Username`} value={username} onChange={(event) => setUsername(event.target.value)} />
-                <TextField
-                    label={t`Display name`}
-                    value={displayName}
-                    onChange={(event) => setDisplayName(event.target.value)}
-                />
-                <TextField
-                    label={t`Password`}
-                    type="password"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                />
-                <select
-                    aria-label={t`Role`}
-                    value={roleId ?? ''}
-                    onChange={(event) => setRoleId(event.target.value ? Number(event.target.value) : undefined)}
-                >
-                    <option value="">{t`Select role`}</option>
-                    {rolesData.roles.map((role) => (
-                        <option key={role.id} value={role.id}>
-                            {role.name}
-                        </option>
-                    ))}
-                </select>
-                <Button startIcon={<AddIcon />} variant="contained" onClick={submit}>{t`Create`}</Button>
+                        disableElevation
+                        onClick={() => pendingDeleteId !== null && remove(pendingDeleteId)}
+                    >
+                        {t`Delete`}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                <ManageAccountsIcon color="primary" />
+                <Typography variant="h5" component="h1">
+                    {t`Administration`}
+                </Typography>
             </Stack>
+
+            <Card variant="outlined" sx={{ borderRadius: 2.5 }}>
+                <CardContent>
+                    <Stack spacing={2}>
+                        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                            <AddIcon fontSize="small" color="action" />
+                            <Typography variant="h6">{t`New user`}</Typography>
+                        </Stack>
+                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
+                            <TextField
+                                label={t`Username`}
+                                value={username}
+                                onChange={(event) => setUsername(event.target.value)}
+                            />
+                            <TextField
+                                label={t`Display name`}
+                                value={displayName}
+                                onChange={(event) => setDisplayName(event.target.value)}
+                            />
+                            <TextField
+                                label={t`Password`}
+                                type="password"
+                                value={password}
+                                onChange={(event) => setPassword(event.target.value)}
+                            />
+                            <TextField
+                                select
+                                label={t`Role`}
+                                value={roleId ?? ''}
+                                onChange={(event) =>
+                                    setRoleId(event.target.value ? Number(event.target.value) : undefined)
+                                }
+                                sx={{ minWidth: 160 }}
+                            >
+                                <MenuItem value="">{t`Select role`}</MenuItem>
+                                {rolesData.roles.map((role) => (
+                                    <MenuItem key={role.id} value={role.id}>
+                                        {role.name}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Stack>
+                    </Stack>
+                </CardContent>
+                <CardActions sx={{ justifyContent: 'flex-end', px: 2, pb: 2 }}>
+                    <Button
+                        startIcon={<AddIcon />}
+                        variant="contained"
+                        disableElevation
+                        onClick={submit}
+                        disabled={!username || !password || !displayName || roleId === undefined}
+                    >
+                        {t`Create`}
+                    </Button>
+                </CardActions>
+            </Card>
+
+            <Divider />
+
             <Stack spacing={2}>
-                <Box>
+                <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                    <SecurityIcon color="action" fontSize="small" />
                     <Typography variant="h6">{t`Roles`}</Typography>
+                </Stack>
+                <Box>
                     <Typography color="text.secondary" variant="body2">
                         {editingRoleId === null
                             ? t`Create a role and choose the permissions it should have.`
                             : t`Edit role details and permissions.`}
                     </Typography>
                 </Box>
-                <Card variant="outlined">
+                <Card variant="outlined" sx={{ borderRadius: 2.5 }}>
                     <CardContent>
                         <Stack spacing={2}>
                             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -459,7 +539,10 @@ export function Admin() {
                                 sx={{
                                     display: 'grid',
                                     gap: 1.5,
-                                    gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' },
+                                    gridTemplateColumns: {
+                                        xs: '1fr',
+                                        sm: 'repeat(2, minmax(0, 1fr))',
+                                    },
                                 }}
                             >
                                 {Object.entries(
@@ -469,10 +552,13 @@ export function Admin() {
                                         )
                                         .reduce<Record<string, string[]>>((groups, permission) => {
                                             const group = permission.split(/[.:/]/, 1)[0] || t`Other`;
-                                            return { ...groups, [group]: [...(groups[group] ?? []), permission] };
+                                            return {
+                                                ...groups,
+                                                [group]: [...(groups[group] ?? []), permission],
+                                            };
                                         }, {}),
                                 ).map(([group, permissions]) => (
-                                    <Paper key={group} variant="outlined" sx={{ p: 1.5 }}>
+                                    <Paper key={group} variant="outlined" sx={{ p: 1.5, borderRadius: 2 }}>
                                         <Typography sx={{ fontWeight: 'bold' }} variant="subtitle2">
                                             {group}
                                         </Typography>
@@ -514,9 +600,19 @@ export function Admin() {
                 <Stack spacing={1}>
                     <List>
                         {rolesData.roles.map((role) => (
-                            <Card key={role.id} variant="outlined">
+                            <Card key={role.id} variant="outlined" sx={{ mb: 1, borderRadius: 2.5 }}>
                                 <CardContent sx={{ pb: 1 }}>
-                                    <Typography variant="subtitle1">{role.name}</Typography>
+                                    <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                                        <Typography variant="subtitle1">{role.name}</Typography>
+                                        {role.name === 'owner' && (
+                                            <Chip
+                                                label={t`Protected`}
+                                                size="small"
+                                                color="primary"
+                                                variant="outlined"
+                                            />
+                                        )}
+                                    </Stack>
                                     <Typography color="text.secondary" variant="body2">
                                         {role.description || role.permissions.join(', ')}
                                     </Typography>
@@ -542,6 +638,8 @@ export function Admin() {
                     </List>
                 </Stack>
             </Stack>
+            <Divider />
+
             <CategoryAccessSection
                 users={data.users}
                 categories={(categoriesData?.categories.nodes ?? []).map((category) => ({
@@ -549,65 +647,93 @@ export function Admin() {
                     name: category.name,
                 }))}
             />
-            <List>
-                {data.users.map((user) => (
-                    <Box key={user.id}>
-                        <ListItem
-                            component="div"
-                            secondaryAction={
-                                <Stack direction="row">
-                                    <Button startIcon={<EditIcon />} onClick={() => startEdit(user)}>{t`Edit`}</Button>
-                                    <Button
-                                        color="error"
-                                        startIcon={<DeleteIcon />}
-                                        onClick={() => requestDelete(user.id)}
-                                    >{t`Delete`}</Button>
+
+            <Divider />
+
+            <Stack spacing={2}>
+                <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                    <GroupIcon color="action" fontSize="small" />
+                    <Typography variant="h6">{t`Users`}</Typography>
+                    <Chip label={data.users.length} size="small" sx={{ fontWeight: 600 }} />
+                </Stack>
+                <List>
+                    {data.users.map((user) => (
+                        <Box key={user.id}>
+                            <ListItem
+                                component="div"
+                                secondaryAction={
+                                    <Stack direction="row">
+                                        <Button
+                                            startIcon={<EditIcon />}
+                                            onClick={() => startEdit(user)}
+                                        >{t`Edit`}</Button>
+                                        <Button
+                                            color="error"
+                                            startIcon={<DeleteIcon />}
+                                            onClick={() => requestDelete(user.id)}
+                                        >{t`Delete`}</Button>
+                                    </Stack>
+                                }
+                            >
+                                <ListItemAvatar>
+                                    <UserAvatar avatarUrl={user.avatarUrl} displayName={user.displayName} size={40} />
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={user.displayName}
+                                    secondary={
+                                        <Stack direction="row" spacing={0.75} sx={{ alignItems: 'center', mt: 0.25 }}>
+                                            <Typography component="span" variant="body2" color="text.secondary">
+                                                @{user.username}
+                                            </Typography>
+                                            <Chip label={user.role} size="small" variant="outlined" />
+                                        </Stack>
+                                    }
+                                />
+                            </ListItem>
+                            {editingId === user.id && (
+                                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ p: 2 }}>
+                                    <TextField
+                                        label={t`Display name`}
+                                        value={editDisplayName}
+                                        onChange={(event) => setEditDisplayName(event.target.value)}
+                                    />
+                                    <TextField
+                                        label={t`New password`}
+                                        type="password"
+                                        value={editPassword}
+                                        onChange={(event) => setEditPassword(event.target.value)}
+                                    />
+                                    <TextField
+                                        select
+                                        label={t`Role`}
+                                        value={editRoleId ?? ''}
+                                        onChange={(event) =>
+                                            setEditRoleId(event.target.value ? Number(event.target.value) : undefined)
+                                        }
+                                        sx={{ minWidth: 160 }}
+                                    >
+                                        {rolesData.roles.map((role) => (
+                                            <MenuItem key={role.id} value={role.id}>
+                                                {role.name}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={editEnabled}
+                                                onChange={(event) => setEditEnabled(event.target.checked)}
+                                            />
+                                        }
+                                        label={t`Enabled`}
+                                    />
+                                    <Button variant="contained" onClick={saveEdit}>{t`Save`}</Button>
                                 </Stack>
-                            }
-                        >
-                            <ListItemText primary={user.displayName} secondary={`@${user.username} · ${user.role}`} />
-                        </ListItem>
-                        {editingId === user.id && (
-                            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ p: 2 }}>
-                                <TextField
-                                    label={t`Display name`}
-                                    value={editDisplayName}
-                                    onChange={(event) => setEditDisplayName(event.target.value)}
-                                />
-                                <TextField
-                                    label={t`New password`}
-                                    type="password"
-                                    value={editPassword}
-                                    onChange={(event) => setEditPassword(event.target.value)}
-                                />
-                                <select
-                                    aria-label={t`Role`}
-                                    value={editRoleId ?? ''}
-                                    onChange={(event) =>
-                                        setEditRoleId(event.target.value ? Number(event.target.value) : undefined)
-                                    }
-                                >
-                                    {rolesData.roles.map((role) => (
-                                        <option key={role.id} value={role.id}>
-                                            {role.name}
-                                        </option>
-                                    ))}
-                                </select>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={editEnabled}
-                                            onChange={(event) => setEditEnabled(event.target.checked)}
-                                        />
-                                    }
-                                    label={t`Enabled`}
-                                />
-                                <Button variant="contained" onClick={saveEdit}>{t`Save`}</Button>
-                            </Stack>
-                        )}
-                    </Box>
-                ))}
-            </List>
+                            )}
+                        </Box>
+                    ))}
+                </List>
+            </Stack>
         </Stack>
     );
 }

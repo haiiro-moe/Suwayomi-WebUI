@@ -9,6 +9,9 @@
 import ChatIcon from '@mui/icons-material/Chat';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import LockIcon from '@mui/icons-material/Lock';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -33,7 +36,9 @@ export function UserProfile() {
     const navigate = useNavigate();
     const { userId } = useParams();
     const parsedUserId = Number(userId);
-    const { data, loading, error } = requestManager.useGetUserProfile({ profileUserId: parsedUserId });
+    const { data, loading, error } = requestManager.useGetUserProfile({
+        profileUserId: parsedUserId,
+    });
     if (loading && !data) {
         return <LoadingPlaceholder />;
     }
@@ -60,14 +65,27 @@ export function UserProfile() {
                 {/* Banner */}
                 <Box
                     sx={{
+                        position: 'relative',
                         height: { xs: 160, sm: 220 },
                         width: '100%',
-                        bgcolor: 'background.paper',
-                        backgroundImage: profile.bannerUrl ? `url(${profile.bannerUrl})` : undefined,
+                        backgroundImage: profile.bannerUrl
+                            ? `url(${profile.bannerUrl})`
+                            : (theme) =>
+                                  `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 45%, ${theme.palette.secondary.main} 100%)`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                     }}
-                />
+                >
+                    {!!profile.bannerUrl && (
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                inset: 0,
+                                background: 'linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%)',
+                            }}
+                        />
+                    )}
+                </Box>
 
                 {/* Avatar + username row */}
                 <Stack
@@ -89,7 +107,8 @@ export function UserProfile() {
                             border: 4,
                             borderColor: 'background.default',
                             bgcolor: 'background.paper',
-                            boxShadow: 3,
+                            boxShadow: 4,
+                            transition: (theme) => theme.transitions.create(['box-shadow']),
                         }}
                     >
                         {profile.avatarUrl ? (
@@ -97,7 +116,12 @@ export function UserProfile() {
                                 component="img"
                                 src={profile.avatarUrl}
                                 alt={profile.displayName}
-                                sx={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                                sx={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                    display: 'block',
+                                }}
                             />
                         ) : (
                             <Stack
@@ -106,9 +130,11 @@ export function UserProfile() {
                                     height: '100%',
                                     alignItems: 'center',
                                     justifyContent: 'center',
+                                    background: (theme) =>
+                                        `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
                                 }}
                             >
-                                <Typography variant="h4" component="span">
+                                <Typography variant="h4" component="span" sx={{ color: 'primary.contrastText' }}>
                                     {profile.displayName.charAt(0).toUpperCase()}
                                 </Typography>
                             </Stack>
@@ -123,22 +149,33 @@ export function UserProfile() {
                                 px: 1.5,
                                 py: 0.5,
                                 borderRadius: 2.5,
-                                bgcolor: 'background.paper',
+                                bgcolor: (theme) =>
+                                    theme.palette.mode === 'dark'
+                                        ? 'rgba(18, 18, 18, 0.72)'
+                                        : 'rgba(255, 255, 255, 0.82)',
+                                backdropFilter: 'blur(10px)',
                                 boxShadow: 1,
                                 wordBreak: 'break-word',
                             }}
                         >
                             {profile.displayName}
                         </Typography>
-                        <Typography color="text.secondary" variant="body2" sx={{ mt: 0.5 }}>
+                        <Typography color="text.secondary" variant="body2" sx={{ mt: 0.5, ml: 1.5 }}>
                             @{profile.username}
                         </Typography>
                     </Box>
                     <Box sx={{ pb: 1.5 }}>
                         <Button
                             variant="contained"
+                            disableElevation
                             startIcon={<ChatIcon />}
                             onClick={() => navigate(AppRoutes.conversation.path(parsedUserId))}
+                            sx={{
+                                borderRadius: 999,
+                                px: 2.5,
+                                transition: (theme) => theme.transitions.create(['transform', 'box-shadow']),
+                                '&:hover': { transform: 'translateY(-1px)', boxShadow: 3 },
+                            }}
                         >
                             {t`Message`}
                         </Button>
@@ -152,17 +189,36 @@ export function UserProfile() {
                 >
                     <Paper
                         variant="outlined"
-                        sx={{ p: 2, width: { md: '30%' }, flexShrink: 0, alignSelf: 'flex-start' }}
+                        sx={{
+                            p: 2,
+                            width: { md: '30%' },
+                            flexShrink: 0,
+                            alignSelf: 'flex-start',
+                            borderRadius: 3,
+                        }}
                     >
-                        <Typography variant="h6" component="h2" sx={{ mb: 1 }}>{t`Description`}</Typography>
-                        <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                        <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mb: 1.5 }}>
+                            <DescriptionOutlinedIcon fontSize="small" color="action" />
+                            <Typography variant="h6" component="h2">
+                                {t`Description`}
+                            </Typography>
+                        </Stack>
+                        <Typography
+                            variant="body1"
+                            color={profile.description ? 'text.primary' : 'text.secondary'}
+                            sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+                        >
                             {profile.description || t`No description.`}
                         </Typography>
                     </Paper>
-                    <Paper variant="outlined" sx={{ p: 2, flex: 1, minWidth: 0 }}>
-                        <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
-                            {t`Favorites`} · {favorites.length}
-                        </Typography>
+                    <Paper variant="outlined" sx={{ p: 2, flex: 1, minWidth: 0, borderRadius: 3 }}>
+                        <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mb: 2 }}>
+                            <FavoriteIcon fontSize="small" color="action" />
+                            <Typography variant="h6" component="h2">
+                                {t`Favorites`}
+                            </Typography>
+                            <Chip label={favorites.length} size="small" sx={{ fontWeight: 600 }} />
+                        </Stack>
                         {favorites.length === 0 ? (
                             <Typography color="text.secondary">{t`No favorites yet.`}</Typography>
                         ) : (
@@ -212,6 +268,17 @@ export function UserProfile() {
                                                     display: 'block',
                                                     bgcolor: 'action.hover',
                                                     textDecoration: 'none',
+                                                    boxShadow: 1,
+                                                    transition: (theme) =>
+                                                        theme.transitions.create(['transform', 'box-shadow'], {
+                                                            duration: theme.transitions.duration.shortest,
+                                                        }),
+                                                    '@media (hover: hover) and (pointer: fine)': {
+                                                        '&:hover': {
+                                                            transform: 'translateY(-3px)',
+                                                            boxShadow: 4,
+                                                        },
+                                                    },
                                                 }}
                                             >
                                                 <Box
@@ -226,24 +293,32 @@ export function UserProfile() {
                                                         display: 'block',
                                                     }}
                                                 />
-                                                <Typography
-                                                    variant="caption"
+                                                <Box
                                                     sx={{
                                                         position: 'absolute',
                                                         left: 0,
                                                         right: 0,
                                                         bottom: 0,
-                                                        px: 0.75,
-                                                        py: 0.5,
-                                                        color: 'common.white',
-                                                        bgcolor: 'rgba(0, 0, 0, 0.6)',
-                                                        overflow: 'hidden',
-                                                        textOverflow: 'ellipsis',
-                                                        whiteSpace: 'nowrap',
+                                                        pt: 2,
+                                                        background:
+                                                            'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%)',
                                                     }}
                                                 >
-                                                    {manga.title}
-                                                </Typography>
+                                                    <Typography
+                                                        variant="caption"
+                                                        sx={{
+                                                            display: 'block',
+                                                            px: 0.75,
+                                                            py: 0.5,
+                                                            color: 'common.white',
+                                                            overflow: 'hidden',
+                                                            textOverflow: 'ellipsis',
+                                                            whiteSpace: 'nowrap',
+                                                        }}
+                                                    >
+                                                        {manga.title}
+                                                    </Typography>
+                                                </Box>
                                             </Box>
                                         </Tooltip>
                                     );
