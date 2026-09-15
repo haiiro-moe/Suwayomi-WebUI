@@ -91,6 +91,7 @@ export function Profile() {
         });
 
         requestManager.reset();
+        document.cookie = 'suwayomi-server-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
         navigate(AppRoutes.authentication.children.login.path, { replace: true });
     };
 
