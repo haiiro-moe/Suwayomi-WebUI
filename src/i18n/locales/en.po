@@ -2607,6 +2607,7 @@ msgid "Log in to {0}"
 msgstr "Log in to {0}"
 
 #: src/base/components/modals/LoginDialog.tsx
+#: src/features/profile/screens/Profile.tsx
 msgid "Log out"
 msgstr "Log out"
 
@@ -2614,6 +2615,10 @@ msgstr "Log out"
 #: src/features/tracker/components/cards/SettingsTrackerCard.tsx
 msgid "Log out from {0}"
 msgstr "Log out from {0}"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "Log out?"
+msgstr "Log out?"
 
 #: src/features/tracker/components/cards/SettingsTrackerCard.tsx
 msgid "Logged in"
@@ -4744,6 +4749,10 @@ msgstr "You have not read any series yet."
 #: src/features/browse/extensions/Extensions.tsx
 msgid "You have to add a extension store to be able to install extensions"
 msgstr "You have to add a extension store to be able to install extensions"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "You will need to log in again to access your account."
+msgstr "You will need to log in again to access your account."
 
 #: src/features/settings/Settings.constants.ts
 msgid "Your browser will prompt you to enter credentials with a dialog."

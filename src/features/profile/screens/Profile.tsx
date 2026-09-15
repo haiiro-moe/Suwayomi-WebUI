@@ -7,6 +7,7 @@
  */
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -25,7 +26,9 @@ import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useLingui } from '@lingui/react/macro';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { requestManager } from '@/lib/requests/RequestManager.ts';
+import { AppRoutes } from '@/base/AppRoute.constants.ts';
 import { LoadingPlaceholder } from '@/base/components/feedback/LoadingPlaceholder.tsx';
 import { EmptyViewAbsoluteCentered } from '@/base/components/feedback/EmptyViewAbsoluteCentered.tsx';
 import { getErrorMessage } from '@/lib/HelperFunctions.ts';
@@ -33,11 +36,13 @@ import { defaultPromiseErrorHandler } from '@/lib/DefaultPromiseErrorHandler.ts'
 import { useAppTitle } from '@/features/navigation-bar/hooks/useAppTitle.ts';
 import { TextSetting } from '@/base/components/settings/text/TextSetting.tsx';
 import { makeToast } from '@/base/utils/Toast.ts';
+import { Confirmation } from '@/base/AppAwaitableComponent.ts';
 
 const PREVIEW_AVATAR_SIZE = 72;
 
 export function Profile() {
     const { t } = useLingui();
+    const navigate = useNavigate();
     useAppTitle(t`Profile`);
     const [isSaving, setIsSaving] = useState(false);
     const { data, loading, error, refetch } = requestManager.useGetCurrentUserProfile({
@@ -75,6 +80,19 @@ export function Profile() {
             />
         );
     }
+
+    const logout = async () => {
+        await Confirmation.show({
+            title: t`Log out?`,
+            message: t`You will need to log in again to access your account.`,
+            actions: {
+                confirm: { title: t`Log out` },
+            },
+        });
+
+        requestManager.reset();
+        navigate(AppRoutes.authentication.children.login.path, { replace: true });
+    };
 
     const save = async () => {
         setIsSaving(true);
@@ -241,6 +259,20 @@ export function Profile() {
                 disabled={isSaving}
                 dialogDescription={t`Describe yourself to other users.`}
             />
+            <Divider sx={{ my: 1 }} />
+            <Box sx={{ px: 2, pb: 2 }}>
+                <Button
+                    variant="outlined"
+                    color="error"
+                    startIcon={<LogoutIcon />}
+                    onClick={() => {
+                        logout().catch(() => {});
+                    }}
+                    sx={{ borderRadius: 999, px: 3 }}
+                >
+                    {t`Log out`}
+                </Button>
+            </Box>
         </List>
     );
 }
