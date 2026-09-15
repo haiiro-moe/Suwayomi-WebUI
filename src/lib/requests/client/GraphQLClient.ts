@@ -10,7 +10,7 @@ import { ErrorLink } from '@apollo/client/link/error';
 import { SetContextLink } from '@apollo/client/link/context';
 import type { ErrorLike } from '@apollo/client';
 import { ApolloClient, ApolloLink, CombinedGraphQLErrors, InMemoryCache, ServerError } from '@apollo/client';
-import { filter, firstValueFrom, from, map, switchMap } from 'rxjs';
+import { catchError, filter, firstValueFrom, from, map, switchMap } from 'rxjs';
 import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import type { Client } from 'graphql-ws';
@@ -258,7 +258,14 @@ export class GraphQLClient extends BaseClient<ApolloClient, ApolloClient.Options
     }
 
     protected override shouldQueueRequest(operationName: string | undefined): boolean {
-        const authOperations = ['GET_ABOUT', 'USER_LOGIN', 'USER_REFRESH'];
+        const authOperations = [
+            'GET_ABOUT',
+            'GET_LOGIN_INFO',
+            'ONBOARDING_STATUS',
+            'SETUP_OWNER',
+            'USER_LOGIN',
+            'USER_REFRESH',
+        ];
         if (authOperations.includes(operationName!)) {
             return false;
         }
@@ -304,9 +311,10 @@ export class GraphQLClient extends BaseClient<ApolloClient, ApolloClient.Options
     }
 
     private isAuthError(errors: readonly GraphQLFormattedError[]): boolean {
-        return errors.some((graphQLError) =>
-            graphQLError.message.includes('suwayomi.tachidesk.server.user.UnauthorizedException'),
-        );
+        return errors.some((graphQLError) => {
+            const message = graphQLError.message.toLowerCase();
+            return message.includes('unauthorized') || message.includes('authentication');
+        });
     }
 
     private createErrorLink() {
@@ -330,6 +338,13 @@ export class GraphQLClient extends BaseClient<ApolloClient, ApolloClient.Options
                 return undefined;
             }
 
+            if (operation.operationName === 'USER_REFRESH') {
+                AuthManager.removeTokens();
+                AuthManager.setAuthRequired(true);
+                AuthManager.setAuthInitialized(true);
+                return undefined;
+            }
+
             return from(BaseClient.refreshAccessToken(this.handleRefreshToken)).pipe(
                 filter(Boolean),
                 map((result) => {
@@ -337,6 +352,12 @@ export class GraphQLClient extends BaseClient<ApolloClient, ApolloClient.Options
                     return result;
                 }),
                 switchMap(() => forward(operation)),
+                catchError((refreshError) => {
+                    AuthManager.removeTokens();
+                    AuthManager.setAuthRequired(true);
+                    AuthManager.setAuthInitialized(true);
+                    throw refreshError;
+                }),
             );
         });
     }

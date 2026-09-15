@@ -4,6 +4,100 @@ type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import type * as Types from './graphql-base.types';
 
+export type SetCategoryAccessMutationVariables = Exact<{
+    input: Types.SetCategoryAccessInput;
+}>;
+
+export type SetCategoryAccessMutation = {
+    __typename: 'Mutation';
+    setCategoryAccess: { __typename: 'SetCategoryAccessPayload'; updated: boolean };
+};
+
+export type CreateUserMutationVariables = Exact<{
+    input: Types.CreateUserInput;
+}>;
+
+export type CreateUserMutation = { __typename: 'Mutation'; createUser: { __typename: 'UserAdminPayload'; id: number } };
+
+export type UpdateUserMutationVariables = Exact<{
+    input: Types.UpdateUserInput;
+}>;
+
+export type UpdateUserMutation = {
+    __typename: 'Mutation';
+    updateUser: { __typename: 'UpdateUserPayload'; updated: boolean };
+};
+
+export type DeleteUserMutationVariables = Exact<{
+    input: Types.DeleteUserInput;
+}>;
+
+export type DeleteUserMutation = {
+    __typename: 'Mutation';
+    deleteUser: { __typename: 'OperationPayload'; success: boolean };
+};
+
+export type CreateRoleMutationVariables = Exact<{
+    input: Types.RoleInput;
+}>;
+
+export type CreateRoleMutation = { __typename: 'Mutation'; createRole: { __typename: 'UserAdminPayload'; id: number } };
+
+export type UpdateRoleMutationVariables = Exact<{
+    input: Types.UpdateRoleInput;
+}>;
+
+export type UpdateRoleMutation = {
+    __typename: 'Mutation';
+    updateRole: { __typename: 'OperationPayload'; success: boolean };
+};
+
+export type DeleteRoleMutationVariables = Exact<{
+    input: Types.DeleteRoleInput;
+}>;
+
+export type DeleteRoleMutation = {
+    __typename: 'Mutation';
+    deleteRole: { __typename: 'OperationPayload'; success: boolean };
+};
+
+export type GetCategoryAccessQueryVariables = Exact<{
+    userId: number;
+}>;
+
+export type GetCategoryAccessQuery = {
+    __typename: 'Query';
+    categoryAccess: Array<{
+        __typename: 'CategoryAccessType';
+        userId: number;
+        categoryId: number;
+        canRead: boolean;
+        canEdit: boolean;
+    }>;
+};
+
+export type GetAdminUsersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAdminUsersQuery = {
+    __typename: 'Query';
+    users: Array<{
+        __typename: 'UserProfile';
+        id: number;
+        username: string;
+        displayName: string;
+        role: string;
+        avatarUrl: string | null;
+    }>;
+};
+
+export type GetAdminRolesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAdminRolesQuery = {
+    __typename: 'Query';
+    permissionNodes: Array<string>;
+    roles: Array<{ __typename: 'RoleType'; id: number; name: string; description: string; permissions: Array<string> }>;
+};
+
 export type CreateBackupMutationVariables = Exact<{
     input: Types.CreateBackupInput;
 }>;
@@ -3021,6 +3115,7 @@ export type GetAboutQuery = {
         github: string;
         name: string;
         version: string;
+        ssoEnabled: boolean;
         platformInfo: {
             __typename: 'PlatformInfo';
             arch: string;
@@ -3103,10 +3198,7 @@ export type ServerSettingsFragment = {
     autoDownloadNewChaptersLimit: number;
     autoDownloadIgnoreReUploads: boolean;
     maxSourcesInParallel: number;
-    excludeUnreadChapters: boolean;
-    excludeNotStarted: boolean;
-    excludeCompleted: boolean;
-    globalUpdateInterval: number;
+    globalUpdateCron: string;
     updateMangas: boolean;
     authMode: Types.AuthMode;
     authPassword: string;
@@ -3216,10 +3308,7 @@ export type ResetServerSettingsMutation = {
             autoDownloadNewChaptersLimit: number;
             autoDownloadIgnoreReUploads: boolean;
             maxSourcesInParallel: number;
-            excludeUnreadChapters: boolean;
-            excludeNotStarted: boolean;
-            excludeCompleted: boolean;
-            globalUpdateInterval: number;
+            globalUpdateCron: string;
             updateMangas: boolean;
             authMode: Types.AuthMode;
             authPassword: string;
@@ -3339,10 +3428,7 @@ export type UpdateServerSettingsMutation = {
             autoDownloadNewChaptersLimit: number;
             autoDownloadIgnoreReUploads: boolean;
             maxSourcesInParallel: number;
-            excludeUnreadChapters: boolean;
-            excludeNotStarted: boolean;
-            excludeCompleted: boolean;
-            globalUpdateInterval: number;
+            globalUpdateCron: string;
             updateMangas: boolean;
             authMode: Types.AuthMode;
             authPassword: string;
@@ -3458,10 +3544,7 @@ export type GetServerSettingsQuery = {
         autoDownloadNewChaptersLimit: number;
         autoDownloadIgnoreReUploads: boolean;
         maxSourcesInParallel: number;
-        excludeUnreadChapters: boolean;
-        excludeNotStarted: boolean;
-        excludeCompleted: boolean;
-        globalUpdateInterval: number;
+        globalUpdateCron: string;
         updateMangas: boolean;
         authMode: Types.AuthMode;
         authPassword: string;
@@ -5124,6 +5207,98 @@ export type UpdaterSubscription = {
     };
 };
 
+export type GetUserDirectoryQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserDirectoryQuery = {
+    __typename: 'Query';
+    userDirectory: Array<{
+        __typename: 'UserProfile';
+        id: number;
+        username: string;
+        displayName: string;
+        avatarUrl: string | null;
+        role: string;
+        description: string;
+        favoriteMangaIds: Array<number>;
+    }>;
+};
+
+export type GetUserProfileQueryVariables = Exact<{
+    profileUserId: number;
+}>;
+
+export type GetUserProfileQuery = {
+    __typename: 'Query';
+    profile: {
+        __typename: 'UserProfile';
+        id: number;
+        username: string;
+        displayName: string;
+        avatarUrl: string | null;
+        role: string;
+        description: string;
+        bannerUrl: string | null;
+        appTheme: string | null;
+        themeMode: string | null;
+        pureBlackMode: boolean | null;
+        favoriteMangaIds: Array<number>;
+        favoriteManga: Array<{
+            __typename: 'FavoriteMangaEntryType';
+            mangaId: number;
+            accessible: boolean;
+            manga: {
+                __typename: 'MangaType';
+                id: number;
+                title: string;
+                sourceId: string;
+                inLibrary: boolean;
+                thumbnailUrl: string | null;
+                thumbnailUrlLastFetched: string | null;
+            } | null;
+        }>;
+    } | null;
+};
+
+export type GetConversationQueryVariables = Exact<{
+    otherUserId: number;
+}>;
+
+export type GetConversationQuery = {
+    __typename: 'Query';
+    conversation: Array<{
+        __typename: 'MessageType';
+        id: number;
+        senderId: number;
+        receiverId: number;
+        content: string;
+        createdAt: string;
+        readAt: string | null;
+        parentId: number | null;
+    }>;
+};
+
+export type GetUnreadMessageCountQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUnreadMessageCountQuery = { __typename: 'Query'; unreadMessageCount: string };
+
+export type SendMessageMutationVariables = Exact<{
+    input: Types.SendMessageInput;
+}>;
+
+export type SendMessageMutation = {
+    __typename: 'Mutation';
+    sendMessage: { __typename: 'MessageMutationPayload'; messageId: number };
+};
+
+export type MarkMessageReadMutationVariables = Exact<{
+    input: Types.MarkMessageReadInput;
+}>;
+
+export type MarkMessageReadMutation = {
+    __typename: 'Mutation';
+    markMessageRead: { __typename: 'ProfileMutationPayload'; updated: boolean };
+};
+
 export type UserLoginMutationVariables = Exact<{
     password: string;
     username: string;
@@ -5134,6 +5309,16 @@ export type UserLoginMutation = {
     login: { __typename: 'LoginPayload'; accessToken: string; refreshToken: string };
 };
 
+export type SetupOwnerMutationVariables = Exact<{
+    password: string;
+    username: string;
+}>;
+
+export type SetupOwnerMutation = {
+    __typename: 'Mutation';
+    setupOwner: { __typename: 'SetupOwnerPayload'; accessToken: string; refreshToken: string };
+};
+
 export type UserRefreshMutationVariables = Exact<{
     refreshToken: string;
 }>;
@@ -5141,6 +5326,177 @@ export type UserRefreshMutationVariables = Exact<{
 export type UserRefreshMutation = {
     __typename: 'Mutation';
     refreshToken: { __typename: 'RefreshTokenPayload'; accessToken: string };
+};
+
+export type UpdateProfileMutationVariables = Exact<{
+    input: Types.UpdateProfileInput;
+}>;
+
+export type UpdateProfileMutation = {
+    __typename: 'Mutation';
+    updateProfile: { __typename: 'ProfileMutationPayload'; updated: boolean };
+};
+
+export type AddFavoriteMutationVariables = Exact<{
+    input: Types.FavoriteMangaInput;
+}>;
+
+export type AddFavoriteMutation = {
+    __typename: 'Mutation';
+    addFavorite: { __typename: 'ProfileMutationPayload'; updated: boolean };
+};
+
+export type RemoveFavoriteMutationVariables = Exact<{
+    input: Types.FavoriteMangaInput;
+}>;
+
+export type RemoveFavoriteMutation = {
+    __typename: 'Mutation';
+    removeFavorite: { __typename: 'ProfileMutationPayload'; updated: boolean };
+};
+
+export type SetMangaNoteMutationVariables = Exact<{
+    input: Types.SetMangaNoteInput;
+}>;
+
+export type SetMangaNoteMutation = {
+    __typename: 'Mutation';
+    setMangaNote: { __typename: 'ProfileMutationPayload'; updated: boolean };
+};
+
+export type GetMyMangaNoteQueryVariables = Exact<{
+    mangaId: number;
+}>;
+
+export type GetMyMangaNoteQuery = { __typename: 'Query'; myMangaNote: string };
+
+export type GetOtherUserMangaNotesQueryVariables = Exact<{
+    mangaId: number;
+}>;
+
+export type GetOtherUserMangaNotesQuery = {
+    __typename: 'Query';
+    otherUserMangaNotes: Array<{
+        __typename: 'UserMangaNoteType';
+        userId: number;
+        username: string;
+        displayName: string;
+        note: string;
+    }>;
+};
+
+export type RequestMangaMutationVariables = Exact<{
+    input: Types.RequestMangaInput;
+}>;
+
+export type RequestMangaMutation = {
+    __typename: 'Mutation';
+    requestManga: { __typename: 'RequestMangaPayload'; requestId: number };
+};
+
+export type GetRequestPreviewQueryVariables = Exact<{
+    mangaId: number;
+}>;
+
+export type GetRequestPreviewQuery = {
+    __typename: 'Query';
+    requestPreview: {
+        __typename: 'RequestPreview';
+        manga: {
+            __typename: 'MangaType';
+            id: number;
+            title: string;
+            author: string | null;
+            artist: string | null;
+            status: Types.MangaStatus;
+            genre: Array<string>;
+            description: string | null;
+            thumbnailUrl: string | null;
+            thumbnailUrlLastFetched: string | null;
+            sourceId: string;
+            inLibrary: boolean;
+        };
+        chapters: Array<{
+            __typename: 'ChapterPreview';
+            name: string;
+            chapterNumber: number | null;
+            scanlator: string | null;
+        }>;
+    };
+};
+
+export type GetMangaRequestsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetMangaRequestsQuery = {
+    __typename: 'Query';
+    mangaRequests: Array<{
+        __typename: 'MangaRequestType';
+        id: number;
+        userId: number;
+        username: string;
+        displayName: string;
+        mangaId: number;
+        mangaTitle: string | null;
+        mangaThumbnailUrl: string | null;
+        createdAt: string;
+        status: string;
+    }>;
+};
+
+export type DecideMangaRequestMutationVariables = Exact<{
+    input: Types.DecideMangaRequestInput;
+}>;
+
+export type DecideMangaRequestMutation = {
+    __typename: 'Mutation';
+    decideMangaRequest: { __typename: 'DecideMangaRequestPayload'; success: boolean };
+};
+
+export type OnboardingStatusQueryVariables = Exact<{ [key: string]: never }>;
+
+export type OnboardingStatusQuery = { __typename: 'Query'; onboardingStatus: boolean };
+
+export type GetCurrentUserProfileQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetCurrentUserProfileQuery = {
+    __typename: 'Query';
+    currentUserProfile: {
+        __typename: 'UserProfile';
+        id: number;
+        username: string;
+        displayName: string;
+        avatarUrl: string | null;
+        role: string;
+        description: string;
+        bannerUrl: string | null;
+        favoriteMangaIds: Array<number>;
+        permissions: Array<string>;
+    } | null;
+};
+
+export type GetUserSettingsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserSettingsQuery = {
+    __typename: 'Query';
+    userSettings: Array<{ __typename: 'UserSetting'; key: string; value: string }>;
+};
+
+export type SetUserSettingsMutationVariables = Exact<{
+    input: Types.SetUserSettingsInput;
+}>;
+
+export type SetUserSettingsMutation = {
+    __typename: 'Mutation';
+    setUserSettings: { __typename: 'SetUserSettingsPayload'; updated: boolean };
+};
+
+export type ResetUserSettingsMutationVariables = Exact<{
+    input: Types.ResetUserSettingsInput;
+}>;
+
+export type ResetUserSettingsMutation = {
+    __typename: 'Mutation';
+    resetUserSettings: { __typename: 'SetUserSettingsPayload'; updated: boolean };
 };
 
 export type WebviewClearCacheCookiesMutationVariables = Exact<{ [key: string]: never }>;

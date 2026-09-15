@@ -17,10 +17,125 @@ export const USER_LOGIN = gql`
     }
 `;
 
+export const SETUP_OWNER = gql`
+    mutation SETUP_OWNER($password: String!, $username: String!) {
+        setupOwner(input: { password: $password, username: $username }) {
+            accessToken
+            refreshToken
+        }
+    }
+`;
+
 export const USER_REFRESH = gql`
     mutation USER_REFRESH($refreshToken: String!) {
         refreshToken(input: { refreshToken: $refreshToken }) {
             accessToken
+        }
+    }
+`;
+
+export const UPDATE_PROFILE = gql`
+    mutation UPDATE_PROFILE($input: UpdateProfileInput!) {
+        updateProfile(input: $input) {
+            updated
+        }
+    }
+`;
+
+export const ADD_FAVORITE = gql`
+    mutation ADD_FAVORITE($input: FavoriteMangaInput!) {
+        addFavorite(input: $input) {
+            updated
+        }
+    }
+`;
+
+export const REMOVE_FAVORITE = gql`
+    mutation REMOVE_FAVORITE($input: FavoriteMangaInput!) {
+        removeFavorite(input: $input) {
+            updated
+        }
+    }
+`;
+
+export const SET_MANGA_NOTE = gql`
+    mutation SET_MANGA_NOTE($input: SetMangaNoteInput!) {
+        setMangaNote(input: $input) {
+            updated
+        }
+    }
+`;
+
+export const GET_MY_MANGA_NOTE = gql`
+    query GET_MY_MANGA_NOTE($mangaId: Int!) {
+        myMangaNote(mangaId: $mangaId)
+    }
+`;
+
+export const GET_OTHER_USER_MANGA_NOTES = gql`
+    query GET_OTHER_USER_MANGA_NOTES($mangaId: Int!) {
+        otherUserMangaNotes(mangaId: $mangaId) {
+            userId
+            username
+            displayName
+            note
+        }
+    }
+`;
+
+export const REQUEST_MANGA = gql`
+    mutation REQUEST_MANGA($input: RequestMangaInput!) {
+        requestManga(input: $input) {
+            requestId
+        }
+    }
+`;
+
+export const GET_REQUEST_PREVIEW = gql`
+    query GET_REQUEST_PREVIEW($mangaId: Int!) {
+        requestPreview(mangaId: $mangaId) {
+            manga {
+                id
+                title
+                author
+                artist
+                status
+                genre
+                description
+                thumbnailUrl
+                thumbnailUrlLastFetched
+                sourceId
+                inLibrary
+            }
+            chapters {
+                name
+                chapterNumber
+                scanlator
+            }
+        }
+    }
+`;
+
+export const GET_MANGA_REQUESTS = gql`
+    query GET_MANGA_REQUESTS {
+        mangaRequests {
+            id
+            userId
+            username
+            displayName
+            mangaId
+            mangaTitle
+            mangaThumbnailUrl
+            createdAt
+            status
+        }
+    }
+`;
+
+export const DECIDE_MANGA_REQUEST = gql`
+    mutation DECIDE_MANGA_REQUEST($input: DecideMangaRequestInput!) {
+        decideMangaRequest(input: $input) {
+            success
         }
     }
 `;

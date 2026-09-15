@@ -67,7 +67,7 @@ export const MangaCard = memo((props: MangaCardProps) => {
         settings: { showContinueReadingButton },
     } = useMetadataServerSettings();
 
-    const { updateLibraryState, isInLibrary } = useManageMangaLibraryState(manga, mode === 'source');
+    const { updateLibraryState, isInLibrary, canManageLibrary } = useManageMangaLibraryState(manga, mode === 'source');
 
     const mangaLinkTo = getMangaLinkTo(mode, manga.id);
 
@@ -90,7 +90,9 @@ export const MangaCard = memo((props: MangaCardProps) => {
             event.preventDefault();
 
             if (isSourceMode) {
-                updateLibraryState();
+                if (canManageLibrary) {
+                    updateLibraryState();
+                }
                 return;
             }
 
@@ -163,7 +165,7 @@ export const MangaCard = memo((props: MangaCardProps) => {
                 migrate();
             }
         },
-        [mode, selected, updateLibraryState, handleSelection, migrationSourceMangaId],
+        [mode, selected, updateLibraryState, canManageLibrary, handleSelection, migrationSourceMangaId],
     );
 
     const longPressBind = usePress({
@@ -209,6 +211,7 @@ export const MangaCard = memo((props: MangaCardProps) => {
                                 downloadCount={downloadCount}
                                 updateLibraryState={updateLibraryState}
                                 mode={mode}
+                                canManageLibrary={canManageLibrary}
                             />
                         }
                     />

@@ -134,6 +134,21 @@ msgstr "{0} / {1}"
 msgid "{0} / {1}{2}"
 msgstr "{0} / {1}{2}"
 
+#. placeholder {0}: chapters.length
+#: src/features/manga/components/MangaRequestCard.tsx
+msgid "{0} chapters"
+msgstr "{0} chapters"
+
+#. placeholder {0}: profile.favoriteMangaIds.length
+#: src/features/profile/screens/Profile.tsx
+msgid "{0} favorites"
+msgstr "{0} favorites"
+
+#. placeholder {0}: rolePermissions.length
+#: src/features/admin/screens/Admin.tsx
+msgid "{0} selected"
+msgstr "{0} selected"
+
 #. placeholder {0}: updateStatus.progress
 #: src/features/app-updates/components/WebUIUpdateChecker.tsx
 msgid "{0}% | Updating…"
@@ -146,6 +161,10 @@ msgstr "{availableUpdates, plural, one {# update available} other {# updates ava
 #: src/features/library/screens/LibrarySettings.tsx
 msgid "{categoryCount, plural, one {# category} other {# categories}}"
 msgstr "{categoryCount, plural, one {# category} other {# categories}}"
+
+#: src/features/navigation-bar/NavigationBar.constants.ts
+msgid "{count, plural, one {# unread message} other {# unread messages}}"
+msgstr "{count, plural, one {# unread message} other {# unread messages}}"
 
 #: src/features/manga/Manga.constants.ts
 msgid "{count, plural, one {Changed categories of manga} other {Changed categories of # manga}}"
@@ -335,6 +354,10 @@ msgstr "{missingChapterCount, plural, one {Missing # chapter} other {Missing # c
 msgid "{otherResultsCount, plural, one {# more match} other {# more matches}}"
 msgstr "{otherResultsCount, plural, one {# more match} other {# more matches}}"
 
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "{pendingCount} pending"
+msgstr "{pendingCount} pending"
+
 #: src/features/app-updates/components/VersionInfo.tsx
 msgid "{progress}% | Updating…"
 msgstr "{progress}% | Updating…"
@@ -379,6 +402,7 @@ msgid "Aborted"
 msgstr "Aborted"
 
 #: src/features/navigation-bar/NavigationBar.constants.ts
+#: src/features/profile/screens/Profile.tsx
 #: src/features/settings/screens/About.tsx
 msgid "About"
 msgstr "About"
@@ -436,6 +460,11 @@ msgstr "Add tracking"
 msgid "Added manga to library!"
 msgstr "Added manga to library!"
 
+#: src/features/admin/screens/Admin.tsx
+#: src/features/navigation-bar/NavigationBar.constants.ts
+msgid "Administration"
+msgstr "Administration"
+
 #: src/features/library/screens/LibrarySettings.tsx
 msgid "Advanced"
 msgstr "Advanced"
@@ -472,18 +501,21 @@ msgstr "Alpha"
 msgid "Also remove from {0}"
 msgstr "Also remove from {0}"
 
+#: src/features/manga/components/MangaRequestCard.tsx
+msgid "An administrator will review your request."
+msgstr "An administrator will review your request."
+
 #: src/features/library/components/LibraryOptionsPanel.tsx
 msgid "and"
 msgstr "and"
 
-#: src/features/settings/screens/Appearance.tsx
-#: src/features/settings/screens/Settings.tsx
-msgid "Appearance"
-msgstr "Appearance"
-
 #: src/features/reader/settings/general/components/ReaderSettingSafeAreaInset.tsx
 msgid "Apply safe area padding"
 msgstr "Apply safe area padding"
+
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Approve"
+msgstr "Approve"
 
 #: src/features/migration/MigrationManager.ts
 msgid "Are you sure you want to abort the migration?"
@@ -506,6 +538,10 @@ msgstr "Artist"
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "Ascending"
 msgstr "Ascending"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Assign individual category visibility and edit access to users. Role permissions still apply."
+msgstr "Assign individual category visibility and edit access to users. Role permissions still apply."
 
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "Authentication"
@@ -594,6 +630,14 @@ msgstr "Automatically use webtoon mode for entries that are detected to likely u
 msgid "Available"
 msgstr "Available"
 
+#: src/features/profile/screens/Profile.tsx
+msgid "Avatar URL"
+msgstr "Avatar URL"
+
+#: src/features/community/screens/Conversation.tsx
+msgid "Back"
+msgstr "Back"
+
 #: src/features/backup/screens/Backup.tsx
 msgid "Back up library as a Tachiyomi backup"
 msgstr "Back up library as a Tachiyomi backup"
@@ -638,6 +682,10 @@ msgstr "Backup validation"
 #: src/features/library/components/LibraryOptionsPanel.tsx
 msgid "Badges"
 msgstr "Badges"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "Banner URL"
+msgstr "Banner URL"
 
 #: src/features/settings/Settings.constants.ts
 msgid "Basic Authentication"
@@ -764,6 +812,7 @@ msgstr "Can't migrate an entry to itself"
 #: src/base/components/settings/SelectSetting.tsx
 #: src/base/components/settings/text/TextSettingDialog.tsx
 #: src/base/components/settings/TimeSetting.tsx
+#: src/features/admin/screens/Admin.tsx
 #: src/features/backup/component/BackupFlagInclusionDialog.tsx
 #: src/features/backup/component/BackupValidationDialog.tsx
 #: src/features/category/components/CategoriesInclusionSetting.tsx
@@ -774,7 +823,6 @@ msgstr "Can't migrate an entry to itself"
 #: src/features/migration/components/MigrationBulkSearchOptionsDialog.tsx
 #: src/features/migration/components/MigrationOptionsDialog.tsx
 #: src/features/reader/hotkeys/settings/components/RecordHotkey.tsx
-#: src/features/settings/components/globalUpdate/GlobalUpdateSettingsEntries.tsx
 #: src/features/source/browse/components/SourceOptions.tsx
 #: src/features/source/components/SourceLanguageSelect.tsx
 #: src/features/source/configuration/components/EditTextPreference.tsx
@@ -808,10 +856,15 @@ msgstr "Cancelled"
 msgid "Categories"
 msgstr "Categories"
 
+#: src/features/admin/screens/Admin.tsx
 #: src/features/category/components/CategoriesInclusionSetting.tsx
 #: src/features/migration/components/MigrationOptionsDialog.tsx
 msgid "Category"
 msgstr "Category"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Category access"
+msgstr "Category access"
 
 #: src/features/category/components/CreateOrEditCategoryDialog.tsx
 msgid "Category Name"
@@ -882,6 +935,7 @@ msgid "Chapter transition warning"
 msgstr "Chapter transition warning"
 
 #: src/features/backup/Backup.constants.ts
+#: src/features/manga/components/MangaRequestCard.tsx
 msgid "Chapters"
 msgstr "Chapters"
 
@@ -988,6 +1042,10 @@ msgstr "Completed"
 msgid "Compression level"
 msgstr "Compression level"
 
+#: src/features/authentication/screens/LoginPage.tsx
+msgid "Confirm password"
+msgstr "Confirm password"
+
 #: src/features/settings/components/images/Processing.tsx
 msgid "Connect timeout"
 msgstr "Connect timeout"
@@ -1034,6 +1092,19 @@ msgid "Controls the MimeType that Suwayomi sends in OPDS entries for CBZ archive
 msgstr "Controls the MimeType that Suwayomi sends in OPDS entries for CBZ archives. Also affects global CBZ download.\n"
 "Modern follows recent IANA standard (2017), while LEGACY (deprecated mimetype for .cbz) and COMPATIBLE (deprecated mimetype for all comic archives) might be more compatible with older clients."
 
+#: src/features/community/screens/Conversation.tsx
+msgid "Conversation"
+msgstr "Conversation"
+
+#. placeholder {0}: otherProfile.displayName
+#: src/features/community/screens/Conversation.tsx
+msgid "Conversation with {0}"
+msgstr "Conversation with {0}"
+
+#: src/features/community/screens/Inbox.tsx
+msgid "Conversations"
+msgstr "Conversations"
+
 #: src/features/settings/Settings.constants.ts
 msgid "Convert images to different formats"
 msgstr "Convert images to different formats"
@@ -1056,9 +1127,17 @@ msgstr "Copy index url"
 msgid "Could not add extension store"
 msgstr "Could not add extension store"
 
+#: src/features/manga/components/FavoriteMangaButton.tsx
+msgid "Could not add favorite"
+msgstr "Could not add favorite"
+
 #: src/features/manga/hooks/useManageMangaLibraryState.tsx
 msgid "Could not add manga to library!"
 msgstr "Could not add manga to library!"
+
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Could not approve request"
+msgstr "Could not approve request"
 
 #: src/features/manga/hooks/useManageMangaLibraryState.tsx
 msgid "Could not check for duplicated manga in your library.\n"
@@ -1109,6 +1188,10 @@ msgstr "Could not delete category"
 msgid "Could not delete theme \"{0}\""
 msgstr "Could not delete theme \"{0}\""
 
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Could not deny request"
+msgstr "Could not deny request"
+
 #: src/features/manga/components/details/MangaDetails.tsx
 msgid "Could not find source. Check your installed extensions."
 msgstr "Could not find source. Check your installed extensions."
@@ -1157,8 +1240,8 @@ msgid "Could not log in to {trackerName}"
 msgstr "Could not log in to {trackerName}"
 
 #: src/features/authentication/screens/LoginPage.tsx
-msgid "Could not log in to Suwayomi"
-msgstr "Could not log in to Suwayomi"
+msgid "Could not log in to Suwairo"
+msgstr "Could not log in to Suwairo"
 
 #. placeholder {0}: tracker.name
 #: src/features/tracker/components/cards/SettingsTrackerCard.tsx
@@ -1184,6 +1267,10 @@ msgstr "Could not remove all downloads from the queue"
 #: src/features/extension/store/screens/ExtensionStores.tsx
 msgid "Could not remove extension store \"{name}\""
 msgstr "Could not remove extension store \"{name}\""
+
+#: src/features/manga/components/FavoriteMangaButton.tsx
+msgid "Could not remove favorite"
+msgstr "Could not remove favorite"
 
 #: src/features/library/screens/LibrarySettings.tsx
 msgid "Could not remove non library manga from categories"
@@ -1235,6 +1322,10 @@ msgstr "Could not save theme changes"
 msgid "Could not search source"
 msgstr "Could not search source"
 
+#: src/features/authentication/screens/LoginPage.tsx
+msgid "Could not set up the owner account"
+msgstr "Could not set up the owner account"
+
 #: src/features/settings/screens/ServerSettings.tsx
 #: src/features/sync/components/SyncButton.tsx
 msgid "Could not start sync"
@@ -1243,6 +1334,10 @@ msgstr "Could not start sync"
 #: src/features/updates/components/UpdateChecker.tsx
 msgid "Could not stop global update"
 msgstr "Could not stop global update"
+
+#: src/features/manga/components/MangaRequestCard.tsx
+msgid "Could not submit request"
+msgstr "Could not submit request"
 
 #: src/features/manga/Manga.constants.ts
 #: src/features/tracker/components/TrackerSearch.tsx
@@ -1261,15 +1356,28 @@ msgstr "Could not update WebUI"
 msgid "Could not validate backup"
 msgstr "Could not validate backup"
 
+#: src/features/admin/screens/Admin.tsx
 #: src/features/category/components/CategorySelect.tsx
 #: src/features/device/screens/DeviceSetting.tsx
 #: src/features/reader/hotkeys/settings/components/RecordHotkey.tsx
 msgid "Create"
 msgstr "Create"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "Create a role and choose the permissions it should have."
+msgstr "Create a role and choose the permissions it should have."
+
 #: src/features/backup/screens/Backup.tsx
 msgid "Create backup"
 msgstr "Create backup"
+
+#: src/features/authentication/screens/LoginPage.tsx
+msgid "Create owner account"
+msgstr "Create owner account"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Create role"
+msgstr "Create role"
 
 #: src/features/theme/components/CreateThemeButton.tsx
 #: src/features/theme/components/CreateThemeDialog.tsx
@@ -1402,6 +1510,7 @@ msgid "Default category when adding new manga to the library"
 msgstr "Default category when adding new manga to the library"
 
 #: src/base/components/settings/MutableListSetting.tsx
+#: src/features/admin/screens/Admin.tsx
 #: src/features/category/components/CategorySettingsCard.tsx
 #: src/features/chapter/Chapter.constants.ts
 #: src/features/downloads/components/DownloadQueueChapterCard.tsx
@@ -1442,6 +1551,10 @@ msgstr "Delete search"
 msgid "Delete selected"
 msgstr "Delete selected"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "Delete this user?"
+msgstr "Delete this user?"
+
 #. placeholder {0}: theme.getName()
 #: src/features/theme/components/ThemeList.tsx
 msgid "Deleted theme \"{0}\""
@@ -1452,10 +1565,23 @@ msgstr "Deleted theme \"{0}\""
 msgid "Deleting theme \"{0}\"…"
 msgstr "Deleting theme \"{0}\"…"
 
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Deny"
+msgstr "Deny"
+
 #: src/features/migration/Migration.constants.ts
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "Descending"
 msgstr "Descending"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "Describe yourself to other users."
+msgstr "Describe yourself to other users."
+
+#: src/features/admin/screens/Admin.tsx
+#: src/features/community/screens/UserProfile.tsx
+msgid "Description"
+msgstr "Description"
 
 #: src/features/chapter/components/cards/ChapterCard.tsx
 #: src/features/manga/components/MangaOptionButton.tsx
@@ -1516,6 +1642,11 @@ msgstr "Display file sizes in binary (KiB, MiB, GiB) instead of decimal (KB, MB,
 #: src/features/library/components/LibraryOptionsPanel.tsx
 msgid "Display mode"
 msgstr "Display mode"
+
+#: src/features/admin/screens/Admin.tsx
+#: src/features/profile/screens/Profile.tsx
+msgid "Display name"
+msgstr "Display name"
 
 #: src/features/settings/components/koreaderSync/KoreaderSyncSettings.tsx
 msgid "Document matching method"
@@ -1619,6 +1750,7 @@ msgstr "Dynamic theme colors on manga page"
 msgid "Edge"
 msgstr "Edge"
 
+#: src/features/admin/screens/Admin.tsx
 #: src/features/category/components/CategorySelect.tsx
 #: src/features/category/components/CategorySettingsCard.tsx
 #: src/features/manga/components/details/MangaNotes.tsx
@@ -1642,6 +1774,10 @@ msgstr "Edit manga categories"
 #: src/features/manga/components/details/MangaNotes.tsx
 msgid "Edit notes"
 msgstr "Edit notes"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Edit role details and permissions."
+msgstr "Edit role details and permissions."
 
 #: src/features/theme/components/CreateThemeDialog.tsx
 msgid "Edit theme"
@@ -1670,6 +1806,10 @@ msgstr "Enable page read progress"
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "Enable the WebView via CEF (Chromium)"
 msgstr "Enable the WebView via CEF (Chromium)"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Enabled"
+msgstr "Enabled"
 
 #: src/base/components/inputs/LanguageSelect.tsx
 msgid "Enabled languages"
@@ -1785,6 +1925,18 @@ msgstr "Extension stores"
 msgid "Failed to connect to KOReader Sync server."
 msgstr "Failed to connect to KOReader Sync server."
 
+#: src/features/admin/screens/Admin.tsx
+msgid "Failed to create user"
+msgstr "Failed to create user"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Failed to delete role"
+msgstr "Failed to delete role"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Failed to delete user"
+msgstr "Failed to delete user"
+
 #: src/features/settings/components/koreaderSync/KoreaderSyncSettings.tsx
 msgid "Failed to disconnect from KOReader Sync server."
 msgstr "Failed to disconnect from KOReader Sync server."
@@ -1806,7 +1958,6 @@ msgstr "Failed to disconnect from KOReader Sync server."
 #: src/features/library/components/LibraryOptionsPanel.tsx
 #: src/features/migration/screens/MigrationSelectSource.tsx
 #: src/features/settings/components/globalUpdate/GlobalUpdateSettings.tsx
-#: src/features/settings/components/globalUpdate/GlobalUpdateSettingsEntries.tsx
 #: src/features/settings/components/webUI/WebUIUpdateIntervalSetting.tsx
 #: src/features/settings/screens/Appearance.tsx
 #: src/features/settings/screens/ImageProcessingSetting.tsx
@@ -1816,11 +1967,38 @@ msgstr "Failed to disconnect from KOReader Sync server."
 #: src/features/source/components/SourceLanguageSelect.tsx
 #: src/features/source/configuration/screens/SourceConfigure.tsx
 #: src/features/source/services/Sources.ts
-#: src/features/theme/AppThemeContext.tsx
 #: src/features/tracker/components/cards/TrackerActiveCard.tsx
 #: src/features/tracker/screens/TrackingSettings.tsx
 msgid "Failed to save changes"
 msgstr "Failed to save changes"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "Failed to save profile"
+msgstr "Failed to save profile"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Failed to save role"
+msgstr "Failed to save role"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Failed to update category access"
+msgstr "Failed to update category access"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Failed to update user"
+msgstr "Failed to update user"
+
+#: src/features/manga/components/FavoriteMangaButton.tsx
+msgid "Favorite"
+msgstr "Favorite"
+
+#: src/features/manga/components/FavoriteMangaButton.tsx
+msgid "Favorited"
+msgstr "Favorited"
+
+#: src/features/community/screens/UserProfile.tsx
+msgid "Favorites"
+msgstr "Favorites"
 
 #: src/features/settings/Settings.constants.ts
 msgid "Features and changes in this version might not be completely ready yet and can cause bugs.\n"
@@ -2387,6 +2565,10 @@ msgstr "Links"
 msgid "List"
 msgstr "List"
 
+#: src/features/community/screens/Inbox.tsx
+msgid "Loading conversation…"
+msgstr "Loading conversation…"
+
 #: src/features/theme/components/ThemePreview.tsx
 msgid "Loading theme fonts…"
 msgstr "Loading theme fonts…"
@@ -2425,6 +2607,7 @@ msgid "Log in to {0}"
 msgstr "Log in to {0}"
 
 #: src/base/components/modals/LoginDialog.tsx
+#: src/features/profile/screens/Profile.tsx
 msgid "Log out"
 msgstr "Log out"
 
@@ -2433,6 +2616,10 @@ msgstr "Log out"
 msgid "Log out from {0}"
 msgstr "Log out from {0}"
 
+#: src/features/profile/screens/Profile.tsx
+msgid "Log out?"
+msgstr "Log out?"
+
 #: src/features/tracker/components/cards/SettingsTrackerCard.tsx
 msgid "Logged in"
 msgstr "Logged in"
@@ -2440,6 +2627,10 @@ msgstr "Logged in"
 #: src/features/tracker/screens/TrackerOAuthLogin.tsx
 msgid "Logging in to {trackerName}…"
 msgstr "Logging in to {trackerName}…"
+
+#: src/features/settings/Settings.constants.ts
+msgid "Login is handled by an external OIDC provider (e.g. Tinyauth with LLDAP). Configure the issuer URL, client id, and client secret in the server config."
+msgstr "Login is handled by an external OIDC provider (e.g. Tinyauth with LLDAP). Configure the issuer URL, client id, and client secret in the server config."
 
 #. Used to detect the type of an entry by using it to check if the genre/tags of an entry includes this string. This is NOT shown to any user. Do NOT include any unnecessary text or characters, this will break the type detection (e.g. "MangaInMyLanguage (Manga)")
 #. js-lingui-explicit-id
@@ -2467,13 +2658,25 @@ msgstr "Manga"
 msgid "entry-type-detection-manga"
 msgstr "Manga"
 
+#: src/features/manga/components/MangaRequestCard.tsx
+msgid "Manga does not exist"
+msgstr "Manga does not exist"
+
 #: src/features/settings/screens/Appearance.tsx
 msgid "Manga item width"
 msgstr "Manga item width"
 
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Manga requests"
+msgstr "Manga requests"
+
 #: src/features/settings/screens/Appearance.tsx
 msgid "Manga thumbnail as background"
 msgstr "Manga thumbnail as background"
+
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Manga you cannot see"
+msgstr "Manga you cannot see"
 
 #: src/features/tracker/Tracker.constants.ts
 msgid "Manhua"
@@ -2564,6 +2767,15 @@ msgstr "Menu"
 #: src/features/settings/Settings.constants.ts
 msgid "Merging"
 msgstr "Merging"
+
+#: src/features/community/screens/UserProfile.tsx
+msgid "Message"
+msgstr "Message"
+
+#: src/features/community/screens/Inbox.tsx
+#: src/features/navigation-bar/NavigationBar.constants.ts
+msgid "Messages"
+msgstr "Messages"
 
 #: src/features/browse/screens/Browse.tsx
 #: src/features/manga/components/MangaToolbarMenu.tsx
@@ -2697,6 +2909,18 @@ msgstr "Never"
 msgid "New category"
 msgstr "New category"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "New password"
+msgstr "New password"
+
+#: src/features/settings/Settings.constants.ts
+msgid "New SSO users are auto-provisioned with the configured default role. Local password login remains available for existing accounts."
+msgstr "New SSO users are auto-provisioned with the configured default role. Local password login remains available for existing accounts."
+
+#: src/features/admin/screens/Admin.tsx
+msgid "New user"
+msgstr "New user"
+
 #: src/features/reader/tap-zones/ReaderTapZone.constants.ts
 msgid "Next"
 msgstr "Next"
@@ -2715,17 +2939,37 @@ msgstr "Next page"
 msgid "Next:"
 msgstr "Next:"
 
+#: src/features/community/screens/UserProfile.tsx
+msgid "No access"
+msgstr "No access"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "No categories found."
+msgstr "No categories found."
+
 #: src/features/chapter/components/ChapterList.tsx
 msgid "No chapters found"
 msgstr "No chapters found"
+
+#: src/features/manga/components/MangaRequestCard.tsx
+msgid "No chapters found."
+msgstr "No chapters found."
 
 #: src/features/chapter/components/ChapterList.tsx
 msgid "No chapters matching filter"
 msgstr "No chapters matching filter"
 
+#: src/features/community/screens/UserProfile.tsx
+msgid "No description."
+msgstr "No description."
+
 #: src/features/downloads/screens/DownloadQueue.tsx
 msgid "No downloads"
 msgstr "No downloads"
+
+#: src/features/community/screens/UserProfile.tsx
+msgid "No favorites yet."
+msgstr "No favorites yet."
 
 #: src/features/global-search/screens/SearchAll.tsx
 #: src/features/manga/components/MangaGrid.tsx
@@ -2743,9 +2987,25 @@ msgstr "No manga matches this filter"
 msgid "No match found"
 msgstr "No match found"
 
+#: src/features/community/screens/Conversation.tsx
+msgid "No messages yet. Say hello!"
+msgstr "No messages yet. Say hello!"
+
+#: src/features/community/screens/Inbox.tsx
+msgid "No one else to message yet."
+msgstr "No one else to message yet."
+
+#: src/features/community/screens/UserDirectory.tsx
+msgid "No other users yet."
+msgstr "No other users yet."
+
 #: src/features/reader/viewer/ReaderChapterViewer.tsx
 msgid "No pages found"
 msgstr "No pages found"
+
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "No requests yet."
+msgstr "No requests yet."
 
 #: src/features/migration/components/MigrationDestinationSourceList.tsx
 msgid "No sources available to migrate to"
@@ -2763,7 +3023,6 @@ msgstr "No sources installed"
 #: src/features/category/components/CategoriesInclusionSetting.tsx
 #: src/features/downloads/screens/DownloadSettings.tsx
 #: src/features/reader/settings/layout/components/ReaderSettingTapZoneInvertMode.tsx
-#: src/features/settings/components/globalUpdate/GlobalUpdateSettingsEntries.tsx
 #: src/features/settings/Settings.constants.ts
 msgid "None"
 msgstr "None"
@@ -2779,6 +3038,10 @@ msgstr "Not yet released"
 #: src/features/manga/components/details/MangaNotes.tsx
 msgid "Notes"
 msgstr "Notes"
+
+#: src/features/manga/components/details/MangaNotes.tsx
+msgid "Notes from other users"
+msgstr "Notes from other users"
 
 #: src/features/manga/components/details/MangaNotes.tsx
 msgid "Notes saved"
@@ -2832,7 +3095,6 @@ msgstr "Offset double spreads"
 #: src/features/category/components/CategorySelect.tsx
 #: src/features/chapter/services/Chapters.ts
 #: src/features/manga/services/Mangas.ts
-#: src/features/settings/components/globalUpdate/GlobalUpdateSettingsEntries.tsx
 #: src/features/source/browse/components/SourceOptions.tsx
 #: src/features/source/components/SourceLanguageSelect.tsx
 #: src/features/source/configuration/components/EditTextPreference.tsx
@@ -2908,6 +3170,7 @@ msgstr "Open website"
 msgid "Options"
 msgstr "Options"
 
+#: src/features/authentication/screens/LoginPage.tsx
 #: src/features/library/components/LibraryOptionsPanel.tsx
 msgid "or"
 msgstr "or"
@@ -2921,6 +3184,7 @@ msgid "Original size"
 msgstr "Original size"
 
 #: src/base/utils/Languages.ts
+#: src/features/admin/screens/Admin.tsx
 #: src/features/extension/Extensions.constants.ts
 #: src/features/library/components/LibraryOptionsPanel.tsx
 msgid "Other"
@@ -2947,9 +3211,14 @@ msgid "Parallel source requests"
 msgstr "Parallel source requests"
 
 #: src/base/components/inputs/PasswordTextField.tsx
+#: src/features/admin/screens/Admin.tsx
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "Password"
 msgstr "Password"
+
+#: src/features/authentication/screens/LoginPage.tsx
+msgid "Passwords do not match"
+msgstr "Passwords do not match"
 
 #: src/features/navigation-bar/NavigationBar.constants.ts
 msgid "Paused — {count} remaining"
@@ -2962,6 +3231,10 @@ msgstr "Pending…"
 #: src/features/settings/components/koreaderSync/KoreaderSyncSettings.tsx
 msgid "Percentage Tolerance"
 msgstr "Percentage Tolerance"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Permissions"
+msgstr "Permissions"
 
 #: src/features/browse/sources/components/SourceCard.tsx
 msgid "Pin source"
@@ -3020,6 +3293,20 @@ msgstr "Previous page"
 msgid "Previous:"
 msgstr "Previous:"
 
+#: src/features/navigation-bar/NavigationBar.constants.ts
+#: src/features/profile/screens/Profile.tsx
+msgid "Profile"
+msgstr "Profile"
+
+#: src/features/settings/screens/Appearance.tsx
+#: src/features/settings/screens/Settings.tsx
+msgid "Profile and Site theme"
+msgstr "Profile and Site theme"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "Profile saved"
+msgstr "Profile saved"
+
 #: src/features/reader/overlay/progress-bar/settings/components/ReaderSettingProgressBarPosition.tsx
 msgid "Progress bar position"
 msgstr "Progress bar position"
@@ -3035,6 +3322,10 @@ msgstr "Progress bar style"
 #: src/features/settings/Settings.constants.ts
 msgid "Prompt"
 msgstr "Prompt"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Protected"
+msgstr "Protected"
 
 #: src/features/manga/Manga.constants.ts
 msgid "Publishing finished"
@@ -3060,6 +3351,10 @@ msgstr "Quick settings"
 #: src/features/library/components/LibraryOptionsPanel.tsx
 msgid "Random"
 msgstr "Random"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Read"
+msgstr "Read"
 
 #: src/features/reader/settings/screens/GlobalReaderSettings.tsx
 #: src/features/settings/screens/Settings.tsx
@@ -3162,8 +3457,25 @@ msgstr "Remove selected from the library"
 msgid "Removed non library manga from categories"
 msgstr "Removed non library manga from categories"
 
+#: src/features/browse/screens/Browse.tsx
+msgid "Request"
+msgstr "Request"
+
+#: src/features/manga/components/MangaRequestCard.tsx
+msgid "Request submitted"
+msgstr "Request submitted"
+
+#: src/features/manga/components/MangaRequestCard.tsx
+msgid "Request this manga"
+msgstr "Request this manga"
+
+#: src/features/navigation-bar/NavigationBar.constants.ts
+msgid "Requests"
+msgstr "Requests"
+
 #: src/base/components/buttons/ResetButton.tsx
 #: src/base/components/settings/CheckboxListSetting.tsx
+#: src/features/admin/screens/Admin.tsx
 #: src/features/reader/hotkeys/settings/components/RecordHotkey.tsx
 #: src/features/source/browse/components/SourceOptions.tsx
 msgid "Reset"
@@ -3229,10 +3541,23 @@ msgstr "Right and left"
 msgid "Right to left"
 msgstr "Right to left"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "Role"
+msgstr "Role"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Role name"
+msgstr "Role name"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Roles"
+msgstr "Roles"
+
 #: src/features/theme/Themes.ts
 msgid "Rosegold"
 msgstr "Rosegold"
 
+#: src/features/admin/screens/Admin.tsx
 #: src/features/manga/components/details/MangaNotes.tsx
 #: src/features/settings/screens/ImageProcessingSetting.tsx
 #: src/features/theme/components/CreateThemeDialog.tsx
@@ -3252,6 +3577,14 @@ msgstr "Save current search"
 msgid "Save dynamic color theme"
 msgstr "Save dynamic color theme"
 
+#: src/features/profile/screens/Profile.tsx
+msgid "Save profile"
+msgstr "Save profile"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Save role"
+msgstr "Save role"
+
 #: src/features/source/browse/components/SourceOptions.tsx
 msgid "Save search"
 msgstr "Save search"
@@ -3263,6 +3596,10 @@ msgstr "Saved theme changes"
 #: src/features/theme/components/CreateThemeDialog.tsx
 msgid "Saving theme changes…"
 msgstr "Saving theme changes…"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "Saving…"
+msgstr "Saving…"
 
 #: src/features/reader/overlay/navigation/desktop/quick-settings/components/ReaderNavBarDesktopPageScale.tsx
 #: src/features/reader/settings/layout/components/ReaderSettingPageScaleMode.tsx
@@ -3331,6 +3668,10 @@ msgstr "Search parameters"
 msgid "Search parameters ({0})"
 msgstr "Search parameters ({0})"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "Search permissions"
+msgstr "Search permissions"
+
 #: src/features/migration/screens/MigrationSearch.tsx
 msgid "Search results"
 msgstr "Search results"
@@ -3391,9 +3732,17 @@ msgstr "Select enabled sources"
 msgid "Select pinned sources"
 msgstr "Select pinned sources"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "Select role"
+msgstr "Select role"
+
 #: src/features/migration/components/MigrationDestinationSourceList.tsx
 msgid "Selected"
 msgstr "Selected"
+
+#: src/features/community/screens/Conversation.tsx
+msgid "Send"
+msgstr "Send"
 
 #: src/features/reader/filters/settings/components/ReaderSettingSepia.tsx
 msgid "Sepia"
@@ -3557,6 +3906,10 @@ msgstr "Shows a dialog in case the version got updated. This dialog will be show
 msgid "Shows a dialog in case the version of the server has changed"
 msgstr "Shows a dialog in case the version of the server has changed"
 
+#: src/features/authentication/screens/LoginPage.tsx
+msgid "Sign in with Haiiro Auth"
+msgstr "Sign in with Haiiro Auth"
+
 #: src/features/settings/Settings.constants.ts
 msgid "Simple Login"
 msgstr "Simple Login"
@@ -3576,10 +3929,6 @@ msgstr "Skip duplicate chapters"
 #: src/features/reader/settings/behaviour/ReaderBehaviourSettings.tsx
 msgid "Skip filtered chapters"
 msgstr "Skip filtered chapters"
-
-#: src/features/settings/components/globalUpdate/GlobalUpdateSettingsEntries.tsx
-msgid "Skip updating entries"
-msgstr "Skip updating entries"
 
 #: src/features/reader/settings/behaviour/components/ReaderSettingScrollAmount.tsx
 msgid "Small"
@@ -3651,6 +4000,10 @@ msgstr "Source title"
 #: src/features/browse/screens/BrowseSettings.tsx
 msgid "Sources"
 msgstr "Sources"
+
+#: src/features/settings/Settings.constants.ts
+msgid "SSO (OIDC)"
+msgstr "SSO (OIDC)"
 
 #: src/features/settings/Settings.constants.ts
 msgid "Stable"
@@ -3814,10 +4167,6 @@ msgstr "Tap zones"
 msgid "Target mode"
 msgstr "Target mode"
 
-#: src/features/settings/Settings.constants.ts
-msgid "That haven't been started"
-msgstr "That haven't been started"
-
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "The address of the FlareSolverr server"
 msgstr "The address of the FlareSolverr server"
@@ -3916,6 +4265,10 @@ msgstr "These options are slow and dangerous and may lead to restrictions from s
 msgid "Third to last read chapter"
 msgstr "Third to last read chapter"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "This cannot be undone. The user will lose access immediately."
+msgstr "This cannot be undone. The user will lose access immediately."
+
 #: src/features/browse/screens/BrowseSettings.tsx
 msgid "This does not prevent unofficial or potentially incorrectly flagged extensions from surfacing NSFW (18+) content within the app."
 msgstr "This does not prevent unofficial or potentially incorrectly flagged extensions from surfacing NSFW (18+) content within the app."
@@ -4006,7 +4359,6 @@ msgstr "Trackers"
 #: src/features/backup/Backup.constants.ts
 #: src/features/manga/components/TrackMangaButton.tsx
 #: src/features/migration/components/MigrationOptionsDialog.tsx
-#: src/features/settings/screens/Settings.tsx
 #: src/features/tracker/screens/TrackingSettings.tsx
 msgid "Tracking"
 msgstr "Tracking"
@@ -4023,6 +4375,14 @@ msgstr "Type"
 #: src/features/settings/Settings.constants.ts
 msgid "UI Login"
 msgstr "UI Login"
+
+#: src/features/admin/screens/Admin.tsx
+msgid "Unable to load administration"
+msgstr "Unable to load administration"
+
+#: src/features/community/screens/Conversation.tsx
+msgid "Unable to load conversation"
+msgstr "Unable to load conversation"
 
 #: src/features/backup/screens/Backup.tsx
 #: src/features/browse/extensions/Extensions.tsx
@@ -4065,9 +4425,22 @@ msgstr "Unable to load data"
 msgid "Unable to load extension stores"
 msgstr "Unable to load extension stores"
 
+#: src/features/community/screens/UserProfile.tsx
+#: src/features/profile/screens/Profile.tsx
+msgid "Unable to load profile"
+msgstr "Unable to load profile"
+
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Unable to load requests"
+msgstr "Unable to load requests"
+
 #: src/features/migration/screens/MigrationSelectDestinationSources.tsx
 msgid "Unable to load sources"
 msgstr "Unable to load sources"
+
+#: src/features/community/screens/UserDirectory.tsx
+msgid "Unable to load user directory"
+msgstr "Unable to load user directory"
 
 #: src/features/migration/MigrationManager.ts
 #: src/features/settings/screens/ServerSettings.tsx
@@ -4210,11 +4583,30 @@ msgstr "Use the latest released version."
 msgid "Use the version that was delivered with the server release"
 msgstr "Use the version that was delivered with the server release"
 
+#: src/features/admin/screens/Admin.tsx
+msgid "User"
+msgstr "User"
+
+#: src/features/community/screens/UserDirectory.tsx
+msgid "User directory"
+msgstr "User directory"
+
+#: src/features/community/screens/UserProfile.tsx
+msgid "User profile"
+msgstr "User profile"
+
 #: src/base/components/modals/LoginDialog.tsx
+#: src/features/admin/screens/Admin.tsx
 #: src/features/authentication/screens/LoginPage.tsx
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "Username"
 msgstr "Username"
+
+#: src/features/admin/screens/Admin.tsx
+#: src/features/community/screens/UserDirectory.tsx
+#: src/features/navigation-bar/NavigationBar.constants.ts
+msgid "Users"
+msgstr "Users"
 
 #: src/features/settings/components/images/KeyValueItem.tsx
 msgid "Value"
@@ -4304,13 +4696,9 @@ msgstr "Where to start the WebUI when starting the server"
 msgid "White"
 msgstr "White"
 
-#: src/features/settings/Settings.constants.ts
-msgid "With \"Completed\" status"
-msgstr "With \"Completed\" status"
-
-#: src/features/settings/Settings.constants.ts
-msgid "With unread chapter(s)"
-msgstr "With unread chapter(s)"
+#: src/features/community/screens/Conversation.tsx
+msgid "Write a message"
+msgstr "Write a message"
 
 #: src/base/utils/DateHelper.ts
 msgid "Yesterday"
@@ -4361,6 +4749,10 @@ msgstr "You have not read any series yet."
 #: src/features/browse/extensions/Extensions.tsx
 msgid "You have to add a extension store to be able to install extensions"
 msgstr "You have to add a extension store to be able to install extensions"
+
+#: src/features/profile/screens/Profile.tsx
+msgid "You will need to log in again to access your account."
+msgstr "You will need to log in again to access your account."
 
 #: src/features/settings/Settings.constants.ts
 msgid "Your browser will prompt you to enter credentials with a dialog."

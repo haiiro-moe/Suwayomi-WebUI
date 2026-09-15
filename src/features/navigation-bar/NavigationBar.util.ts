@@ -16,6 +16,7 @@ type NavBarItemDeviceFilterKey = `hide${Capitalize<NavbarItem['show']>}`;
 type FilterSettings = Pick<MetadataHistorySettings, 'hideHistory'> &
     Partial<Record<NavBarItemDeviceFilterKey, boolean>> & {
         hideMore?: boolean;
+        permissions?: ReadonlySet<string>;
     };
 
 const ITEM_TO_VISIBLE_FILTER: Partial<Record<StaticAppRoute, keyof FilterSettings>> = {
@@ -38,7 +39,10 @@ export class NavigationBarUtil {
         items: NavbarItem[],
         { hideBoth, hideDesktop, hideMobile, ...filter }: FilterSettings,
     ): NavbarItem[] {
+        const {permissions} = filter;
+
         return items
+            .filter((item) => !item.requiredPermission || permissions?.has(item.requiredPermission) !== false)
             .filter((item) => !NavigationBarUtil.isPathRestricted(item.path, filter))
             .filter((item) => {
                 switch (item.show) {

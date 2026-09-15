@@ -40,7 +40,9 @@ export interface ISearchSettings {
     ignoreFilters: boolean;
 }
 
-export type ServerSettings = Omit<GetServerSettingsQuery['settings'], '__typename'>;
+export type ServerSettings = Omit<GetServerSettingsQuery['settings'], '__typename'> & {
+    globalUpdateCron?: string | null;
+};
 
 export type WebUISettingsType = Pick<
     ServerSettings,
@@ -50,11 +52,6 @@ export type WebUISettingsType = Pick<
     | 'electronPath'
     | 'webUIChannel'
     | 'webUIUpdateCheckInterval'
->;
-
-export type GlobalUpdateSkipEntriesSettings = Pick<
-    ServerSettings,
-    'excludeUnreadChapters' | 'excludeNotStarted' | 'excludeCompleted'
 >;
 
 export type LibrarySettingsType = Pick<ServerSettings, 'updateMangas'>;

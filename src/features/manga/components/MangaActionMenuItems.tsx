@@ -13,10 +13,8 @@ import RemoveDone from '@mui/icons-material/RemoveDone';
 import Done from '@mui/icons-material/Done';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Label from '@mui/icons-material/Label';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
-import SyncIcon from '@mui/icons-material/Sync';
-import Dialog from '@mui/material/Dialog';
 import { AwaitableComponent } from 'awaitable-component';
 import { useLingui } from '@lingui/react/macro';
 import { Mangas } from '@/features/manga/services/Mangas.ts';
@@ -28,7 +26,6 @@ import {
     createShouldShowMenuItem,
 } from '@/base/components/menu/Menu.utils.ts';
 import { defaultPromiseErrorHandler } from '@/lib/DefaultPromiseErrorHandler.ts';
-import { TrackManga } from '@/features/tracker/components/TrackManga.tsx';
 import { ChaptersDownloadActionMenuItems } from '@/features/chapter/components/actions/ChaptersDownloadActionMenuItems.tsx';
 import { NestedMenuItem } from '@/base/components/menu/NestedMenuItem.tsx';
 import type { MangaChapterStatFieldsFragment } from '@/lib/graphql/generated/graphql.ts';
@@ -44,6 +41,7 @@ import type {
 import { MANGA_ACTION_TO_TRANSLATION } from '@/features/manga/Manga.constants.ts';
 import { CategorySelect } from '@/features/category/components/CategorySelect.tsx';
 import { STABLE_EMPTY_ARRAY } from '@/base/Base.constants.ts';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 
 type BaseProps = { onClose: () => void; setHideMenu: (hide: boolean) => void };
 
@@ -73,8 +71,7 @@ export const MangaActionMenuItems = ({
     setHideMenu,
 }: Props) => {
     const { t } = useLingui();
-
-    const [isTrackDialogOpen, setIsTrackDialogOpen] = useState(false);
+    const canManageLibrary = usePermissions().has('browse.add_to_library');
 
     const isSingleMode = !!manga;
 
@@ -163,16 +160,6 @@ export const MangaActionMenuItems = ({
                 Icon={SyncAltIcon}
                 onClick={() => performAction('migrate', selectedMangas)}
             />
-            {isSingleMode && (
-                <MenuItem
-                    onClick={() => {
-                        setIsTrackDialogOpen(true);
-                        setHideMenu(true);
-                    }}
-                    Icon={SyncIcon}
-                    title={getMenuItemTitle('track', selectedMangas.length)}
-                />
-            )}
             <MenuItem
                 onClick={() => {
                     AwaitableComponent.show(CategorySelect, {
@@ -186,24 +173,12 @@ export const MangaActionMenuItems = ({
                 Icon={Label}
                 title={getMenuItemTitle('change_categories', selectedMangas.length)}
             />
-            <MenuItem
-                onClick={() => performAction('remove_from_library', selectedMangas)}
-                Icon={FavoriteBorderIcon}
-                title={getMenuItemTitle('remove_from_library', selectedMangas.length)}
-            />
-            {isTrackDialogOpen && (
-                <Dialog
-                    open
-                    maxWidth="md"
-                    fullWidth
-                    scroll="paper"
-                    onClose={() => {
-                        setIsTrackDialogOpen(false);
-                        onClose();
-                    }}
-                >
-                    <TrackManga manga={manga!} />
-                </Dialog>
+            {canManageLibrary && (
+                <MenuItem
+                    onClick={() => performAction('remove_from_library', selectedMangas)}
+                    Icon={FavoriteBorderIcon}
+                    title={getMenuItemTitle('remove_from_library', selectedMangas.length)}
+                />
             )}
         </>
     );

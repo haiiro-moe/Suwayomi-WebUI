@@ -13,11 +13,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { useLingui } from '@lingui/react/macro';
 import { makeToast } from '@/base/utils/Toast.ts';
-import type { MangaIdInfo, MangaMetaInfo } from '@/features/manga/Manga.types.ts';
-import { updateMangaMetadata, useGetMangaMetadata } from '@/features/manga/services/MangaMetadata.ts';
+import type { MangaIdInfo } from '@/features/manga/Manga.types.ts';
+import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { getErrorMessage, markdownToSafeHtml } from '@/lib/HelperFunctions.ts';
 import StarterKit from '@tiptap/starter-kit';
 import {
@@ -40,11 +41,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { ClearContentShortcut, SaveContentShortcut } from '@/lib/mui-tiptap/MuiTipTap.shortcut.util.ts';
 import { MarkdownViewer } from '@/lib/mui-tiptap/MarkdownViewer.tsx';
 import Typography from '@mui/material/Typography';
+import { AppRoutes } from '@/base/AppRoute.constants.ts';
+import { Link as RouterLink } from 'react-router-dom';
 
-export const MangaNotesButton = ({ manga, notes }: { manga: MangaIdInfo & MangaMetaInfo; notes: string }) => {
+export const MangaNotesButton = ({ mangaId, notes }: { mangaId: number; notes: string }) => {
     const { t } = useLingui();
 
     const rteRef = useRef<RichTextEditorRef>(null);
+    const [setMangaNote] = requestManager.useSetMangaNote();
 
     const [isOpen, setIsOpen] = useState(false);
     const [draft, setDraft] = useState(notes);
@@ -62,7 +66,7 @@ export const MangaNotesButton = ({ manga, notes }: { manga: MangaIdInfo & MangaM
     const saveNotes = (content: string) => {
         const nextNotes = content.trimEnd();
 
-        void updateMangaMetadata(manga, 'notes', nextNotes)
+        void setMangaNote({ variables: { input: { mangaId, note: nextNotes } } })
             .then(() => {
                 makeToast(t`Notes saved`, 'success');
                 setIsOpen(false);
@@ -137,19 +141,49 @@ export const MangaNotesButton = ({ manga, notes }: { manga: MangaIdInfo & MangaM
     );
 };
 
-export const MangaNotes = ({ manga, showDivider }: { manga: MangaIdInfo & MangaMetaInfo; showDivider: boolean }) => {
+export const MangaNotes = ({ mangaId, showDivider }: { mangaId: MangaIdInfo['id']; showDivider: boolean }) => {
     const { t } = useLingui();
 
-    const { notes } = useGetMangaMetadata(manga);
-    const hasNotes = notes.trim().length > 0;
+    const { data: myNoteData } = requestManager.useGetMyMangaNote(mangaId);
+    const { data: otherNotesData } = requestManager.useGetOtherUserMangaNotes(mangaId);
+
+    const myNote = myNoteData?.myMangaNote ?? '';
+    const otherNotes = otherNotesData?.otherUserMangaNotes ?? [];
+    const hasNotes = myNote.trim().length > 0;
+    const hasOtherNotes = otherNotes.length > 0;
 
     return (
         <Stack sx={{ alignItems: 'flex-start', gap: 1 }}>
             <Stack sx={{ flexDirection: 'row', alignItems: 'center', gap: 1 }}>
                 <Typography variant="subtitle1">{t`Notes`}</Typography>
-                <MangaNotesButton manga={manga} notes={notes} />
+                <MangaNotesButton mangaId={mangaId} notes={myNote} />
             </Stack>
-            {hasNotes && <MarkdownViewer markdown={notes.trim()} />}
+            {hasNotes && <MarkdownViewer markdown={myNote.trim()} />}
+            {hasOtherNotes && (
+                <>
+                    <Divider flexItem sx={{ my: 0.5 }} />
+                    <Typography color="text.secondary" variant="caption">{t`Notes from other users`}</Typography>
+                    <Stack spacing={1} sx={{ width: '100%' }}>
+                        {otherNotes.map((entry) => (
+                            <Paper key={entry.userId} variant="outlined" sx={{ px: 1.5, py: 1 }}>
+                                <Typography
+                                    component={RouterLink}
+                                    to={AppRoutes.userProfile.path(entry.userId)}
+                                    variant="caption"
+                                    sx={{
+                                        fontWeight: 'bold',
+                                        textDecoration: 'none',
+                                        '&:hover': { textDecoration: 'underline' },
+                                    }}
+                                >
+                                    {entry.displayName}
+                                </Typography>
+                                <MarkdownViewer markdown={entry.note.trim()} />
+                            </Paper>
+                        ))}
+                    </Stack>
+                </>
+            )}
             {showDivider && <Divider flexItem sx={{ my: 1 }} />}
         </Stack>
     );

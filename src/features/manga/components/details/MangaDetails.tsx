@@ -25,6 +25,7 @@ import { Mangas } from '@/features/manga/services/Mangas.ts';
 import { SpinnerImage } from '@/base/components/SpinnerImage.tsx';
 import { FlexWrapButton } from '@/base/components/buttons/FlexWrapButton.tsx';
 import { TrackMangaButton } from '@/features/manga/components/TrackMangaButton.tsx';
+import { FavoriteMangaButton } from '@/features/manga/components/FavoriteMangaButton.tsx';
 import { useManageMangaLibraryState } from '@/features/manga/hooks/useManageMangaLibraryState.tsx';
 import { Metadata as BaseMetadata } from '@/base/components/texts/Metadata.tsx';
 import type { MangaType, SourceType } from '@/lib/graphql/generated/graphql-base.types.ts';
@@ -241,7 +242,7 @@ export const MangaDetails = ({
         }
     }, [manga.source, t]);
 
-    const { updateLibraryState } = useManageMangaLibraryState(manga);
+    const { updateLibraryState, canManageLibrary } = useManageMangaLibraryState(manga);
 
     return (
         <DetailsWrapper>
@@ -283,12 +284,14 @@ export const MangaDetails = ({
                     <FlexWrapButton
                         size={MediaQuery.useIsMobileWidth() ? 'small' : 'medium'}
                         onClick={updateLibraryState}
+                        disabled={!canManageLibrary}
                         variant={manga.inLibrary ? 'contained' : 'outlined'}
                     >
                         {manga.inLibrary ? <FavoriteIcon /> : <FavoriteBorderIcon />}
                         {manga.inLibrary ? t`In Library` : t`Add To Library`}
                     </FlexWrapButton>
                     <TrackMangaButton manga={manga} />
+                    <FavoriteMangaButton mangaId={manga.id} />
                     <OpenSourceButton url={manga.realUrl} />
                 </MangaButtonsContainer>
             </TopContentWrapper>

@@ -17,8 +17,16 @@ import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import GetAppOutlinedIcon from '@mui/icons-material/GetAppOutlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
+import PendingActionsOutlinedIcon from '@mui/icons-material/PendingActionsOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import PeopleIcon from '@mui/icons-material/People';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutlined';
+import MailIcon from '@mui/icons-material/Mail';
+import MailOutlineIcon from '@mui/icons-material/MailOutlined';
 import { useLingui } from '@lingui/react/macro';
 import { msg, plural } from '@lingui/core/macro';
 import type { NavbarItem } from '@/features/navigation-bar/NavigationBar.types.ts';
@@ -38,6 +46,7 @@ const NAVIGATION_BAR_BASE_ITEMS = [
         IconComponent: CollectionsOutlinedBookmarkIcon,
         show: 'both',
         moreGroup: NavBarItemMoreGroup.GENERAL,
+        requiredPermission: 'library.read',
     },
     {
         path: AppRoutes.updates.path,
@@ -46,6 +55,7 @@ const NAVIGATION_BAR_BASE_ITEMS = [
         IconComponent: NewReleasesOutlinedIcon,
         show: 'both',
         moreGroup: NavBarItemMoreGroup.GENERAL,
+        requiredPermission: 'updates.read',
     },
     {
         path: AppRoutes.history.path,
@@ -62,8 +72,11 @@ const NAVIGATION_BAR_BASE_ITEMS = [
         IconComponent: ExploreOutlinedIcon,
         show: 'both',
         moreGroup: NavBarItemMoreGroup.GENERAL,
+        requiredPermission: 'browse.read',
         useBadge: () => {
-            const { data } = requestManager.useGetExtensionList({ fetchPolicy: 'cache-only' });
+            const { data } = requestManager.useGetExtensionList({
+                fetchPolicy: 'cache-only',
+            });
 
             const extensions = data?.extensions.nodes ?? STABLE_EMPTY_ARRAY;
             const availableUpdates = extensions.filter(
@@ -133,6 +146,64 @@ const NAVIGATION_BAR_DESKTOP_ITEMS = [
         IconComponent: InfoIcon,
         show: 'desktop',
         moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+    },
+    {
+        path: AppRoutes.userDirectory.path,
+        title: msg`Users`,
+        SelectedIconComponent: PeopleIcon,
+        IconComponent: PeopleOutlineIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+    },
+    {
+        path: AppRoutes.inbox.path,
+        title: msg`Messages`,
+        SelectedIconComponent: MailIcon,
+        IconComponent: MailOutlineIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+        useBadge: () => {
+            const { data } = requestManager.useGetUnreadMessageCount({
+                pollInterval: 15000,
+            });
+            const count = Number(data?.unreadMessageCount ?? 0);
+
+            return {
+                count,
+                title: count
+                    ? plural(count, {
+                          one: '# unread message',
+                          other: '# unread messages',
+                      })
+                    : '',
+            };
+        },
+    },
+    {
+        path: AppRoutes.profile.path,
+        title: msg`Profile`,
+        SelectedIconComponent: AccountCircleIcon,
+        IconComponent: AccountCircleIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+    },
+    {
+        path: AppRoutes.admin.path,
+        title: msg`Administration`,
+        SelectedIconComponent: ManageAccountsIcon,
+        IconComponent: ManageAccountsIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+        requiredPermission: 'admin.users.manage',
+    },
+    {
+        path: AppRoutes.requests.path,
+        title: msg`Requests`,
+        SelectedIconComponent: PendingActionsIcon,
+        IconComponent: PendingActionsOutlinedIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+        requiredPermission: 'requests.read',
     },
 ] as const satisfies RestrictedNavBarItem<'desktop'>[];
 

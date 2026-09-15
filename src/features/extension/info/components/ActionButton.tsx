@@ -15,36 +15,41 @@ import { getInstalledState, updateExtension } from '@/features/extension/Extensi
 import { useBackButton } from '@/base/hooks/useBackButton.ts';
 import type { TExtension } from '@/features/extension/Extensions.types.ts';
 import { ExtensionAction, InstalledState } from '@/features/extension/Extensions.types.ts';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 
 export const ActionButton = ({ pkgName, isInstalled, isObsolete, hasUpdate }: TExtension) => {
     const handleBack = useBackButton();
     const { t } = useLingui();
+    const permissions = usePermissions();
 
     const installedState = getInstalledState(isInstalled, isObsolete, hasUpdate);
+    const canUpdate = permissions.has('browse.extensions.update');
 
     return (
         <Box sx={{ px: 1, flexGrow: 1, flexBasis: 0 }}>
-            <Button
-                sx={{ width: '100%' }}
-                color={installedState === InstalledState.OBSOLETE ? 'error' : undefined}
-                variant="outlined"
-                size="large"
-                onClick={async () => {
-                    const action = hasUpdate && !isObsolete ? ExtensionAction.UPDATE : ExtensionAction.UNINSTALL;
+            {canUpdate && (
+                <Button
+                    sx={{ width: '100%' }}
+                    color={installedState === InstalledState.OBSOLETE ? 'error' : undefined}
+                    variant="outlined"
+                    size="large"
+                    onClick={async () => {
+                        const action = hasUpdate && !isObsolete ? ExtensionAction.UPDATE : ExtensionAction.UNINSTALL;
 
-                    try {
-                        await updateExtension(pkgName, isObsolete, action);
+                        try {
+                            await updateExtension(pkgName, isObsolete, action);
 
-                        if (action === ExtensionAction.UNINSTALL) {
-                            handleBack();
+                            if (action === ExtensionAction.UNINSTALL) {
+                                handleBack();
+                            }
+                        } catch (e) {
+                            defaultPromiseErrorHandler('ExtensionInfo::ActionButton::onClick');
                         }
-                    } catch (e) {
-                        defaultPromiseErrorHandler('ExtensionInfo::ActionButton::onClick');
-                    }
-                }}
-            >
-                {t(INSTALLED_STATE_TO_TRANSLATION_MAP[installedState])}
-            </Button>
+                    }}
+                >
+                    {t(INSTALLED_STATE_TO_TRANSLATION_MAP[installedState])}
+                </Button>
+            )}
         </Box>
     );
 };

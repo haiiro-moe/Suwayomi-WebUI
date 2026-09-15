@@ -21,6 +21,8 @@ import { ChapterList } from '@/features/chapter/components/ChapterList.tsx';
 import { useRefreshManga } from '@/features/manga/hooks/useRefreshManga.ts';
 import { MangaDetails } from '@/features/manga/components/details/MangaDetails.tsx';
 import { MangaToolbarMenu } from '@/features/manga/components/MangaToolbarMenu.tsx';
+import { MangaRequestCard } from '@/features/manga/components/MangaRequestCard.tsx';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 import { EmptyViewAbsoluteCentered } from '@/base/components/feedback/EmptyViewAbsoluteCentered.tsx';
 import { LoadingPlaceholder } from '@/base/components/feedback/LoadingPlaceholder.tsx';
 import type { GetMangaScreenQuery } from '@/lib/graphql/generated/graphql.ts';
@@ -34,6 +36,12 @@ export const Manga: React.FC = () => {
     const { t } = useLingui();
     const { id } = useParams<{ id: string }>();
     const { mode } = useLocation<MangaLocationState>().state ?? STABLE_EMPTY_OBJECT;
+
+    const permissions = usePermissions();
+    // "can read manga" = add-to-library access (library members) — NOT browse.read, which request-only users also have
+    const canRead = permissions.has('browse.add_to_library');
+    const canRequest = permissions.has('browse.request');
+    const isRequestOnly = !canRead && canRequest;
 
     const autofetchedRef = useRef(false);
 
@@ -96,9 +104,18 @@ export const Manga: React.FC = () => {
         [t, error, isValidating, refreshing, manga, refresh],
     );
 
-    if (error && !manga) {
+    if (error && !manga && !isRequestOnly) {
         return <EmptyViewAbsoluteCentered message={t`Could not load manga`} messageExtra={getErrorMessage(error)} />;
     }
+
+    if (isRequestOnly) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 4, px: 2 }}>
+                <MangaRequestCard mangaId={Number(id)} />
+            </Box>
+        );
+    }
+
     return (
         <Box sx={{ display: { md: 'flex' }, overflow: 'hidden' }}>
             {isLoading && <LoadingPlaceholder />}
