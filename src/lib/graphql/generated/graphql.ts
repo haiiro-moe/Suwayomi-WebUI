@@ -13,6 +13,15 @@ export type SetCategoryAccessMutation = {
     setCategoryAccess: { __typename: 'SetCategoryAccessPayload'; updated: boolean };
 };
 
+export type SetRoleCategoryAccessMutationVariables = Exact<{
+    input: Types.SetRoleCategoryAccessInput;
+}>;
+
+export type SetRoleCategoryAccessMutation = {
+    __typename: 'Mutation';
+    setRoleCategoryAccess: { __typename: 'SetCategoryAccessPayload'; updated: boolean };
+};
+
 export type CreateUserMutationVariables = Exact<{
     input: Types.CreateUserInput;
 }>;
@@ -61,13 +70,19 @@ export type DeleteRoleMutation = {
     deleteRole: { __typename: 'OperationPayload'; success: boolean };
 };
 
-export type SetRoleCategoryAccessMutationVariables = Exact<{
-    input: Types.SetRoleCategoryAccessInput;
+export type GetCategoryAccessQueryVariables = Exact<{
+    userId: number;
 }>;
 
-export type SetRoleCategoryAccessMutation = {
-    __typename: 'Mutation';
-    setRoleCategoryAccess: { __typename: 'SetCategoryAccessPayload'; updated: boolean };
+export type GetCategoryAccessQuery = {
+    __typename: 'Query';
+    categoryAccess: Array<{
+        __typename: 'CategoryAccessType';
+        userId: number;
+        categoryId: number;
+        canRead: boolean;
+        canEdit: boolean;
+    }>;
 };
 
 export type GetRoleCategoryAccessQueryVariables = Exact<{
@@ -79,21 +94,6 @@ export type GetRoleCategoryAccessQuery = {
     roleCategoryAccess: Array<{
         __typename: 'RoleCategoryAccessType';
         roleId: number;
-        categoryId: number;
-        canRead: boolean;
-        canEdit: boolean;
-    }>;
-};
-
-export type GetCategoryAccessQueryVariables = Exact<{
-    userId: number;
-}>;
-
-export type GetCategoryAccessQuery = {
-    __typename: 'Query';
-    categoryAccess: Array<{
-        __typename: 'CategoryAccessType';
-        userId: number;
         categoryId: number;
         canRead: boolean;
         canEdit: boolean;
@@ -3151,6 +3151,13 @@ export type GetAboutQuery = {
     aboutWebUI: { __typename: 'AboutWebUI'; channel: Types.WebUiChannel; tag: string; updateTimestamp: string };
 };
 
+export type GetLoginInfoQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetLoginInfoQuery = {
+    __typename: 'Query';
+    aboutServer: { __typename: 'AboutServerPayload'; ssoEnabled: boolean };
+};
+
 export type CheckForServerUpdatesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type CheckForServerUpdatesQuery = {
@@ -5301,13 +5308,6 @@ export type GetConversationQuery = {
     }>;
 };
 
-export type UserEventsSubscriptionVariables = Exact<{ [key: string]: never }>;
-
-export type UserEventsSubscription = {
-    __typename: 'Subscription';
-    userEvents: { __typename: 'UserEvent'; type: Types.UserEventType; otherUserId: number | null };
-};
-
 export type GetUnreadMessageCountQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetUnreadMessageCountQuery = { __typename: 'Query'; unreadMessageCount: string };
@@ -5328,6 +5328,13 @@ export type MarkMessageReadMutationVariables = Exact<{
 export type MarkMessageReadMutation = {
     __typename: 'Mutation';
     markMessageRead: { __typename: 'ProfileMutationPayload'; updated: boolean };
+};
+
+export type UserEventsSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type UserEventsSubscription = {
+    __typename: 'Subscription';
+    userEvents: { __typename: 'UserEvent'; type: Types.UserEventType; otherUserId: number | null };
 };
 
 export type UserLoginMutationVariables = Exact<{

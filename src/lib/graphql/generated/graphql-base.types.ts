@@ -1625,7 +1625,6 @@ export type Mutation = {
     restoreBackup: RestoreBackupPayload;
     sendMessage: MessageMutationPayload;
     setCategoryAccess: SetCategoryAccessPayload;
-    setRoleCategoryAccess: SetCategoryAccessPayload;
     setCategoryMeta?: Maybe<SetCategoryMetaPayload>;
     setCategoryMetas?: Maybe<SetCategoryMetasPayload>;
     setChapterMeta?: Maybe<SetChapterMetaPayload>;
@@ -1635,6 +1634,7 @@ export type Mutation = {
     setMangaMeta?: Maybe<SetMangaMetaPayload>;
     setMangaMetas?: Maybe<SetMangaMetasPayload>;
     setMangaNote: ProfileMutationPayload;
+    setRoleCategoryAccess: SetCategoryAccessPayload;
     setSettings: SetSettingsPayload;
     setSourceMeta?: Maybe<SetSourceMetaPayload>;
     setSourceMetas?: Maybe<SetSourceMetasPayload>;
@@ -1904,10 +1904,6 @@ export type MutationSetCategoryAccessArgs = {
     input: SetCategoryAccessInput;
 };
 
-export type MutationSetRoleCategoryAccessArgs = {
-    input: SetRoleCategoryAccessInput;
-};
-
 export type MutationSetCategoryMetaArgs = {
     input: SetCategoryMetaInput;
 };
@@ -1942,6 +1938,10 @@ export type MutationSetMangaMetasArgs = {
 
 export type MutationSetMangaNoteArgs = {
     input: SetMangaNoteInput;
+};
+
+export type MutationSetRoleCategoryAccessArgs = {
+    input: SetRoleCategoryAccessInput;
 };
 
 export type MutationSetSettingsArgs = {
@@ -2230,6 +2230,7 @@ export type PartialSettingsType = Settings & {
     ssoClientSecret?: Maybe<Scalars['String']['output']>;
     ssoDefaultRole?: Maybe<Scalars['String']['output']>;
     ssoIssuerUrl?: Maybe<Scalars['String']['output']>;
+    ssoPublicUrl?: Maybe<Scalars['String']['output']>;
     ssoScope?: Maybe<Scalars['String']['output']>;
     syncDataCategories?: Maybe<Scalars['Boolean']['output']>;
     syncDataChapters?: Maybe<Scalars['Boolean']['output']>;
@@ -2323,6 +2324,7 @@ export type PartialSettingsTypeInput = {
     ssoClientSecret?: InputMaybe<Scalars['String']['input']>;
     ssoDefaultRole?: InputMaybe<Scalars['String']['input']>;
     ssoIssuerUrl?: InputMaybe<Scalars['String']['input']>;
+    ssoPublicUrl?: InputMaybe<Scalars['String']['input']>;
     ssoScope?: InputMaybe<Scalars['String']['input']>;
     syncDataCategories?: InputMaybe<Scalars['Boolean']['input']>;
     syncDataChapters?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2413,18 +2415,18 @@ export type Query = {
     libraryUpdateStatus: LibraryUpdateStatus;
     manga: MangaType;
     mangaRequests: Array<MangaRequestType>;
-    pendingMangaRequestCount: Scalars['Int']['output'];
-    roleCategoryAccess: Array<RoleCategoryAccessType>;
     mangas: MangaNodeList;
     meta: GlobalMetaType;
     metas: GlobalMetaNodeList;
     myMangaNote: Scalars['String']['output'];
     onboardingStatus: Scalars['Boolean']['output'];
     otherUserMangaNotes: Array<UserMangaNoteType>;
+    pendingMangaRequestCount: Scalars['Int']['output'];
     permissionNodes: Array<Scalars['String']['output']>;
     profile?: Maybe<UserProfile>;
     requestPreview: RequestPreview;
     restoreStatus?: Maybe<BackupRestoreStatus>;
+    roleCategoryAccess: Array<RoleCategoryAccessType>;
     roles: Array<RoleType>;
     searchTracker: SearchTrackerPayload;
     settings: SettingsType;
@@ -2460,10 +2462,6 @@ export type QueryCategoryArgs = {
 
 export type QueryCategoryAccessArgs = {
     userId: Scalars['Int']['input'];
-};
-
-export type QueryRoleCategoryAccessArgs = {
-    roleId: Scalars['Int']['input'];
 };
 
 export type QueryChapterArgs = {
@@ -2567,6 +2565,10 @@ export type QueryRequestPreviewArgs = {
 
 export type QueryRestoreStatusArgs = {
     id: Scalars['String']['input'];
+};
+
+export type QueryRoleCategoryAccessArgs = {
+    roleId: Scalars['Int']['input'];
 };
 
 export type QuerySearchTrackerArgs = {
@@ -2704,6 +2706,14 @@ export type RestoreBackupPayload = {
     status?: Maybe<BackupRestoreStatus>;
 };
 
+export type RoleCategoryAccessType = {
+    __typename?: 'RoleCategoryAccessType';
+    canEdit: Scalars['Boolean']['output'];
+    canRead: Scalars['Boolean']['output'];
+    categoryId: Scalars['Int']['output'];
+    roleId: Scalars['Int']['output'];
+};
+
 export type RoleInput = {
     clientMutationId?: InputMaybe<Scalars['String']['input']>;
     description: Scalars['String']['input'];
@@ -2760,22 +2770,6 @@ export type SetCategoryAccessPayload = {
     __typename?: 'SetCategoryAccessPayload';
     clientMutationId?: Maybe<Scalars['String']['output']>;
     updated: Scalars['Boolean']['output'];
-};
-
-export type SetRoleCategoryAccessInput = {
-    canEdit: Scalars['Boolean']['input'];
-    canRead: Scalars['Boolean']['input'];
-    categoryIds: Array<Scalars['Int']['input']>;
-    clientMutationId?: InputMaybe<Scalars['String']['input']>;
-    roleId: Scalars['Int']['input'];
-};
-
-export type RoleCategoryAccessType = {
-    __typename?: 'RoleCategoryAccessType';
-    canEdit: Scalars['Boolean']['output'];
-    canRead: Scalars['Boolean']['output'];
-    categoryId: Scalars['Int']['output'];
-    roleId: Scalars['Int']['output'];
 };
 
 export type SetCategoryMetaInput = {
@@ -2888,6 +2882,14 @@ export type SetMangaNoteInput = {
     clientMutationId?: InputMaybe<Scalars['String']['input']>;
     mangaId: Scalars['Int']['input'];
     note: Scalars['String']['input'];
+};
+
+export type SetRoleCategoryAccessInput = {
+    canEdit: Scalars['Boolean']['input'];
+    canRead: Scalars['Boolean']['input'];
+    categoryIds: Array<Scalars['Int']['input']>;
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    roleId: Scalars['Int']['input'];
 };
 
 export type SetSettingsInput = {
@@ -3036,6 +3038,7 @@ export type Settings = {
     ssoClientSecret?: Maybe<Scalars['String']['output']>;
     ssoDefaultRole?: Maybe<Scalars['String']['output']>;
     ssoIssuerUrl?: Maybe<Scalars['String']['output']>;
+    ssoPublicUrl?: Maybe<Scalars['String']['output']>;
     ssoScope?: Maybe<Scalars['String']['output']>;
     syncDataCategories?: Maybe<Scalars['Boolean']['output']>;
     syncDataChapters?: Maybe<Scalars['Boolean']['output']>;
@@ -3196,6 +3199,7 @@ export type SettingsType = Settings & {
     ssoClientSecret: Scalars['String']['output'];
     ssoDefaultRole: Scalars['String']['output'];
     ssoIssuerUrl: Scalars['String']['output'];
+    ssoPublicUrl: Scalars['String']['output'];
     ssoScope: Scalars['String']['output'];
     syncDataCategories: Scalars['Boolean']['output'];
     syncDataChapters: Scalars['Boolean']['output'];
@@ -3466,17 +3470,6 @@ export type Subscription = {
     userEvents: UserEvent;
     webUIUpdateStatusChange: WebUiUpdateStatus;
 };
-
-export type UserEvent = {
-    __typename?: 'UserEvent';
-    otherUserId?: Maybe<Scalars['Int']['output']>;
-    type: UserEventType;
-};
-
-export enum UserEventType {
-    MessagesChanged = 'MESSAGES_CHANGED',
-    RequestsChanged = 'REQUESTS_CHANGED',
-}
 
 export type SubscriptionDownloadStatusChangedArgs = {
     input: DownloadChangedInput;
@@ -4060,6 +4053,17 @@ export type UserAdminPayload = {
     clientMutationId?: Maybe<Scalars['String']['output']>;
     id: Scalars['Int']['output'];
 };
+
+export type UserEvent = {
+    __typename?: 'UserEvent';
+    otherUserId?: Maybe<Scalars['Int']['output']>;
+    type: UserEventType;
+};
+
+export enum UserEventType {
+    MessagesChanged = 'MESSAGES_CHANGED',
+    RequestsChanged = 'REQUESTS_CHANGED',
+}
 
 export type UserMangaNoteType = {
     __typename?: 'UserMangaNoteType';

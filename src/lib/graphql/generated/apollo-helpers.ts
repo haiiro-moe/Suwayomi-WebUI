@@ -1129,7 +1129,6 @@ export type MutationKeySpecifier = (
     | 'restoreBackup'
     | 'sendMessage'
     | 'setCategoryAccess'
-    | 'setRoleCategoryAccess'
     | 'setCategoryMeta'
     | 'setCategoryMetas'
     | 'setChapterMeta'
@@ -1139,6 +1138,7 @@ export type MutationKeySpecifier = (
     | 'setMangaMeta'
     | 'setMangaMetas'
     | 'setMangaNote'
+    | 'setRoleCategoryAccess'
     | 'setSettings'
     | 'setSourceMeta'
     | 'setSourceMetas'
@@ -1233,7 +1233,6 @@ export type MutationFieldPolicy = {
     restoreBackup?: FieldPolicy<any> | FieldReadFunction<any>;
     sendMessage?: FieldPolicy<any> | FieldReadFunction<any>;
     setCategoryAccess?: FieldPolicy<any> | FieldReadFunction<any>;
-    setRoleCategoryAccess?: FieldPolicy<any> | FieldReadFunction<any>;
     setCategoryMeta?: FieldPolicy<any> | FieldReadFunction<any>;
     setCategoryMetas?: FieldPolicy<any> | FieldReadFunction<any>;
     setChapterMeta?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1243,6 +1242,7 @@ export type MutationFieldPolicy = {
     setMangaMeta?: FieldPolicy<any> | FieldReadFunction<any>;
     setMangaMetas?: FieldPolicy<any> | FieldReadFunction<any>;
     setMangaNote?: FieldPolicy<any> | FieldReadFunction<any>;
+    setRoleCategoryAccess?: FieldPolicy<any> | FieldReadFunction<any>;
     setSettings?: FieldPolicy<any> | FieldReadFunction<any>;
     setSourceMeta?: FieldPolicy<any> | FieldReadFunction<any>;
     setSourceMetas?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1391,6 +1391,7 @@ export type PartialSettingsTypeKeySpecifier = (
     | 'ssoClientSecret'
     | 'ssoDefaultRole'
     | 'ssoIssuerUrl'
+    | 'ssoPublicUrl'
     | 'ssoScope'
     | 'syncDataCategories'
     | 'syncDataChapters'
@@ -1495,6 +1496,7 @@ export type PartialSettingsTypeFieldPolicy = {
     ssoClientSecret?: FieldPolicy<any> | FieldReadFunction<any>;
     ssoDefaultRole?: FieldPolicy<any> | FieldReadFunction<any>;
     ssoIssuerUrl?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoPublicUrl?: FieldPolicy<any> | FieldReadFunction<any>;
     ssoScope?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataCategories?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataChapters?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1576,18 +1578,18 @@ export type QueryKeySpecifier = (
     | 'libraryUpdateStatus'
     | 'manga'
     | 'mangaRequests'
-    | 'pendingMangaRequestCount'
-    | 'roleCategoryAccess'
     | 'mangas'
     | 'meta'
     | 'metas'
     | 'myMangaNote'
     | 'onboardingStatus'
     | 'otherUserMangaNotes'
+    | 'pendingMangaRequestCount'
     | 'permissionNodes'
     | 'profile'
     | 'requestPreview'
     | 'restoreStatus'
+    | 'roleCategoryAccess'
     | 'roles'
     | 'searchTracker'
     | 'settings'
@@ -1630,18 +1632,18 @@ export type QueryFieldPolicy = {
     libraryUpdateStatus?: FieldPolicy<any> | FieldReadFunction<any>;
     manga?: FieldPolicy<any> | FieldReadFunction<any>;
     mangaRequests?: FieldPolicy<any> | FieldReadFunction<any>;
-    pendingMangaRequestCount?: FieldPolicy<any> | FieldReadFunction<any>;
-    roleCategoryAccess?: FieldPolicy<any> | FieldReadFunction<any>;
     mangas?: FieldPolicy<any> | FieldReadFunction<any>;
     meta?: FieldPolicy<any> | FieldReadFunction<any>;
     metas?: FieldPolicy<any> | FieldReadFunction<any>;
     myMangaNote?: FieldPolicy<any> | FieldReadFunction<any>;
     onboardingStatus?: FieldPolicy<any> | FieldReadFunction<any>;
     otherUserMangaNotes?: FieldPolicy<any> | FieldReadFunction<any>;
+    pendingMangaRequestCount?: FieldPolicy<any> | FieldReadFunction<any>;
     permissionNodes?: FieldPolicy<any> | FieldReadFunction<any>;
     profile?: FieldPolicy<any> | FieldReadFunction<any>;
     requestPreview?: FieldPolicy<any> | FieldReadFunction<any>;
     restoreStatus?: FieldPolicy<any> | FieldReadFunction<any>;
+    roleCategoryAccess?: FieldPolicy<any> | FieldReadFunction<any>;
     roles?: FieldPolicy<any> | FieldReadFunction<any>;
     searchTracker?: FieldPolicy<any> | FieldReadFunction<any>;
     settings?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1719,11 +1721,6 @@ export type RoleCategoryAccessTypeFieldPolicy = {
     canRead?: FieldPolicy<any> | FieldReadFunction<any>;
     categoryId?: FieldPolicy<any> | FieldReadFunction<any>;
     roleId?: FieldPolicy<any> | FieldReadFunction<any>;
-};
-export type UserEventKeySpecifier = ('otherUserId' | 'type' | UserEventKeySpecifier)[];
-export type UserEventFieldPolicy = {
-    otherUserId?: FieldPolicy<any> | FieldReadFunction<any>;
-    type?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type RoleTypeKeySpecifier = ('description' | 'id' | 'name' | 'permissions' | RoleTypeKeySpecifier)[];
 export type RoleTypeFieldPolicy = {
@@ -1928,6 +1925,7 @@ export type SettingsKeySpecifier = (
     | 'ssoClientSecret'
     | 'ssoDefaultRole'
     | 'ssoIssuerUrl'
+    | 'ssoPublicUrl'
     | 'ssoScope'
     | 'syncDataCategories'
     | 'syncDataChapters'
@@ -2032,6 +2030,7 @@ export type SettingsFieldPolicy = {
     ssoClientSecret?: FieldPolicy<any> | FieldReadFunction<any>;
     ssoDefaultRole?: FieldPolicy<any> | FieldReadFunction<any>;
     ssoIssuerUrl?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoPublicUrl?: FieldPolicy<any> | FieldReadFunction<any>;
     ssoScope?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataCategories?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataChapters?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -2187,6 +2186,7 @@ export type SettingsTypeKeySpecifier = (
     | 'ssoClientSecret'
     | 'ssoDefaultRole'
     | 'ssoIssuerUrl'
+    | 'ssoPublicUrl'
     | 'ssoScope'
     | 'syncDataCategories'
     | 'syncDataChapters'
@@ -2291,6 +2291,7 @@ export type SettingsTypeFieldPolicy = {
     ssoClientSecret?: FieldPolicy<any> | FieldReadFunction<any>;
     ssoDefaultRole?: FieldPolicy<any> | FieldReadFunction<any>;
     ssoIssuerUrl?: FieldPolicy<any> | FieldReadFunction<any>;
+    ssoPublicUrl?: FieldPolicy<any> | FieldReadFunction<any>;
     ssoScope?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataCategories?: FieldPolicy<any> | FieldReadFunction<any>;
     syncDataChapters?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -2840,6 +2841,11 @@ export type UserAdminPayloadKeySpecifier = ('clientMutationId' | 'id' | UserAdmi
 export type UserAdminPayloadFieldPolicy = {
     clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
     id?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type UserEventKeySpecifier = ('otherUserId' | 'type' | UserEventKeySpecifier)[];
+export type UserEventFieldPolicy = {
+    otherUserId?: FieldPolicy<any> | FieldReadFunction<any>;
+    type?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type UserMangaNoteTypeKeySpecifier = (
     | 'displayName'
@@ -3474,10 +3480,6 @@ export type StrictTypedTypePolicies = {
         keyFields?: false | RoleCategoryAccessTypeKeySpecifier | (() => undefined | RoleCategoryAccessTypeKeySpecifier);
         fields?: RoleCategoryAccessTypeFieldPolicy;
     };
-    UserEvent?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
-        keyFields?: false | UserEventKeySpecifier | (() => undefined | UserEventKeySpecifier);
-        fields?: UserEventFieldPolicy;
-    };
     RoleType?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | RoleTypeKeySpecifier | (() => undefined | RoleTypeKeySpecifier);
         fields?: RoleTypeFieldPolicy;
@@ -3814,6 +3816,10 @@ export type StrictTypedTypePolicies = {
     UserAdminPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | UserAdminPayloadKeySpecifier | (() => undefined | UserAdminPayloadKeySpecifier);
         fields?: UserAdminPayloadFieldPolicy;
+    };
+    UserEvent?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | UserEventKeySpecifier | (() => undefined | UserEventKeySpecifier);
+        fields?: UserEventFieldPolicy;
     };
     UserMangaNoteType?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | UserMangaNoteTypeKeySpecifier | (() => undefined | UserMangaNoteTypeKeySpecifier);
