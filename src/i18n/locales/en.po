@@ -547,10 +547,6 @@ msgstr "Artist"
 msgid "Ascending"
 msgstr "Ascending"
 
-#: src/features/admin/screens/Admin.tsx
-msgid "Assign individual category visibility and edit access to users. Role permissions still apply."
-msgstr "Assign individual category visibility and edit access to users. Role permissions still apply."
-
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "Authentication"
 msgstr "Authentication"
@@ -864,13 +860,13 @@ msgstr "Cancelled"
 msgid "Categories"
 msgstr "Categories"
 
-#: src/features/admin/screens/Admin.tsx
+#: src/features/admin/components/CategoryAccessSection.tsx
 #: src/features/category/components/CategoriesInclusionSetting.tsx
 #: src/features/migration/components/MigrationOptionsDialog.tsx
 msgid "Category"
 msgstr "Category"
 
-#: src/features/admin/screens/Admin.tsx
+#: src/features/admin/components/CategoryAccessSection.tsx
 msgid "Category access"
 msgstr "Category access"
 
@@ -966,6 +962,10 @@ msgstr "Checking for update"
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "Choose the order in which chapters are displayed."
 msgstr "Choose the order in which chapters are displayed."
+
+#: src/features/admin/components/CategoryAccessSection.tsx
+msgid "Choose which categories each role can see and edit. Applies to every user with the role."
+msgstr "Choose which categories each role can see and edit. Applies to every user with the role."
 
 #: src/features/library/screens/LibrarySettings.tsx
 msgid "Cleanup database"
@@ -1375,6 +1375,10 @@ msgstr "Create"
 msgid "Create a role and choose the permissions it should have."
 msgstr "Create a role and choose the permissions it should have."
 
+#: src/features/admin/components/CategoryAccessSection.tsx
+msgid "Create a role first."
+msgstr "Create a role first."
+
 #: src/features/backup/screens/Backup.tsx
 msgid "Create backup"
 msgstr "Create backup"
@@ -1762,6 +1766,7 @@ msgstr "Dynamic theme colors on manga page"
 msgid "Edge"
 msgstr "Edge"
 
+#: src/features/admin/components/CategoryAccessSection.tsx
 #: src/features/admin/screens/Admin.tsx
 #: src/features/category/components/CategorySelect.tsx
 #: src/features/category/components/CategorySettingsCard.tsx
@@ -1992,7 +1997,7 @@ msgstr "Failed to save profile"
 msgid "Failed to save role"
 msgstr "Failed to save role"
 
-#: src/features/admin/screens/Admin.tsx
+#: src/features/admin/components/CategoryAccessSection.tsx
 msgid "Failed to update category access"
 msgstr "Failed to update category access"
 
@@ -2147,6 +2152,10 @@ msgstr "GitHub Server"
 msgid "GitHub WebUI"
 msgstr "GitHub WebUI"
 
+#: src/features/admin/components/CategoryAccessSection.tsx
+msgid "Give single users access on top of what their role already allows."
+msgstr "Give single users access on top of what their role already allows."
+
 #: src/features/browse/sources/Sources.tsx
 #: src/features/global-search/screens/SearchAll.tsx
 msgid "Global Search"
@@ -2159,6 +2168,14 @@ msgstr "Global update"
 #: src/features/updates/components/UpdateChecker.tsx
 msgid "Global update (last update: {date})"
 msgstr "Global update (last update: {date})"
+
+#: src/features/admin/components/CategoryAccessSection.tsx
+msgid "Granted by the role \"{roleName}\""
+msgstr "Granted by the role \"{roleName}\""
+
+#: src/features/admin/components/CategoryAccessSection.tsx
+msgid "Grants from the role \"{roleName}\" are always applied and can only be changed on the role."
+msgstr "Grants from the role \"{roleName}\" are always applied and can only be changed on the role."
 
 #: src/features/reader/settings/general/components/ReaderSettingBackgroundColor.tsx
 msgid "Gray"
@@ -2329,6 +2346,10 @@ msgstr "Include: {includedSyncDataText}"
 #: src/features/reader/hotkeys/settings/components/ReaderSettingHotkey.tsx
 msgid "Increase auto scroll speed"
 msgstr "Increase auto scroll speed"
+
+#: src/features/admin/components/CategoryAccessSection.tsx
+msgid "Individual users"
+msgstr "Individual users"
 
 #: src/features/settings/screens/ServerSettings.tsx
 #: src/features/settings/screens/WebUISettings.tsx
@@ -2955,7 +2976,7 @@ msgstr "Next:"
 msgid "No access"
 msgstr "No access"
 
-#: src/features/admin/screens/Admin.tsx
+#: src/features/admin/components/CategoryAccessSection.tsx
 msgid "No categories found."
 msgstr "No categories found."
 
@@ -3030,6 +3051,10 @@ msgstr "No sources found. Install Some extensions first."
 #: src/features/source/components/SourceLanguageSelect.tsx
 msgid "No sources installed"
 msgstr "No sources installed"
+
+#: src/features/admin/components/CategoryAccessSection.tsx
+msgid "No users found."
+msgstr "No users found."
 
 #: src/features/backup/Backup.utils.ts
 #: src/features/category/components/CategoriesInclusionSetting.tsx
@@ -3364,7 +3389,7 @@ msgstr "Quick settings"
 msgid "Random"
 msgstr "Random"
 
-#: src/features/admin/screens/Admin.tsx
+#: src/features/admin/components/CategoryAccessSection.tsx
 msgid "Read"
 msgstr "Read"
 
@@ -3558,6 +3583,7 @@ msgstr "Right and left"
 msgid "Right to left"
 msgstr "Right to left"
 
+#: src/features/admin/components/CategoryAccessSection.tsx
 #: src/features/admin/screens/Admin.tsx
 msgid "Role"
 msgstr "Role"
@@ -3566,6 +3592,7 @@ msgstr "Role"
 msgid "Role name"
 msgstr "Role name"
 
+#: src/features/admin/components/CategoryAccessSection.tsx
 #: src/features/admin/screens/Admin.tsx
 msgid "Roles"
 msgstr "Roles"
@@ -4322,6 +4349,10 @@ msgstr "Today at {timeString}"
 msgid "Toggle auto scroll"
 msgstr "Toggle auto scroll"
 
+#: src/features/admin/components/CategoryAccessSection.tsx
+msgid "Toggle edit access for all categories"
+msgstr "Toggle edit access for all categories"
+
 #: src/features/reader/hotkeys/settings/components/ReaderSettingHotkey.tsx
 msgid "Toggle menu"
 msgstr "Toggle menu"
@@ -4329,6 +4360,10 @@ msgstr "Toggle menu"
 #: src/features/reader/hotkeys/settings/components/ReaderSettingHotkey.tsx
 msgid "Toggle offset double spreads"
 msgstr "Toggle offset double spreads"
+
+#: src/features/admin/components/CategoryAccessSection.tsx
+msgid "Toggle read access for all categories"
+msgstr "Toggle read access for all categories"
 
 #: src/features/reader/hotkeys/settings/components/ReaderSettingHotkey.tsx
 msgid "Toggle stretch image"
@@ -4604,7 +4639,7 @@ msgstr "Use the latest released version."
 msgid "Use the version that was delivered with the server release"
 msgstr "Use the version that was delivered with the server release"
 
-#: src/features/admin/screens/Admin.tsx
+#: src/features/admin/components/CategoryAccessSection.tsx
 msgid "User"
 msgstr "User"
 
