@@ -330,11 +330,13 @@ export const ServerSettings = () => {
                                 return;
                             }
 
-                            if (mode !== AuthMode.UiLogin) {
+                            const usesTokens = mode === AuthMode.UiLogin || mode === AuthMode.Sso;
+
+                            if (!usesTokens) {
                                 AuthManager.removeTokens();
                             }
 
-                            AuthManager.setAuthRequired(mode === AuthMode.UiLogin);
+                            AuthManager.setAuthRequired(usesTokens);
                         });
                     }}
                     disabled={authModeDisabled}
