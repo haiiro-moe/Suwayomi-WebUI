@@ -18,6 +18,9 @@ import '@/lib/koration/Setup.ts';
 import '@/lib/PointerDeviceUtil.ts';
 import { App } from '@/App';
 import { defaultPromiseErrorHandler } from '@/lib/DefaultPromiseErrorHandler.ts';
+import { AuthManager } from '@/features/authentication/AuthManager.ts';
+
+AuthManager.consumeSsoTokensFromUrl();
 
 initializeLocalization().catch(defaultPromiseErrorHandler('i18n', true));
 
