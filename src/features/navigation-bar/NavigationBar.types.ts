@@ -31,6 +31,7 @@ export interface NavbarItem {
     IconComponent: OverridableComponent<SvgIconTypeMap<object, 'svg'>>;
     show: 'mobile' | 'desktop' | 'both';
     moreGroup: NavBarItemMoreGroup;
+    requiredPermission?: string;
     useBadge?: () => { count: number; title: string };
 }
 

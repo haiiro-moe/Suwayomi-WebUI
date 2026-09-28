@@ -24,10 +24,12 @@ import type { NavbarItem } from '@/features/navigation-bar/NavigationBar.types.t
 import { NavBarItemMoreGroup } from '@/features/navigation-bar/NavigationBar.types.ts';
 import { useAppTitle } from '@/features/navigation-bar/hooks/useAppTitle.ts';
 import { STABLE_EMPTY_ARRAY } from '@/base/Base.constants.ts';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 
 export const More = () => {
     const { t } = useLingui();
     const isMobileWidth = MediaQuery.useIsMobileWidth();
+    const permissions = usePermissions();
 
     useAppTitle(t`More`);
 
@@ -37,6 +39,7 @@ export const More = () => {
 
     const hiddenNavBarItems = NavigationBarUtil.filterItems(NAVIGATION_BAR_ITEMS, {
         hideHistory,
+        permissions,
         hideMore: true,
         hideBoth: true,
         hideDesktop: !isMobileWidth,

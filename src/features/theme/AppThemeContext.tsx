@@ -11,18 +11,12 @@ import React, { useContext, useEffect, useLayoutEffect, useMemo, useRef, useStat
 import type { Direction } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material/styles';
 import { CacheProvider } from '@emotion/react';
-import { useLingui } from '@lingui/react/macro';
 import type { AppTheme } from '@/features/theme/services/AppThemes.ts';
 import { getTheme } from '@/features/theme/services/AppThemes.ts';
-import {
-    createUpdateMetadataServerSettings,
-    useMetadataServerSettings,
-} from '@/features/settings/services/ServerSettingsMetadata.ts';
+import { useMetadataServerSettings } from '@/features/settings/services/ServerSettingsMetadata.ts';
 import { useLocalStorage } from '@/base/hooks/useStorage.tsx';
 import { MUI_THEME_MODE_KEY } from '@/lib/mui/MUI.constants.ts';
 import { MediaQuery } from '@/base/utils/MediaQuery.tsx';
-import { makeToast } from '@/base/utils/Toast.ts';
-import { getErrorMessage } from '@/lib/HelperFunctions.ts';
 import { createAndSetTheme } from '@/features/theme/services/ThemeCreator.ts';
 import { AppStorage } from '@/lib/storage/AppStorage.ts';
 import { DIRECTION_TO_CACHE } from '@/features/theme/ThemeDirectionCache.ts';
@@ -31,6 +25,12 @@ import { ThemeMode } from '@/features/theme/AppTheme.types.ts';
 import { getLanguageReadingDirection } from '@/lib/ISOLanguageUtil.ts';
 import { loadCatalog } from '@/i18n';
 import { defaultPromiseErrorHandler } from '@/lib/DefaultPromiseErrorHandler.ts';
+import { useUserSettings } from '@/features/settings/services/UserSettings.ts';
+
+const parseBooleanSetting = (value: string | undefined, fallback: boolean) =>
+    value === undefined ? fallback : value === 'true';
+
+const parseStringSetting = <T extends string>(value: string | undefined, fallback: T): T => (value ?? fallback) as T;
 
 export const AppThemeContext = React.createContext<TAppThemeContext>({
     appTheme: 'default',
@@ -46,16 +46,26 @@ export const AppThemeContext = React.createContext<TAppThemeContext>({
 export const useAppThemeContext = () => useContext(AppThemeContext);
 
 export const AppThemeContextProvider = ({ children }: { children: ReactNode }) => {
-    const { t } = useLingui();
     const {
         request: metadataServerSettingsRequest,
-        settings: { appTheme: serverAppTheme, themeMode, shouldUsePureBlackMode, customThemes, locale },
+        settings: {
+            appTheme: serverAppTheme,
+            themeMode: serverThemeMode,
+            shouldUsePureBlackMode: serverPureBlack,
+            customThemes,
+            locale,
+        },
     } = useMetadataServerSettings();
+    const userSettings = useUserSettings();
+    const { settings: userScopedSettings } = userSettings;
+    const resolvedAppTheme = parseStringSetting(userScopedSettings.appTheme, serverAppTheme);
+    const resolvedThemeMode = parseStringSetting(userScopedSettings.themeMode, serverThemeMode);
+    const resolvedPureBlack = parseBooleanSetting(userScopedSettings.shouldUsePureBlackMode, serverPureBlack);
     const [localAppTheme, setLocalAppTheme] = useLocalStorage<AppTheme>(
         'appTheme',
-        getTheme(serverAppTheme, customThemes),
+        getTheme(resolvedAppTheme, customThemes),
     );
-    const [localThemeMode, setLocalThemeMode] = useLocalStorage(MUI_THEME_MODE_KEY, themeMode);
+    const [localThemeMode, setLocalThemeMode] = useLocalStorage(MUI_THEME_MODE_KEY, resolvedThemeMode);
 
     const directionRef = useRef<Direction>('ltr');
 
@@ -65,27 +75,24 @@ export const AppThemeContextProvider = ({ children }: { children: ReactNode }) =
     const areMetadataServerSettingsReady =
         !metadataServerSettingsRequest.loading && !metadataServerSettingsRequest.error;
 
-    const appTheme = areMetadataServerSettingsReady ? serverAppTheme : localAppTheme.id;
-    const actualThemeMode = areMetadataServerSettingsReady ? themeMode : localThemeMode;
+    const appTheme = areMetadataServerSettingsReady ? resolvedAppTheme : localAppTheme.id;
+    const actualThemeMode = areMetadataServerSettingsReady ? resolvedThemeMode : localThemeMode;
+    const shouldUsePureBlackMode = resolvedPureBlack;
     const currentDirection = getLanguageReadingDirection(locale);
-
-    const updateSetting = createUpdateMetadataServerSettings<'appTheme' | 'themeMode' | 'shouldUsePureBlackMode'>((e) =>
-        makeToast(t`Failed to save changes`, 'error', getErrorMessage(e)),
-    );
 
     const appThemeContext = useMemo(
         () =>
             ({
                 appTheme,
-                setAppTheme: (value) => updateSetting('appTheme', value),
-                themeMode,
-                setThemeMode: (value) => updateSetting('themeMode', value),
+                setAppTheme: (value) => userSettings.update('appTheme', value),
+                themeMode: actualThemeMode,
+                setThemeMode: (value) => userSettings.update('themeMode', value),
                 shouldUsePureBlackMode,
-                setShouldUsePureBlackMode: (value) => updateSetting('shouldUsePureBlackMode', value),
+                setShouldUsePureBlackMode: (value) => userSettings.update('shouldUsePureBlackMode', String(value)),
                 dynamicColor,
                 setDynamicColor,
             }) satisfies TAppThemeContext,
-        [themeMode, shouldUsePureBlackMode, appTheme, dynamicColor],
+        [actualThemeMode, shouldUsePureBlackMode, appTheme, dynamicColor, userSettings.update],
     );
 
     const theme = useMemo(
@@ -127,14 +134,22 @@ export const AppThemeContextProvider = ({ children }: { children: ReactNode }) =
             return;
         }
 
-        if (serverAppTheme !== localAppTheme.id) {
-            setLocalAppTheme(getTheme(serverAppTheme, customThemes));
+        if (resolvedAppTheme !== localAppTheme.id) {
+            setLocalAppTheme(getTheme(resolvedAppTheme, customThemes));
         }
 
-        if (themeMode !== localThemeMode) {
-            setLocalThemeMode(themeMode);
+        if (resolvedThemeMode !== localThemeMode) {
+            setLocalThemeMode(resolvedThemeMode);
         }
-    }, [serverAppTheme, localAppTheme, themeMode, localThemeMode]);
+    }, [
+        resolvedAppTheme,
+        localAppTheme,
+        resolvedThemeMode,
+        localThemeMode,
+        customThemes,
+        setLocalAppTheme,
+        setLocalThemeMode,
+    ]);
 
     useEffect(() => {
         // The set background color is not necessary anymore, since the theme has been loaded

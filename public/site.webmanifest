@@ -1,6 +1,6 @@
 {
-    "name": "Suwayomi",
-    "short_name": "Suwayomi",
+    "name": "Suwairo",
+    "short_name": "Suwairo",
     "start_url": ".",
     "icons": [
         {
@@ -21,7 +21,7 @@
             "purpose": "maskable"
         }
     ],
-    "theme_color": "#3181C0",
-    "background_color": "#3181C0",
+    "theme_color": "#EC4899",
+    "background_color": "#EC4899",
     "display": "standalone"
 }

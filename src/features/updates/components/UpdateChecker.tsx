@@ -25,6 +25,7 @@ import { MediaQuery } from '@/base/utils/MediaQuery.tsx';
 import type { CategoryIdInfo } from '@/features/category/Category.types.ts';
 
 import { getErrorMessage } from '@/lib/HelperFunctions.ts';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 
 let lastRunningState = false;
 
@@ -36,6 +37,7 @@ export function UpdateChecker({
     handleFinishedUpdate?: () => void;
 }) {
     const { t } = useLingui();
+    const canTriggerUpdate = usePermissions().has('updates.trigger');
     const isTouchDevice = MediaQuery.useIsTouchDevice();
 
     const [isHovered, setIsHovered] = useState(false);
@@ -88,6 +90,9 @@ export function UpdateChecker({
     };
 
     const onClick = async (category?: CategoryIdInfo['id']) => {
+        if (!canTriggerUpdate) {
+            return;
+        }
         if (isRunning) {
             stopUpdate();
         } else {
@@ -101,6 +106,7 @@ export function UpdateChecker({
                 <>
                     <CustomTooltip title={isRunning ? t`Stop global update` : t`Global update (last update: ${date})`}>
                         <IconButton
+                            disabled={!canTriggerUpdate}
                             sx={{ position: 'relative' }}
                             {...(categoryId !== undefined && !isRunning
                                 ? bindTrigger(popupState)
@@ -125,24 +131,26 @@ export function UpdateChecker({
                             )}
                         </IconButton>
                     </CustomTooltip>
-                    <Menu {...bindMenu(popupState)}>
-                        <MenuItem
-                            onClick={() => {
-                                popupState.close();
-                                onClick();
-                            }}
-                        >
-                            {t`Update library`}
-                        </MenuItem>
-                        <MenuItem
-                            onClick={() => {
-                                popupState.close();
-                                onClick(categoryId);
-                            }}
-                        >
-                            {t`Update category`}
-                        </MenuItem>
-                    </Menu>
+                    {canTriggerUpdate && (
+                        <Menu {...bindMenu(popupState)}>
+                            <MenuItem
+                                onClick={() => {
+                                    popupState.close();
+                                    onClick();
+                                }}
+                            >
+                                {t`Update library`}
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => {
+                                    popupState.close();
+                                    onClick(categoryId);
+                                }}
+                            >
+                                {t`Update category`}
+                            </MenuItem>
+                        </Menu>
+                    )}
                 </>
             )}
         </PopupState>

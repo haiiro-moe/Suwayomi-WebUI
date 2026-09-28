@@ -24,14 +24,21 @@ import type { MangaTitleInfo, MangaTrackRecordInfo } from '@/features/manga/Mang
 import { AppRoutes } from '@/base/AppRoute.constants.ts';
 import { MediaQuery } from '@/base/utils/MediaQuery.tsx';
 import { STABLE_EMPTY_ARRAY } from '@/base/Base.constants.ts';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 
 export const TrackMangaButton = ({ manga }: { manga: MangaTrackRecordInfo & MangaTitleInfo }) => {
     const { t } = useLingui();
     const navigate = useNavigate();
     const isMobileWidth = MediaQuery.useIsMobileWidth();
-
-    const trackerList = requestManager.useGetTrackerList<GetTrackersSettingsQuery>(GET_TRACKERS_SETTINGS);
+    const permissions = usePermissions();
+    const trackerList = requestManager.useGetTrackerList<GetTrackersSettingsQuery>(GET_TRACKERS_SETTINGS, {
+        skip: !permissions.has('settings.tracking'),
+    });
     const trackers = trackerList.data?.trackers.nodes ?? STABLE_EMPTY_ARRAY;
+
+    if (!permissions.has('settings.tracking')) {
+        return null;
+    }
     const mangaTrackers = manga.trackRecords.nodes;
 
     const loggedInTrackers = Trackers.getLoggedIn(trackers);

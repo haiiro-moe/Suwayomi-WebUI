@@ -15,19 +15,28 @@ import { AuthManager } from '@/features/authentication/AuthManager.ts';
 export const AuthGuard = ({ children }: { children: ReactNode }) => {
     const { isAuthRequired } = AuthManager.useSession();
 
-    const { data } = requestManager.useGetAbout({
+    const { data, error } = requestManager.useGetAbout({
         skip: isAuthRequired !== null,
     });
 
     useEffect(() => {
-        if (!data || AuthManager.isAuthInitialized()) {
+        if ((!data && !error) || AuthManager.isAuthInitialized()) {
             return;
         }
 
-        AuthManager.setAuthRequired(false);
+        if (error) {
+            // GET_ABOUT includes authenticated metadata. A fresh/reset browser can
+            // still hold a refresh token that no longer exists in the new database.
+            // Treat the probe failure as an authentication boundary, not as a
+            // successful unauthenticated session.
+            AuthManager.removeTokens();
+            AuthManager.setAuthRequired(true);
+        } else {
+            AuthManager.setAuthRequired(false);
+        }
         AuthManager.setAuthInitialized(true);
         requestManager.processQueues();
-    }, [data]);
+    }, [data, error]);
 
     if (isAuthRequired === null) {
         return <SplashScreen />;

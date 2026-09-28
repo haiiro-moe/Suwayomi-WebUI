@@ -73,7 +73,7 @@ export class AuthManager {
     static useIsAuthenticated(): boolean {
         const { isAuthRequired, accessToken, refreshToken } = AuthManager.useSession();
 
-        return !isAuthRequired || (isAuthRequired && (!!accessToken || !!refreshToken));
+        return isAuthRequired === false || (isAuthRequired === true && (!!accessToken || !!refreshToken));
     }
 
     static isAuthInitialized(): boolean {
@@ -146,6 +146,25 @@ export class AuthManager {
     static removeTokens(): void {
         AuthManager.removeAccessToken();
         AuthManager.removeRefreshToken();
+    }
+
+    /**
+     * The server redirects back from the SSO callback with the issued tokens in the URL fragment.
+     * Store them like a regular login, so the access token can be refreshed once it expires.
+     */
+    static consumeSsoTokensFromUrl(): void {
+        const params = new URLSearchParams(window.location.hash.slice(1));
+        const accessToken = params.get('ssoAccessToken');
+        const refreshToken = params.get('ssoRefreshToken');
+
+        if (!accessToken || !refreshToken) {
+            return;
+        }
+
+        AuthManager.setTokens(accessToken, refreshToken);
+        // tokens from older SSO logins were stored in a cookie, which can not be refreshed
+        document.cookie = 'suwayomi-server-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        window.history.replaceState(window.history.state, '', window.location.pathname + window.location.search);
     }
 
     static shouldQueueRequests(): boolean {

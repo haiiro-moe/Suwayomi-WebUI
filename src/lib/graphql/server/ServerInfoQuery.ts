@@ -19,6 +19,7 @@ export const GET_ABOUT = gql`
             github
             name
             version
+            ssoEnabled
             platformInfo {
                 os {
                     name
@@ -37,6 +38,14 @@ export const GET_ABOUT = gql`
         }
         aboutWebUI {
             ...ABOUT_WEBUI
+        }
+    }
+`;
+
+export const GET_LOGIN_INFO = gql`
+    query GET_LOGIN_INFO {
+        aboutServer {
+            ssoEnabled
         }
     }
 `;
