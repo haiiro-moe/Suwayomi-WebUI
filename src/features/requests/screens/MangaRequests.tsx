@@ -15,6 +15,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
+import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -23,6 +24,7 @@ import Typography from '@mui/material/Typography';
 import { useLingui } from '@lingui/react/macro';
 import dayjs from 'dayjs';
 import { AwaitableComponent } from 'awaitable-component';
+import { Link } from 'react-router-dom';
 import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { LoadingPlaceholder } from '@/base/components/feedback/LoadingPlaceholder.tsx';
 import { EmptyViewAbsoluteCentered } from '@/base/components/feedback/EmptyViewAbsoluteCentered.tsx';
@@ -31,6 +33,8 @@ import { makeToast } from '@/base/utils/Toast.ts';
 import { useAppTitle } from '@/features/navigation-bar/hooks/useAppTitle.ts';
 import { usePermissions } from '@/features/authentication/usePermissions.ts';
 import { CategorySelect } from '@/features/category/components/CategorySelect';
+import { AppRoutes } from '@/base/AppRoute.constants.ts';
+import { SpinnerImage } from '@/base/components/SpinnerImage.tsx';
 
 const STATUS_TO_COLOR = {
     PENDING: 'warning',
@@ -50,8 +54,9 @@ export function MangaRequests() {
     const permissions = usePermissions();
     const canManage = permissions.has('requests.manage');
 
+    // kept up to date by the user events subscription
     const { data, loading, error, refetch } = requestManager.useGetMangaRequests({
-        pollInterval: 30000,
+        fetchPolicy: 'cache-and-network',
     });
     const [decideRequest] = requestManager.useDecideMangaRequest();
     const [updateMangaCategories] = requestManager.useUpdateMangaCategories();
@@ -139,6 +144,13 @@ export function MangaRequests() {
                 <Stack spacing={1.5}>
                     {sortedRequests.map((request) => {
                         const isPending = request.status === 'PENDING';
+                        // request timestamps are unix seconds
+                        const createdAt = dayjs.unix(Number(request.createdAt));
+                        const decidedAt = request.decidedAt != null ? dayjs.unix(Number(request.decidedAt)) : null;
+                        const decidedBy = request.decidedByDisplayName
+                            ? `${request.decidedByDisplayName} (@${request.decidedByUsername})`
+                            : null;
+                        const canOpenManga = request.mangaTitle != null;
                         return (
                             <Card
                                 key={request.id}
@@ -150,63 +162,88 @@ export function MangaRequests() {
                                     ...(isPending && { borderColor: 'warning.main' }),
                                 }}
                             >
-                                <CardContent sx={{ pb: 0 }}>
-                                    <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
-                                        {request.mangaThumbnailUrl ? (
-                                            <Box
-                                                component="img"
-                                                src={request.mangaThumbnailUrl}
-                                                alt={request.mangaTitle ?? ''}
-                                                sx={{
-                                                    width: 42,
-                                                    height: 60,
-                                                    objectFit: 'cover',
-                                                    borderRadius: 1.5,
-                                                    boxShadow: 1,
-                                                    flexShrink: 0,
-                                                }}
-                                            />
-                                        ) : (
-                                            <Box
-                                                sx={{
-                                                    width: 42,
-                                                    height: 60,
-                                                    borderRadius: 1.5,
-                                                    bgcolor: 'action.hover',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    flexShrink: 0,
-                                                }}
-                                            >
-                                                <Typography variant="caption">?</Typography>
-                                            </Box>
-                                        )}
-                                        <Stack sx={{ flex: 1, minWidth: 0 }}>
-                                            <Typography variant="subtitle1" sx={{ wordBreak: 'break-word' }}>
-                                                {request.mangaTitle ?? t`Manga you cannot see`}
-                                            </Typography>
-                                            <Typography color="text.secondary" variant="body2" noWrap>
-                                                {request.displayName} (@{request.username})
-                                            </Typography>
-                                            <Tooltip title={dayjs(Number(request.createdAt)).format('LLL')}>
-                                                <Typography color="text.secondary" variant="caption">
-                                                    {dayjs(Number(request.createdAt)).fromNow()}
+                                <CardActionArea
+                                    component={Link}
+                                    to={AppRoutes.manga.path(request.mangaId)}
+                                    disabled={!canOpenManga}
+                                >
+                                    <CardContent sx={{ pb: canManage && isPending ? 0 : undefined }}>
+                                        <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
+                                            {request.mangaThumbnailUrl ? (
+                                                <Box
+                                                    sx={{
+                                                        width: 42,
+                                                        height: 60,
+                                                        borderRadius: 1.5,
+                                                        overflow: 'hidden',
+                                                        boxShadow: 1,
+                                                        flexShrink: 0,
+                                                    }}
+                                                >
+                                                    <SpinnerImage
+                                                        src={requestManager.getValidImgUrlFor(
+                                                            request.mangaThumbnailUrl,
+                                                        )}
+                                                        alt={request.mangaTitle ?? ''}
+                                                        spinnerStyle={{ small: true }}
+                                                        imgStyle={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                    />
+                                                </Box>
+                                            ) : (
+                                                <Box
+                                                    sx={{
+                                                        width: 42,
+                                                        height: 60,
+                                                        borderRadius: 1.5,
+                                                        bgcolor: 'action.hover',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        flexShrink: 0,
+                                                    }}
+                                                >
+                                                    <Typography variant="caption">?</Typography>
+                                                </Box>
+                                            )}
+                                            <Stack sx={{ flex: 1, minWidth: 0 }}>
+                                                <Typography variant="subtitle1" sx={{ wordBreak: 'break-word' }}>
+                                                    {request.mangaTitle ?? t`Manga you cannot see`}
                                                 </Typography>
-                                            </Tooltip>
+                                                <Typography color="text.secondary" variant="body2" noWrap>
+                                                    {request.displayName} (@{request.username})
+                                                </Typography>
+                                                <Tooltip title={createdAt.format('LLL')}>
+                                                    <Typography color="text.secondary" variant="caption">
+                                                        {t`Requested ${createdAt.fromNow()}`}
+                                                    </Typography>
+                                                </Tooltip>
+                                                {!isPending && (decidedBy || decidedAt) && (
+                                                    <Tooltip title={decidedAt?.format('LLL') ?? ''}>
+                                                        <Typography color="text.secondary" variant="caption">
+                                                            {(() => {
+                                                                const when = decidedAt?.fromNow() ?? '';
+                                                                const who = decidedBy ?? t`unknown user`;
+                                                                return request.status === 'APPROVED'
+                                                                    ? t`Approved by ${who} ${when}`
+                                                                    : t`Denied by ${who} ${when}`;
+                                                            })()}
+                                                        </Typography>
+                                                    </Tooltip>
+                                                )}
+                                            </Stack>
+                                            <Chip
+                                                icon={STATUS_TO_ICON[request.status]}
+                                                label={request.status}
+                                                color={
+                                                    STATUS_TO_COLOR[request.status as keyof typeof STATUS_TO_COLOR] ??
+                                                    'default'
+                                                }
+                                                size="small"
+                                                variant={isPending ? 'filled' : 'outlined'}
+                                            />
                                         </Stack>
-                                        <Chip
-                                            icon={STATUS_TO_ICON[request.status]}
-                                            label={request.status}
-                                            color={
-                                                STATUS_TO_COLOR[request.status as keyof typeof STATUS_TO_COLOR] ??
-                                                'default'
-                                            }
-                                            size="small"
-                                            variant={isPending ? 'filled' : 'outlined'}
-                                        />
-                                    </Stack>
-                                </CardContent>
+                                    </CardContent>
+                                </CardActionArea>
                                 {canManage && isPending && (
                                     <CardActions sx={{ justifyContent: 'flex-end' }}>
                                         <Button color="error" onClick={() => decide(request.id, false)}>
