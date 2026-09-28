@@ -1398,6 +1398,10 @@ export type MangaOrderInput = {
 export type MangaRequestType = {
     __typename?: 'MangaRequestType';
     createdAt: Scalars['LongString']['output'];
+    decidedAt?: Maybe<Scalars['LongString']['output']>;
+    decidedByDisplayName?: Maybe<Scalars['String']['output']>;
+    decidedById?: Maybe<Scalars['Int']['output']>;
+    decidedByUsername?: Maybe<Scalars['String']['output']>;
     displayName: Scalars['String']['output'];
     id: Scalars['Int']['output'];
     mangaId: Scalars['Int']['output'];
@@ -1621,6 +1625,7 @@ export type Mutation = {
     restoreBackup: RestoreBackupPayload;
     sendMessage: MessageMutationPayload;
     setCategoryAccess: SetCategoryAccessPayload;
+    setRoleCategoryAccess: SetCategoryAccessPayload;
     setCategoryMeta?: Maybe<SetCategoryMetaPayload>;
     setCategoryMetas?: Maybe<SetCategoryMetasPayload>;
     setChapterMeta?: Maybe<SetChapterMetaPayload>;
@@ -1897,6 +1902,10 @@ export type MutationSendMessageArgs = {
 
 export type MutationSetCategoryAccessArgs = {
     input: SetCategoryAccessInput;
+};
+
+export type MutationSetRoleCategoryAccessArgs = {
+    input: SetRoleCategoryAccessInput;
 };
 
 export type MutationSetCategoryMetaArgs = {
@@ -2404,6 +2413,8 @@ export type Query = {
     libraryUpdateStatus: LibraryUpdateStatus;
     manga: MangaType;
     mangaRequests: Array<MangaRequestType>;
+    pendingMangaRequestCount: Scalars['Int']['output'];
+    roleCategoryAccess: Array<RoleCategoryAccessType>;
     mangas: MangaNodeList;
     meta: GlobalMetaType;
     metas: GlobalMetaNodeList;
@@ -2449,6 +2460,10 @@ export type QueryCategoryArgs = {
 
 export type QueryCategoryAccessArgs = {
     userId: Scalars['Int']['input'];
+};
+
+export type QueryRoleCategoryAccessArgs = {
+    roleId: Scalars['Int']['input'];
 };
 
 export type QueryChapterArgs = {
@@ -2745,6 +2760,22 @@ export type SetCategoryAccessPayload = {
     __typename?: 'SetCategoryAccessPayload';
     clientMutationId?: Maybe<Scalars['String']['output']>;
     updated: Scalars['Boolean']['output'];
+};
+
+export type SetRoleCategoryAccessInput = {
+    canEdit: Scalars['Boolean']['input'];
+    canRead: Scalars['Boolean']['input'];
+    categoryIds: Array<Scalars['Int']['input']>;
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    roleId: Scalars['Int']['input'];
+};
+
+export type RoleCategoryAccessType = {
+    __typename?: 'RoleCategoryAccessType';
+    canEdit: Scalars['Boolean']['output'];
+    canRead: Scalars['Boolean']['output'];
+    categoryId: Scalars['Int']['output'];
+    roleId: Scalars['Int']['output'];
 };
 
 export type SetCategoryMetaInput = {
@@ -3432,8 +3463,20 @@ export type Subscription = {
     syncStatusChanged: SyncStatus;
     /** @deprecated Replaced with updates, replace with updates(input) */
     updateStatusChanged: UpdateStatus;
+    userEvents: UserEvent;
     webUIUpdateStatusChange: WebUiUpdateStatus;
 };
+
+export type UserEvent = {
+    __typename?: 'UserEvent';
+    otherUserId?: Maybe<Scalars['Int']['output']>;
+    type: UserEventType;
+};
+
+export enum UserEventType {
+    MessagesChanged = 'MESSAGES_CHANGED',
+    RequestsChanged = 'REQUESTS_CHANGED',
+}
 
 export type SubscriptionDownloadStatusChangedArgs = {
     input: DownloadChangedInput;

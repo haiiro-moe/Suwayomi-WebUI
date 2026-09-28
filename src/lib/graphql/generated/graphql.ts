@@ -61,6 +61,30 @@ export type DeleteRoleMutation = {
     deleteRole: { __typename: 'OperationPayload'; success: boolean };
 };
 
+export type SetRoleCategoryAccessMutationVariables = Exact<{
+    input: Types.SetRoleCategoryAccessInput;
+}>;
+
+export type SetRoleCategoryAccessMutation = {
+    __typename: 'Mutation';
+    setRoleCategoryAccess: { __typename: 'SetCategoryAccessPayload'; updated: boolean };
+};
+
+export type GetRoleCategoryAccessQueryVariables = Exact<{
+    roleId: number;
+}>;
+
+export type GetRoleCategoryAccessQuery = {
+    __typename: 'Query';
+    roleCategoryAccess: Array<{
+        __typename: 'RoleCategoryAccessType';
+        roleId: number;
+        categoryId: number;
+        canRead: boolean;
+        canEdit: boolean;
+    }>;
+};
+
 export type GetCategoryAccessQueryVariables = Exact<{
     userId: number;
 }>;
@@ -5277,6 +5301,13 @@ export type GetConversationQuery = {
     }>;
 };
 
+export type UserEventsSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type UserEventsSubscription = {
+    __typename: 'Subscription';
+    userEvents: { __typename: 'UserEvent'; type: Types.UserEventType; otherUserId: number | null };
+};
+
 export type GetUnreadMessageCountQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetUnreadMessageCountQuery = { __typename: 'Query'; unreadMessageCount: string };
@@ -5440,8 +5471,16 @@ export type GetMangaRequestsQuery = {
         mangaThumbnailUrl: string | null;
         createdAt: string;
         status: string;
+        decidedById: number | null;
+        decidedByUsername: string | null;
+        decidedByDisplayName: string | null;
+        decidedAt: string | null;
     }>;
 };
+
+export type GetPendingMangaRequestCountQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetPendingMangaRequestCountQuery = { __typename: 'Query'; pendingMangaRequestCount: number };
 
 export type DecideMangaRequestMutationVariables = Exact<{
     input: Types.DecideMangaRequestInput;

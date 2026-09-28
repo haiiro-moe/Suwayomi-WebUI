@@ -19,6 +19,17 @@ export const GET_CATEGORY_ACCESS = gql`
     }
 `;
 
+export const GET_ROLE_CATEGORY_ACCESS = gql`
+    query GET_ROLE_CATEGORY_ACCESS($roleId: Int!) {
+        roleCategoryAccess(roleId: $roleId) {
+            roleId
+            categoryId
+            canRead
+            canEdit
+        }
+    }
+`;
+
 export const GET_ADMIN_USERS = gql`
     query GET_ADMIN_USERS {
         users {

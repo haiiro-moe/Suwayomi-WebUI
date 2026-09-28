@@ -40,7 +40,7 @@ function ConversationListItem({
     const navigate = useNavigate();
     const { data, loading } = requestManager.useGetConversation(
         { otherUserId: user.id },
-        { pollInterval: 15000, fetchPolicy: 'cache-and-network' },
+        { fetchPolicy: 'cache-and-network' },
     );
     const messages = data?.conversation ?? [];
     const lastMessage = messages.at(-1);

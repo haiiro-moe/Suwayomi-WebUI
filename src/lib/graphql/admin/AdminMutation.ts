@@ -16,6 +16,14 @@ export const SET_CATEGORY_ACCESS = gql`
     }
 `;
 
+export const SET_ROLE_CATEGORY_ACCESS = gql`
+    mutation SET_ROLE_CATEGORY_ACCESS($input: SetRoleCategoryAccessInput!) {
+        setRoleCategoryAccess(input: $input) {
+            updated
+        }
+    }
+`;
+
 export const CREATE_USER = gql`
     mutation CREATE_USER($input: CreateUserInput!) {
         createUser(input: $input) {

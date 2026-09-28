@@ -128,7 +128,17 @@ export const GET_MANGA_REQUESTS = gql`
             mangaThumbnailUrl
             createdAt
             status
+            decidedById
+            decidedByUsername
+            decidedByDisplayName
+            decidedAt
         }
+    }
+`;
+
+export const GET_PENDING_MANGA_REQUEST_COUNT = gql`
+    query GET_PENDING_MANGA_REQUEST_COUNT {
+        pendingMangaRequestCount
     }
 `;
 

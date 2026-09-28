@@ -72,6 +72,14 @@ import type {
     GetCategoryAccessQueryVariables,
     SetCategoryAccessMutation,
     SetCategoryAccessMutationVariables,
+    GetRoleCategoryAccessQuery,
+    GetRoleCategoryAccessQueryVariables,
+    SetRoleCategoryAccessMutation,
+    SetRoleCategoryAccessMutationVariables,
+    GetPendingMangaRequestCountQuery,
+    GetPendingMangaRequestCountQueryVariables,
+    UserEventsSubscription,
+    UserEventsSubscriptionVariables,
     GetCurrentUserProfileQuery,
     GetCurrentUserProfileQueryVariables,
     GetUserDirectoryQuery,
@@ -411,6 +419,7 @@ import {
     DECIDE_MANGA_REQUEST,
     GET_MANGA_REQUESTS,
     GET_MY_MANGA_NOTE,
+    GET_PENDING_MANGA_REQUEST_COUNT,
     GET_OTHER_USER_MANGA_NOTES,
     GET_REQUEST_PREVIEW,
     REMOVE_FAVORITE,
@@ -429,6 +438,7 @@ import {
     GET_USER_PROFILE,
     MARK_MESSAGE_READ,
     SEND_MESSAGE,
+    USER_EVENTS_SUBSCRIPTION,
 } from '@/lib/graphql/user/UserCommunity.ts';
 import { GET_USER_SETTINGS, RESET_USER_SETTINGS, SET_USER_SETTINGS } from '@/lib/graphql/user/UserSettings.ts';
 import {
@@ -437,10 +447,16 @@ import {
     DELETE_ROLE,
     DELETE_USER,
     SET_CATEGORY_ACCESS,
+    SET_ROLE_CATEGORY_ACCESS,
     UPDATE_ROLE,
     UPDATE_USER,
 } from '@/lib/graphql/admin/AdminMutation.ts';
-import { GET_ADMIN_ROLES, GET_ADMIN_USERS, GET_CATEGORY_ACCESS } from '@/lib/graphql/admin/AdminQuery.ts';
+import {
+    GET_ADMIN_ROLES,
+    GET_ADMIN_USERS,
+    GET_CATEGORY_ACCESS,
+    GET_ROLE_CATEGORY_ACCESS,
+} from '@/lib/graphql/admin/AdminQuery.ts';
 import { AuthManager } from '@/features/authentication/AuthManager.ts';
 import { useLocalStorage } from '@/base/hooks/useStorage.tsx';
 import { KO_SYNC_LOGIN, KO_SYNC_LOGOUT } from '@/lib/graphql/koreader/KoreaderSyncMutation.ts';
@@ -1611,6 +1627,29 @@ export class RequestManager {
             undefined,
             options,
         ) as AbortableApolloUseMutationResponse<SetCategoryAccessMutation, SetCategoryAccessMutationVariables>;
+    }
+
+    public useGetRoleCategoryAccess(
+        roleId: number | undefined,
+        options?: QueryHookOptions<GetRoleCategoryAccessQuery, GetRoleCategoryAccessQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetRoleCategoryAccessQuery, GetRoleCategoryAccessQueryVariables> {
+        return this.doRequest<GetRoleCategoryAccessQuery, GetRoleCategoryAccessQueryVariables>(
+            GQLMethod.USE_QUERY,
+            GET_ROLE_CATEGORY_ACCESS,
+            { roleId: roleId ?? 0 },
+            { skip: roleId === undefined, ...options },
+        ) as AbortableApolloUseQueryResponse<GetRoleCategoryAccessQuery, GetRoleCategoryAccessQueryVariables>;
+    }
+
+    public useSetRoleCategoryAccess(
+        options?: MutationHookOptions<SetRoleCategoryAccessMutation, SetRoleCategoryAccessMutationVariables>,
+    ): AbortableApolloUseMutationResponse<SetRoleCategoryAccessMutation, SetRoleCategoryAccessMutationVariables> {
+        return this.doRequest<SetRoleCategoryAccessMutation, SetRoleCategoryAccessMutationVariables>(
+            GQLMethod.USE_MUTATION,
+            SET_ROLE_CATEGORY_ACCESS,
+            undefined,
+            options,
+        ) as AbortableApolloUseMutationResponse<SetRoleCategoryAccessMutation, SetRoleCategoryAccessMutationVariables>;
     }
 
     public useGetAdminRoles(
@@ -4255,6 +4294,18 @@ export class RequestManager {
         options?: QueryHookOptions<GetMangaRequestsQuery, GetMangaRequestsQueryVariables>,
     ): AbortableApolloUseQueryResponse<GetMangaRequestsQuery, GetMangaRequestsQueryVariables> {
         return this.doRequest(GQLMethod.USE_QUERY, GET_MANGA_REQUESTS, {}, options);
+    }
+
+    public useGetPendingMangaRequestCount(
+        options?: QueryHookOptions<GetPendingMangaRequestCountQuery, GetPendingMangaRequestCountQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetPendingMangaRequestCountQuery, GetPendingMangaRequestCountQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_PENDING_MANGA_REQUEST_COUNT, {}, options);
+    }
+
+    public useUserEventsSubscription(
+        options?: SubscriptionHookOptions<UserEventsSubscription, UserEventsSubscriptionVariables>,
+    ): useSubscription.Result<UserEventsSubscription> {
+        return this.doRequest(GQLMethod.USE_SUBSCRIPTION, USER_EVENTS_SUBSCRIPTION, undefined, options);
     }
 
     public useDecideMangaRequest(
