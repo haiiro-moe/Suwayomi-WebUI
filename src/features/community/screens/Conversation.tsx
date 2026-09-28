@@ -179,7 +179,7 @@ export function Conversation() {
                                         opacity: 0.7,
                                     }}
                                 >
-                                    {dayjs(Number(message.createdAt)).format('LT')}
+                                    {dayjs.unix(Number(message.createdAt)).format('LT')}
                                 </Typography>
                             </Paper>
                         </Box>

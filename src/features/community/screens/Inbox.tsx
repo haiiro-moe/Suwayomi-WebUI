@@ -75,7 +75,7 @@ function ConversationListItem({
                 />
                 {!!lastMessage && (
                     <Typography variant="caption" color="text.secondary" sx={{ flexShrink: 0, ml: 1 }}>
-                        {dayjs(Number(lastMessage.createdAt)).fromNow()}
+                        {dayjs.unix(Number(lastMessage.createdAt)).fromNow()}
                     </Typography>
                 )}
             </ListItemButton>
