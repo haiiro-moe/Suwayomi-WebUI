@@ -894,6 +894,10 @@ export type MangaNodeListFieldPolicy = {
 };
 export type MangaRequestTypeKeySpecifier = (
     | 'createdAt'
+    | 'decidedAt'
+    | 'decidedByDisplayName'
+    | 'decidedById'
+    | 'decidedByUsername'
     | 'displayName'
     | 'id'
     | 'mangaId'
@@ -906,6 +910,10 @@ export type MangaRequestTypeKeySpecifier = (
 )[];
 export type MangaRequestTypeFieldPolicy = {
     createdAt?: FieldPolicy<any> | FieldReadFunction<any>;
+    decidedAt?: FieldPolicy<any> | FieldReadFunction<any>;
+    decidedByDisplayName?: FieldPolicy<any> | FieldReadFunction<any>;
+    decidedById?: FieldPolicy<any> | FieldReadFunction<any>;
+    decidedByUsername?: FieldPolicy<any> | FieldReadFunction<any>;
     displayName?: FieldPolicy<any> | FieldReadFunction<any>;
     id?: FieldPolicy<any> | FieldReadFunction<any>;
     mangaId?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1121,6 +1129,7 @@ export type MutationKeySpecifier = (
     | 'restoreBackup'
     | 'sendMessage'
     | 'setCategoryAccess'
+    | 'setRoleCategoryAccess'
     | 'setCategoryMeta'
     | 'setCategoryMetas'
     | 'setChapterMeta'
@@ -1224,6 +1233,7 @@ export type MutationFieldPolicy = {
     restoreBackup?: FieldPolicy<any> | FieldReadFunction<any>;
     sendMessage?: FieldPolicy<any> | FieldReadFunction<any>;
     setCategoryAccess?: FieldPolicy<any> | FieldReadFunction<any>;
+    setRoleCategoryAccess?: FieldPolicy<any> | FieldReadFunction<any>;
     setCategoryMeta?: FieldPolicy<any> | FieldReadFunction<any>;
     setCategoryMetas?: FieldPolicy<any> | FieldReadFunction<any>;
     setChapterMeta?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1566,6 +1576,8 @@ export type QueryKeySpecifier = (
     | 'libraryUpdateStatus'
     | 'manga'
     | 'mangaRequests'
+    | 'pendingMangaRequestCount'
+    | 'roleCategoryAccess'
     | 'mangas'
     | 'meta'
     | 'metas'
@@ -1618,6 +1630,8 @@ export type QueryFieldPolicy = {
     libraryUpdateStatus?: FieldPolicy<any> | FieldReadFunction<any>;
     manga?: FieldPolicy<any> | FieldReadFunction<any>;
     mangaRequests?: FieldPolicy<any> | FieldReadFunction<any>;
+    pendingMangaRequestCount?: FieldPolicy<any> | FieldReadFunction<any>;
+    roleCategoryAccess?: FieldPolicy<any> | FieldReadFunction<any>;
     mangas?: FieldPolicy<any> | FieldReadFunction<any>;
     meta?: FieldPolicy<any> | FieldReadFunction<any>;
     metas?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1692,6 +1706,24 @@ export type RestoreBackupPayloadFieldPolicy = {
     clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
     id?: FieldPolicy<any> | FieldReadFunction<any>;
     status?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type RoleCategoryAccessTypeKeySpecifier = (
+    | 'canEdit'
+    | 'canRead'
+    | 'categoryId'
+    | 'roleId'
+    | RoleCategoryAccessTypeKeySpecifier
+)[];
+export type RoleCategoryAccessTypeFieldPolicy = {
+    canEdit?: FieldPolicy<any> | FieldReadFunction<any>;
+    canRead?: FieldPolicy<any> | FieldReadFunction<any>;
+    categoryId?: FieldPolicy<any> | FieldReadFunction<any>;
+    roleId?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type UserEventKeySpecifier = ('otherUserId' | 'type' | UserEventKeySpecifier)[];
+export type UserEventFieldPolicy = {
+    otherUserId?: FieldPolicy<any> | FieldReadFunction<any>;
+    type?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type RoleTypeKeySpecifier = ('description' | 'id' | 'name' | 'permissions' | RoleTypeKeySpecifier)[];
 export type RoleTypeFieldPolicy = {
@@ -2384,6 +2416,7 @@ export type SubscriptionKeySpecifier = (
     | 'libraryUpdateStatusChanged'
     | 'syncStatusChanged'
     | 'updateStatusChanged'
+    | 'userEvents'
     | 'webUIUpdateStatusChange'
     | SubscriptionKeySpecifier
 )[];
@@ -2393,6 +2426,7 @@ export type SubscriptionFieldPolicy = {
     libraryUpdateStatusChanged?: FieldPolicy<any> | FieldReadFunction<any>;
     syncStatusChanged?: FieldPolicy<any> | FieldReadFunction<any>;
     updateStatusChanged?: FieldPolicy<any> | FieldReadFunction<any>;
+    userEvents?: FieldPolicy<any> | FieldReadFunction<any>;
     webUIUpdateStatusChange?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type SwitchPreferenceKeySpecifier = (
@@ -3435,6 +3469,14 @@ export type StrictTypedTypePolicies = {
     RestoreBackupPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | RestoreBackupPayloadKeySpecifier | (() => undefined | RestoreBackupPayloadKeySpecifier);
         fields?: RestoreBackupPayloadFieldPolicy;
+    };
+    RoleCategoryAccessType?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | RoleCategoryAccessTypeKeySpecifier | (() => undefined | RoleCategoryAccessTypeKeySpecifier);
+        fields?: RoleCategoryAccessTypeFieldPolicy;
+    };
+    UserEvent?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | UserEventKeySpecifier | (() => undefined | UserEventKeySpecifier);
+        fields?: UserEventFieldPolicy;
     };
     RoleType?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | RoleTypeKeySpecifier | (() => undefined | RoleTypeKeySpecifier);

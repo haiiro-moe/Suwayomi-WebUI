@@ -27,6 +27,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutlined';
 import MailIcon from '@mui/icons-material/Mail';
 import MailOutlineIcon from '@mui/icons-material/MailOutlined';
+import { d } from 'koration';
 import { useLingui } from '@lingui/react/macro';
 import { msg, plural } from '@lingui/core/macro';
 import type { NavbarItem } from '@/features/navigation-bar/NavigationBar.types.ts';
@@ -163,8 +164,9 @@ const NAVIGATION_BAR_DESKTOP_ITEMS = [
         show: 'desktop',
         moreGroup: NavBarItemMoreGroup.SETTING_INFO,
         useBadge: () => {
+            // updated by the user events subscription, polling is only a fallback for missed events
             const { data } = requestManager.useGetUnreadMessageCount({
-                pollInterval: 15000,
+                pollInterval: d(5).minutes.inWholeMilliseconds,
             });
             const count = Number(data?.unreadMessageCount ?? 0);
 
@@ -204,6 +206,19 @@ const NAVIGATION_BAR_DESKTOP_ITEMS = [
         show: 'desktop',
         moreGroup: NavBarItemMoreGroup.SETTING_INFO,
         requiredPermission: 'requests.read',
+        useBadge: () => {
+            const { t } = useLingui();
+            // updated by the user events subscription, polling is only a fallback for missed events
+            const { data } = requestManager.useGetPendingMangaRequestCount({
+                pollInterval: d(5).minutes.inWholeMilliseconds,
+            });
+            const count = data?.pendingMangaRequestCount ?? 0;
+
+            return {
+                count,
+                title: count ? t`${count} pending` : '',
+            };
+        },
     },
 ] as const satisfies RestrictedNavBarItem<'desktop'>[];
 

@@ -317,6 +317,10 @@ msgid "{count, plural, one {You are about to remove one entry from your library}
 msgstr "{count, plural, one {You are about to remove one entry from your library} other {You are about to remove # entries from your library}}"
 
 #: src/features/navigation-bar/NavigationBar.constants.ts
+msgid "{count} pending"
+msgstr "{count} pending"
+
+#: src/features/navigation-bar/NavigationBar.constants.ts
 msgid "{count} remaining"
 msgstr "{count} remaining"
 
@@ -516,6 +520,10 @@ msgstr "Apply safe area padding"
 #: src/features/requests/screens/MangaRequests.tsx
 msgid "Approve"
 msgstr "Approve"
+
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Approved by {who} {when}"
+msgstr "Approved by {who} {when}"
 
 #: src/features/migration/MigrationManager.ts
 msgid "Are you sure you want to abort the migration?"
@@ -1564,6 +1572,10 @@ msgstr "Deleted theme \"{0}\""
 #: src/features/theme/components/ThemeList.tsx
 msgid "Deleting theme \"{0}\"…"
 msgstr "Deleting theme \"{0}\"…"
+
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Denied by {who} {when}"
+msgstr "Denied by {who} {when}"
 
 #: src/features/requests/screens/MangaRequests.tsx
 msgid "Deny"
@@ -3469,6 +3481,11 @@ msgstr "Request submitted"
 msgid "Request this manga"
 msgstr "Request this manga"
 
+#. placeholder {0}: createdAt.fromNow()
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "Requested {0}"
+msgstr "Requested {0}"
+
 #: src/features/navigation-bar/NavigationBar.constants.ts
 msgid "Requests"
 msgstr "Requests"
@@ -4466,6 +4483,10 @@ msgstr "Unknown"
 #: src/features/migration/MigrationManager.ts
 msgid "Unknown source"
 msgstr "Unknown source"
+
+#: src/features/requests/screens/MangaRequests.tsx
+msgid "unknown user"
+msgstr "unknown user"
 
 #: src/features/browse/sources/components/SourceCard.tsx
 msgid "Unpin source"

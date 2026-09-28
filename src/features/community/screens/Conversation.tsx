@@ -33,9 +33,10 @@ export function Conversation() {
     const otherUserId = Number(userId);
     const [content, setContent] = useState('');
     const scrollAnchorRef = useRef<HTMLDivElement>(null);
+    // kept up to date by the user events subscription
     const { data, loading, error, refetch } = requestManager.useGetConversation(
         { otherUserId },
-        { pollInterval: 15000 },
+        { fetchPolicy: 'cache-and-network' },
     );
     const [sendMessage] = requestManager.useSendMessage();
     const [markMessageRead] = requestManager.useMarkMessageRead();

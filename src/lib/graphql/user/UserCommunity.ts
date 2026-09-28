@@ -87,3 +87,12 @@ export const MARK_MESSAGE_READ = gql`
         }
     }
 `;
+
+export const USER_EVENTS_SUBSCRIPTION = gql`
+    subscription USER_EVENTS_SUBSCRIPTION {
+        userEvents {
+            type
+            otherUserId
+        }
+    }
+`;
