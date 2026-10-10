@@ -13,6 +13,7 @@ import PopupState, { bindMenu, bindTrigger } from 'material-ui-popup-state';
 import Menu from '@mui/material/Menu';
 import DownloadIcon from '@mui/icons-material/Download';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import { useMemo } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { CustomTooltip } from '@/base/components/CustomTooltip.tsx';
@@ -24,16 +25,19 @@ import type {
     ChapterDownloadInfo,
     ChapterIdInfo,
     ChapterListOptions,
+    ChapterOptimizedInfo,
     ChapterReadInfo,
 } from '@/features/chapter/Chapter.types.ts';
 import { ChaptersDownloadActionMenuItems } from '@/features/chapter/components/actions/ChaptersDownloadActionMenuItems.tsx';
 import { Chapters } from '@/features/chapter/services/Chapters.ts';
+import { defaultPromiseErrorHandler } from '@/lib/DefaultPromiseErrorHandler.ts';
+import { requestManager } from '@/lib/requests/RequestManager.ts';
 
 interface IProps {
     mangaId: number;
     options: ChapterListOptions;
     updateOption: ReturnType<typeof updateChapterListOptions>;
-    chapters: (ChapterIdInfo & ChapterReadInfo & ChapterDownloadInfo & ChapterBookmarkInfo)[];
+    chapters: (ChapterIdInfo & ChapterReadInfo & ChapterDownloadInfo & ChapterOptimizedInfo & ChapterBookmarkInfo)[];
     scanlators: string[];
     excludeScanlators: string[];
 }
@@ -53,6 +57,12 @@ export const ChaptersToolbarMenu = ({
 
     const areAllChaptersRead = useMemo(() => chapters.every(Chapters.isRead), [chapters]);
     const areAllChaptersDownloaded = useMemo(() => chapters.every(Chapters.isDownloaded), [chapters]);
+    // re-render on optimization queue changes, the queue state is read from the cache
+    const { data: optimizationStatusData } = requestManager.useGetOptimizationStatus({ fetchPolicy: 'cache-only' });
+    const optimizableChapters = useMemo(
+        () => Chapters.getOptimizable(chapters),
+        [chapters, optimizationStatusData?.optimizationStatus.queue],
+    );
 
     return (
         <>
@@ -68,7 +78,7 @@ export const ChaptersToolbarMenu = ({
             <PopupState variant="popover" popupId="chapterlist-download-button">
                 {(popupState) => (
                     <>
-                        <CustomTooltip title={t`Download`} disabled={areAllChaptersRead}>
+                        <CustomTooltip title={t`Download & optimize`} disabled={areAllChaptersDownloaded}>
                             <IconButton
                                 disabled={areAllChaptersDownloaded}
                                 {...bindTrigger(popupState)}
@@ -85,6 +95,19 @@ export const ChaptersToolbarMenu = ({
                     </>
                 )}
             </PopupState>
+            <CustomTooltip title={t`Optimize downloaded chapters`} disabled={!optimizableChapters.length}>
+                <IconButton
+                    disabled={!optimizableChapters.length}
+                    onClick={() =>
+                        Chapters.optimize(Chapters.getIds(optimizableChapters)).catch(
+                            defaultPromiseErrorHandler('ChaptersToolbarMenu::optimize'),
+                        )
+                    }
+                    color="inherit"
+                >
+                    <AutoFixHighIcon />
+                </IconButton>
+            </CustomTooltip>
             <CustomTooltip title={t`Filter and sort`}>
                 <IconButton onClick={() => setOpen(true)} color="inherit">
                     <FilterList color={isFiltered ? 'warning' : undefined} />

@@ -215,6 +215,7 @@ export type ChapterConditionInput = {
     id?: InputMaybe<Scalars['Int']['input']>;
     isBookmarked?: InputMaybe<Scalars['Boolean']['input']>;
     isDownloaded?: InputMaybe<Scalars['Boolean']['input']>;
+    isOptimized?: InputMaybe<Scalars['Boolean']['input']>;
     isRead?: InputMaybe<Scalars['Boolean']['input']>;
     lastPageRead?: InputMaybe<Scalars['Int']['input']>;
     lastReadAt?: InputMaybe<Scalars['LongString']['input']>;
@@ -247,6 +248,7 @@ export type ChapterFilterInput = {
     inLibrary?: InputMaybe<BooleanFilterInput>;
     isBookmarked?: InputMaybe<BooleanFilterInput>;
     isDownloaded?: InputMaybe<BooleanFilterInput>;
+    isOptimized?: InputMaybe<BooleanFilterInput>;
     isRead?: InputMaybe<BooleanFilterInput>;
     lastPageRead?: InputMaybe<IntFilterInput>;
     lastReadAt?: InputMaybe<LongFilterInput>;
@@ -284,6 +286,11 @@ export type ChapterNodeList = NodeList & {
     totalCount: Scalars['Int']['output'];
 };
 
+export type ChapterOptimizationReorderInput = {
+    chapterId: Scalars['Int']['input'];
+    to: Scalars['Int']['input'];
+};
+
 export enum ChapterOrderBy {
     ChapterNumber = 'CHAPTER_NUMBER',
     FetchedAt = 'FETCHED_AT',
@@ -313,6 +320,7 @@ export type ChapterType = {
     id: Scalars['Int']['output'];
     isBookmarked: Scalars['Boolean']['output'];
     isDownloaded: Scalars['Boolean']['output'];
+    isOptimized: Scalars['Boolean']['output'];
     isRead: Scalars['Boolean']['output'];
     lastPageRead: Scalars['Int']['output'];
     lastReadAt: Scalars['LongString']['output'];
@@ -384,6 +392,10 @@ export type ClearDownloaderPayload = {
     __typename?: 'ClearDownloaderPayload';
     clientMutationId?: Maybe<Scalars['String']['output']>;
     downloadStatus: DownloadStatus;
+};
+
+export type ClearOptimizerInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ConnectKoSyncAccountInput = {
@@ -681,6 +693,11 @@ export type DequeueChapterDownloadsPayload = {
     downloadStatus: DownloadStatus;
 };
 
+export type DequeueChapterOptimizationsInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    ids: Array<Scalars['Int']['input']>;
+};
+
 export type DoubleFilterInput = {
     distinctFrom?: InputMaybe<Scalars['Float']['input']>;
     distinctFromAll?: InputMaybe<Array<Scalars['Float']['input']>>;
@@ -814,6 +831,11 @@ export type EnqueueChapterDownloadsPayload = {
     __typename?: 'EnqueueChapterDownloadsPayload';
     clientMutationId?: Maybe<Scalars['String']['output']>;
     downloadStatus: DownloadStatus;
+};
+
+export type EnqueueChapterOptimizationsInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    ids: Array<Scalars['Int']['input']>;
 };
 
 export type ExtensionConditionInput = {
@@ -1570,6 +1592,7 @@ export type Mutation = {
     clearCachedImages: ClearCachedImagesPayload;
     clearCookiesAndCache: ClearCookiesAndCachePayload;
     clearDownloader?: Maybe<ClearDownloaderPayload>;
+    clearOptimizer: OptimizationStatusPayload;
     connectKoSyncAccount: KoSyncConnectPayload;
     createBackup: CreateBackupPayload;
     createCategory?: Maybe<CreateCategoryPayload>;
@@ -1593,8 +1616,10 @@ export type Mutation = {
     deleteUser: OperationPayload;
     dequeueChapterDownload?: Maybe<DequeueChapterDownloadPayload>;
     dequeueChapterDownloads?: Maybe<DequeueChapterDownloadsPayload>;
+    dequeueChapterOptimizations: OptimizationStatusPayload;
     enqueueChapterDownload?: Maybe<EnqueueChapterDownloadPayload>;
     enqueueChapterDownloads?: Maybe<EnqueueChapterDownloadsPayload>;
+    enqueueChapterOptimizations: OptimizationStatusPayload;
     fetchChapterPages?: Maybe<FetchChapterPagesPayload>;
     /** @deprecated Deprecated in Tachiyomix 1.6, replace with fetchMangaAndChapters */
     fetchChapters?: Maybe<FetchChaptersPayload>;
@@ -1618,6 +1643,7 @@ export type Mutation = {
     removeFavorite: ProfileMutationPayload;
     reorderChapterDownload?: Maybe<ReorderChapterDownloadPayload>;
     reorderChapterDownloads?: Maybe<ReorderChapterDownloadPayload>;
+    reorderChapterOptimizations: OptimizationStatusPayload;
     requestManga: RequestMangaPayload;
     resetSettings: ResetSettingsPayload;
     resetUserSettings: SetUserSettingsPayload;
@@ -1641,8 +1667,10 @@ export type Mutation = {
     setUserSettings: SetUserSettingsPayload;
     setupOwner: SetupOwnerPayload;
     startDownloader?: Maybe<StartDownloaderPayload>;
+    startOptimizer: OptimizationStatusPayload;
     startSync: StartSyncPayload;
     stopDownloader?: Maybe<StopDownloaderPayload>;
+    stopOptimizer: OptimizationStatusPayload;
     trackProgress?: Maybe<TrackProgressPayload>;
     unbindTrack: UnbindTrackPayload;
     updateCategories?: Maybe<UpdateCategoriesPayload>;
@@ -1694,6 +1722,10 @@ export type MutationClearCookiesAndCacheArgs = {
 
 export type MutationClearDownloaderArgs = {
     input: ClearDownloaderInput;
+};
+
+export type MutationClearOptimizerArgs = {
+    input: ClearOptimizerInput;
 };
 
 export type MutationConnectKoSyncAccountArgs = {
@@ -1788,12 +1820,20 @@ export type MutationDequeueChapterDownloadsArgs = {
     input: DequeueChapterDownloadsInput;
 };
 
+export type MutationDequeueChapterOptimizationsArgs = {
+    input: DequeueChapterOptimizationsInput;
+};
+
 export type MutationEnqueueChapterDownloadArgs = {
     input: EnqueueChapterDownloadInput;
 };
 
 export type MutationEnqueueChapterDownloadsArgs = {
     input: EnqueueChapterDownloadsInput;
+};
+
+export type MutationEnqueueChapterOptimizationsArgs = {
+    input: EnqueueChapterOptimizationsInput;
 };
 
 export type MutationFetchChapterPagesArgs = {
@@ -1878,6 +1918,10 @@ export type MutationReorderChapterDownloadArgs = {
 
 export type MutationReorderChapterDownloadsArgs = {
     input: ReorderChapterDownloadsInput;
+};
+
+export type MutationReorderChapterOptimizationsArgs = {
+    input: ReorderChapterOptimizationsInput;
 };
 
 export type MutationRequestMangaArgs = {
@@ -1968,12 +2012,20 @@ export type MutationStartDownloaderArgs = {
     input: StartDownloaderInput;
 };
 
+export type MutationStartOptimizerArgs = {
+    input: StartOptimizerInput;
+};
+
 export type MutationStartSyncArgs = {
     input: StartSyncInput;
 };
 
 export type MutationStopDownloaderArgs = {
     input: StopDownloaderInput;
+};
+
+export type MutationStopOptimizerArgs = {
+    input: StopOptimizerInput;
 };
 
 export type MutationTrackProgressArgs = {
@@ -2080,6 +2132,7 @@ export type Node =
     | GlobalMetaType
     | MangaMetaType
     | MangaType
+    | OptimizationType
     | PartialSettingsType
     | SettingsType
     | SourceMetaType
@@ -2097,6 +2150,67 @@ export type NodeList = {
     /** The count of all nodes you could get from the connection. */
     totalCount: Scalars['Int']['output'];
 };
+
+export enum OptimizationState {
+    Error = 'ERROR',
+    Finished = 'FINISHED',
+    Optimizing = 'OPTIMIZING',
+    Queued = 'QUEUED',
+}
+
+export type OptimizationStatus = {
+    __typename?: 'OptimizationStatus';
+    queue: Array<OptimizationType>;
+    state: OptimizerState;
+};
+
+export type OptimizationStatusPayload = {
+    __typename?: 'OptimizationStatusPayload';
+    clientMutationId?: Maybe<Scalars['String']['output']>;
+    optimizationStatus: OptimizationStatus;
+};
+
+export type OptimizationType = {
+    __typename?: 'OptimizationType';
+    chapter: ChapterType;
+    manga: MangaType;
+    /** Size in bytes of the downloaded files after the optimization, only set once it finished */
+    optimizedSize?: Maybe<Scalars['LongString']['output']>;
+    /** Size in bytes of the downloaded files before the optimization, only set once it finished */
+    originalSize?: Maybe<Scalars['LongString']['output']>;
+    position: Scalars['Int']['output'];
+    progress: Scalars['Float']['output'];
+    state: OptimizationState;
+    tries: Scalars['Int']['output'];
+};
+
+export type OptimizationUpdate = {
+    __typename?: 'OptimizationUpdate';
+    optimization: OptimizationType;
+    type: OptimizationUpdateType;
+};
+
+export enum OptimizationUpdateType {
+    Dequeued = 'DEQUEUED',
+    Error = 'ERROR',
+    Finished = 'FINISHED',
+    Position = 'POSITION',
+    Progress = 'PROGRESS',
+    Queued = 'QUEUED',
+}
+
+export type OptimizationUpdates = {
+    __typename?: 'OptimizationUpdates';
+    /** The current optimization queue at the time of sending initial message. Is null for all following messages */
+    initial?: Maybe<Array<OptimizationType>>;
+    state: OptimizerState;
+    updates: Array<OptimizationUpdate>;
+};
+
+export enum OptimizerState {
+    Started = 'STARTED',
+    Stopped = 'STOPPED',
+}
 
 export type OsInfo = {
     __typename?: 'OSInfo';
@@ -2420,6 +2534,7 @@ export type Query = {
     metas: GlobalMetaNodeList;
     myMangaNote: Scalars['String']['output'];
     onboardingStatus: Scalars['Boolean']['output'];
+    optimizationStatus: OptimizationStatus;
     otherUserMangaNotes: Array<UserMangaNoteType>;
     pendingMangaRequestCount: Scalars['Int']['output'];
     permissionNodes: Array<Scalars['String']['output']>;
@@ -2660,6 +2775,11 @@ export type ReorderChapterDownloadPayload = {
 export type ReorderChapterDownloadsInput = {
     clientMutationId?: InputMaybe<Scalars['String']['input']>;
     reorders: Array<ChapterDownloadReorderInput>;
+};
+
+export type ReorderChapterOptimizationsInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+    reorders: Array<ChapterOptimizationReorderInput>;
 };
 
 export type RequestMangaInput = {
@@ -3356,6 +3476,10 @@ export type StartDownloaderPayload = {
     downloadStatus: DownloadStatus;
 };
 
+export type StartOptimizerInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type StartSyncInput = {
     clientMutationId?: InputMaybe<Scalars['String']['input']>;
 };
@@ -3380,6 +3504,10 @@ export type StopDownloaderPayload = {
     __typename?: 'StopDownloaderPayload';
     clientMutationId?: Maybe<Scalars['String']['output']>;
     downloadStatus: DownloadStatus;
+};
+
+export type StopOptimizerInput = {
+    clientMutationId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type StringFilterInput = {
@@ -3464,6 +3592,7 @@ export type Subscription = {
     downloadChanged: DownloadStatus;
     downloadStatusChanged: DownloadUpdates;
     libraryUpdateStatusChanged: UpdaterUpdates;
+    optimizationStatusChanged: OptimizationUpdates;
     syncStatusChanged: SyncStatus;
     /** @deprecated Replaced with updates, replace with updates(input) */
     updateStatusChanged: UpdateStatus;

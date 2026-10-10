@@ -537,6 +537,7 @@ export type ChapterStateFieldsFragment = {
     id: number;
     isRead: boolean;
     isDownloaded: boolean;
+    isOptimized: boolean;
     isBookmarked: boolean;
 };
 
@@ -554,6 +555,7 @@ export type ChapterReaderFieldsFragment = {
     chapterNumber: number;
     isRead: boolean;
     isDownloaded: boolean;
+    isOptimized: boolean;
     isBookmarked: boolean;
 };
 
@@ -571,6 +573,7 @@ export type ChapterListFieldsFragment = {
     chapterNumber: number;
     isRead: boolean;
     isDownloaded: boolean;
+    isOptimized: boolean;
     isBookmarked: boolean;
 };
 
@@ -588,6 +591,7 @@ export type ChapterUpdateListFieldsFragment = {
     chapterNumber: number;
     isRead: boolean;
     isDownloaded: boolean;
+    isOptimized: boolean;
     isBookmarked: boolean;
     manga: {
         __typename: 'MangaType';
@@ -620,6 +624,7 @@ export type ChapterHistoryListFieldsFragment = {
     chapterNumber: number;
     isRead: boolean;
     isDownloaded: boolean;
+    isOptimized: boolean;
     isBookmarked: boolean;
     manga: {
         __typename: 'MangaType';
@@ -844,6 +849,7 @@ export type GetChaptersReaderQuery = {
             chapterNumber: number;
             isRead: boolean;
             isDownloaded: boolean;
+            isOptimized: boolean;
             isBookmarked: boolean;
         }>;
         pageInfo: {
@@ -886,6 +892,7 @@ export type GetChaptersMangaQuery = {
             chapterNumber: number;
             isRead: boolean;
             isDownloaded: boolean;
+            isOptimized: boolean;
             isBookmarked: boolean;
         }>;
         pageInfo: {
@@ -929,6 +936,7 @@ export type GetChaptersUpdatesQuery = {
             chapterNumber: number;
             isRead: boolean;
             isDownloaded: boolean;
+            isOptimized: boolean;
             isBookmarked: boolean;
             manga: {
                 __typename: 'MangaType';
@@ -986,6 +994,7 @@ export type GetChaptersHistoryQuery = {
             chapterNumber: number;
             isRead: boolean;
             isDownloaded: boolean;
+            isOptimized: boolean;
             isBookmarked: boolean;
             manga: {
                 __typename: 'MangaType';
@@ -1037,6 +1046,7 @@ export type GetMangasChapterIdsWithStateQuery = {
             id: number;
             isRead: boolean;
             isDownloaded: boolean;
+            isOptimized: boolean;
             isBookmarked: boolean;
         }>;
         pageInfo: {
@@ -1068,6 +1078,7 @@ export type DownloadTypeFieldsFragment = {
     chapter: {
         __typename: 'ChapterType';
         isDownloaded: boolean;
+        isOptimized: boolean;
         pageCount: number;
         id: number;
         name: string;
@@ -1110,6 +1121,7 @@ export type DownloadStatusFieldsFragment = {
         chapter: {
             __typename: 'ChapterType';
             isDownloaded: boolean;
+            isOptimized: boolean;
             pageCount: number;
             id: number;
             name: string;
@@ -1157,6 +1169,7 @@ export type DownloadUpdatesFieldsFragment = {
             chapter: {
                 __typename: 'ChapterType';
                 isDownloaded: boolean;
+                isOptimized: boolean;
                 pageCount: number;
                 id: number;
                 name: string;
@@ -1209,6 +1222,7 @@ export type ClearDownloaderMutation = {
                 chapter: {
                     __typename: 'ChapterType';
                     isDownloaded: boolean;
+                    isOptimized: boolean;
                     pageCount: number;
                     id: number;
                     name: string;
@@ -1254,6 +1268,7 @@ export type DeleteDownloadedChapterMutation = {
             __typename: 'ChapterType';
             id: number;
             isDownloaded: boolean;
+            isOptimized: boolean;
             manga: { __typename: 'MangaType'; id: number; downloadCount: number };
         };
     } | null;
@@ -1271,6 +1286,7 @@ export type DeleteDownloadedChaptersMutation = {
             __typename: 'ChapterType';
             id: number;
             isDownloaded: boolean;
+            isOptimized: boolean;
             manga: { __typename: 'MangaType'; id: number; downloadCount: number };
         }>;
     } | null;
@@ -1296,6 +1312,7 @@ export type DequeueChapterDownloadMutation = {
                 chapter: {
                     __typename: 'ChapterType';
                     isDownloaded: boolean;
+                    isOptimized: boolean;
                     pageCount: number;
                     id: number;
                     name: string;
@@ -1349,6 +1366,7 @@ export type DequeueChapterDownloadsMutation = {
                 chapter: {
                     __typename: 'ChapterType';
                     isDownloaded: boolean;
+                    isOptimized: boolean;
                     pageCount: number;
                     id: number;
                     name: string;
@@ -1402,6 +1420,7 @@ export type EnqueueChapterDownloadMutation = {
                 chapter: {
                     __typename: 'ChapterType';
                     isDownloaded: boolean;
+                    isOptimized: boolean;
                     pageCount: number;
                     id: number;
                     name: string;
@@ -1455,6 +1474,7 @@ export type EnqueueChapterDownloadsMutation = {
                 chapter: {
                     __typename: 'ChapterType';
                     isDownloaded: boolean;
+                    isOptimized: boolean;
                     pageCount: number;
                     id: number;
                     name: string;
@@ -1508,6 +1528,7 @@ export type ReorderChapterDownloadMutation = {
                 chapter: {
                     __typename: 'ChapterType';
                     isDownloaded: boolean;
+                    isOptimized: boolean;
                     pageCount: number;
                     id: number;
                     name: string;
@@ -1561,6 +1582,7 @@ export type ReorderChapterDownloadsMutation = {
                 chapter: {
                     __typename: 'ChapterType';
                     isDownloaded: boolean;
+                    isOptimized: boolean;
                     pageCount: number;
                     id: number;
                     name: string;
@@ -1634,6 +1656,7 @@ export type GetDownloadStatusQuery = {
             chapter: {
                 __typename: 'ChapterType';
                 isDownloaded: boolean;
+                isOptimized: boolean;
                 pageCount: number;
                 id: number;
                 name: string;
@@ -1688,6 +1711,7 @@ export type DownloadStatusSubscription = {
                 chapter: {
                     __typename: 'ChapterType';
                     isDownloaded: boolean;
+                    isOptimized: boolean;
                     pageCount: number;
                     id: number;
                     name: string;
@@ -2397,6 +2421,7 @@ export type RefreshMangaMutation = {
             chapterNumber: number;
             isRead: boolean;
             isDownloaded: boolean;
+            isOptimized: boolean;
             isBookmarked: boolean;
         }>;
     } | null;
@@ -3073,6 +3098,487 @@ export type GetGlobalMetadatasQuery = {
             hasPreviousPage: boolean;
             startCursor: string | null;
         };
+    };
+};
+
+export type OptimizationTypeFieldsFragment = {
+    __typename: 'OptimizationType';
+    progress: number;
+    state: Types.OptimizationState;
+    tries: number;
+    position: number;
+    originalSize: string | null;
+    optimizedSize: string | null;
+    chapter: {
+        __typename: 'ChapterType';
+        isDownloaded: boolean;
+        isOptimized: boolean;
+        pageCount: number;
+        id: number;
+        name: string;
+        mangaId: number;
+        scanlator: string | null;
+        realUrl: string | null;
+        sourceOrder: number;
+        chapterNumber: number;
+    };
+    manga: {
+        __typename: 'MangaType';
+        id: number;
+        title: string;
+        thumbnailUrl: string | null;
+        thumbnailUrlLastFetched: string | null;
+        inLibrary: boolean;
+        initialized: boolean;
+        sourceId: string;
+    };
+};
+
+export type OptimizationStatusFieldsFragment = {
+    __typename: 'OptimizationStatus';
+    state: Types.OptimizerState;
+    queue: Array<{
+        __typename: 'OptimizationType';
+        progress: number;
+        state: Types.OptimizationState;
+        tries: number;
+        position: number;
+        originalSize: string | null;
+        optimizedSize: string | null;
+        chapter: {
+            __typename: 'ChapterType';
+            isDownloaded: boolean;
+            isOptimized: boolean;
+            pageCount: number;
+            id: number;
+            name: string;
+            mangaId: number;
+            scanlator: string | null;
+            realUrl: string | null;
+            sourceOrder: number;
+            chapterNumber: number;
+        };
+        manga: {
+            __typename: 'MangaType';
+            id: number;
+            title: string;
+            thumbnailUrl: string | null;
+            thumbnailUrlLastFetched: string | null;
+            inLibrary: boolean;
+            initialized: boolean;
+            sourceId: string;
+        };
+    }>;
+};
+
+export type OptimizationUpdatesFieldsFragment = {
+    __typename: 'OptimizationUpdates';
+    state: Types.OptimizerState;
+    updates: Array<{
+        __typename: 'OptimizationUpdate';
+        type: Types.OptimizationUpdateType;
+        optimization: {
+            __typename: 'OptimizationType';
+            progress: number;
+            state: Types.OptimizationState;
+            tries: number;
+            position: number;
+            originalSize: string | null;
+            optimizedSize: string | null;
+            chapter: {
+                __typename: 'ChapterType';
+                isDownloaded: boolean;
+                isOptimized: boolean;
+                pageCount: number;
+                id: number;
+                name: string;
+                mangaId: number;
+                scanlator: string | null;
+                realUrl: string | null;
+                sourceOrder: number;
+                chapterNumber: number;
+            };
+            manga: {
+                __typename: 'MangaType';
+                id: number;
+                title: string;
+                thumbnailUrl: string | null;
+                thumbnailUrlLastFetched: string | null;
+                inLibrary: boolean;
+                initialized: boolean;
+                sourceId: string;
+            };
+        };
+    }>;
+};
+
+export type EnqueueChapterOptimizationsMutationVariables = Exact<{
+    input: Types.EnqueueChapterOptimizationsInput;
+}>;
+
+export type EnqueueChapterOptimizationsMutation = {
+    __typename: 'Mutation';
+    enqueueChapterOptimizations: {
+        __typename: 'OptimizationStatusPayload';
+        optimizationStatus: {
+            __typename: 'OptimizationStatus';
+            state: Types.OptimizerState;
+            queue: Array<{
+                __typename: 'OptimizationType';
+                progress: number;
+                state: Types.OptimizationState;
+                tries: number;
+                position: number;
+                originalSize: string | null;
+                optimizedSize: string | null;
+                chapter: {
+                    __typename: 'ChapterType';
+                    isDownloaded: boolean;
+                    isOptimized: boolean;
+                    pageCount: number;
+                    id: number;
+                    name: string;
+                    mangaId: number;
+                    scanlator: string | null;
+                    realUrl: string | null;
+                    sourceOrder: number;
+                    chapterNumber: number;
+                };
+                manga: {
+                    __typename: 'MangaType';
+                    id: number;
+                    title: string;
+                    thumbnailUrl: string | null;
+                    thumbnailUrlLastFetched: string | null;
+                    inLibrary: boolean;
+                    initialized: boolean;
+                    sourceId: string;
+                };
+            }>;
+        };
+    };
+};
+
+export type DequeueChapterOptimizationsMutationVariables = Exact<{
+    input: Types.DequeueChapterOptimizationsInput;
+}>;
+
+export type DequeueChapterOptimizationsMutation = {
+    __typename: 'Mutation';
+    dequeueChapterOptimizations: {
+        __typename: 'OptimizationStatusPayload';
+        optimizationStatus: {
+            __typename: 'OptimizationStatus';
+            state: Types.OptimizerState;
+            queue: Array<{
+                __typename: 'OptimizationType';
+                progress: number;
+                state: Types.OptimizationState;
+                tries: number;
+                position: number;
+                originalSize: string | null;
+                optimizedSize: string | null;
+                chapter: {
+                    __typename: 'ChapterType';
+                    isDownloaded: boolean;
+                    isOptimized: boolean;
+                    pageCount: number;
+                    id: number;
+                    name: string;
+                    mangaId: number;
+                    scanlator: string | null;
+                    realUrl: string | null;
+                    sourceOrder: number;
+                    chapterNumber: number;
+                };
+                manga: {
+                    __typename: 'MangaType';
+                    id: number;
+                    title: string;
+                    thumbnailUrl: string | null;
+                    thumbnailUrlLastFetched: string | null;
+                    inLibrary: boolean;
+                    initialized: boolean;
+                    sourceId: string;
+                };
+            }>;
+        };
+    };
+};
+
+export type ReorderChapterOptimizationsMutationVariables = Exact<{
+    input: Types.ReorderChapterOptimizationsInput;
+}>;
+
+export type ReorderChapterOptimizationsMutation = {
+    __typename: 'Mutation';
+    reorderChapterOptimizations: {
+        __typename: 'OptimizationStatusPayload';
+        optimizationStatus: {
+            __typename: 'OptimizationStatus';
+            state: Types.OptimizerState;
+            queue: Array<{
+                __typename: 'OptimizationType';
+                progress: number;
+                state: Types.OptimizationState;
+                tries: number;
+                position: number;
+                originalSize: string | null;
+                optimizedSize: string | null;
+                chapter: {
+                    __typename: 'ChapterType';
+                    isDownloaded: boolean;
+                    isOptimized: boolean;
+                    pageCount: number;
+                    id: number;
+                    name: string;
+                    mangaId: number;
+                    scanlator: string | null;
+                    realUrl: string | null;
+                    sourceOrder: number;
+                    chapterNumber: number;
+                };
+                manga: {
+                    __typename: 'MangaType';
+                    id: number;
+                    title: string;
+                    thumbnailUrl: string | null;
+                    thumbnailUrlLastFetched: string | null;
+                    inLibrary: boolean;
+                    initialized: boolean;
+                    sourceId: string;
+                };
+            }>;
+        };
+    };
+};
+
+export type ClearOptimizerMutationVariables = Exact<{
+    input?: Types.ClearOptimizerInput | null | undefined;
+}>;
+
+export type ClearOptimizerMutation = {
+    __typename: 'Mutation';
+    clearOptimizer: {
+        __typename: 'OptimizationStatusPayload';
+        optimizationStatus: {
+            __typename: 'OptimizationStatus';
+            state: Types.OptimizerState;
+            queue: Array<{
+                __typename: 'OptimizationType';
+                progress: number;
+                state: Types.OptimizationState;
+                tries: number;
+                position: number;
+                originalSize: string | null;
+                optimizedSize: string | null;
+                chapter: {
+                    __typename: 'ChapterType';
+                    isDownloaded: boolean;
+                    isOptimized: boolean;
+                    pageCount: number;
+                    id: number;
+                    name: string;
+                    mangaId: number;
+                    scanlator: string | null;
+                    realUrl: string | null;
+                    sourceOrder: number;
+                    chapterNumber: number;
+                };
+                manga: {
+                    __typename: 'MangaType';
+                    id: number;
+                    title: string;
+                    thumbnailUrl: string | null;
+                    thumbnailUrlLastFetched: string | null;
+                    inLibrary: boolean;
+                    initialized: boolean;
+                    sourceId: string;
+                };
+            }>;
+        };
+    };
+};
+
+export type StartOptimizerMutationVariables = Exact<{
+    input?: Types.StartOptimizerInput | null | undefined;
+}>;
+
+export type StartOptimizerMutation = {
+    __typename: 'Mutation';
+    startOptimizer: {
+        __typename: 'OptimizationStatusPayload';
+        optimizationStatus: {
+            __typename: 'OptimizationStatus';
+            state: Types.OptimizerState;
+            queue: Array<{
+                __typename: 'OptimizationType';
+                progress: number;
+                state: Types.OptimizationState;
+                tries: number;
+                position: number;
+                originalSize: string | null;
+                optimizedSize: string | null;
+                chapter: {
+                    __typename: 'ChapterType';
+                    isDownloaded: boolean;
+                    isOptimized: boolean;
+                    pageCount: number;
+                    id: number;
+                    name: string;
+                    mangaId: number;
+                    scanlator: string | null;
+                    realUrl: string | null;
+                    sourceOrder: number;
+                    chapterNumber: number;
+                };
+                manga: {
+                    __typename: 'MangaType';
+                    id: number;
+                    title: string;
+                    thumbnailUrl: string | null;
+                    thumbnailUrlLastFetched: string | null;
+                    inLibrary: boolean;
+                    initialized: boolean;
+                    sourceId: string;
+                };
+            }>;
+        };
+    };
+};
+
+export type StopOptimizerMutationVariables = Exact<{
+    input?: Types.StopOptimizerInput | null | undefined;
+}>;
+
+export type StopOptimizerMutation = {
+    __typename: 'Mutation';
+    stopOptimizer: {
+        __typename: 'OptimizationStatusPayload';
+        optimizationStatus: {
+            __typename: 'OptimizationStatus';
+            state: Types.OptimizerState;
+            queue: Array<{
+                __typename: 'OptimizationType';
+                progress: number;
+                state: Types.OptimizationState;
+                tries: number;
+                position: number;
+                originalSize: string | null;
+                optimizedSize: string | null;
+                chapter: {
+                    __typename: 'ChapterType';
+                    isDownloaded: boolean;
+                    isOptimized: boolean;
+                    pageCount: number;
+                    id: number;
+                    name: string;
+                    mangaId: number;
+                    scanlator: string | null;
+                    realUrl: string | null;
+                    sourceOrder: number;
+                    chapterNumber: number;
+                };
+                manga: {
+                    __typename: 'MangaType';
+                    id: number;
+                    title: string;
+                    thumbnailUrl: string | null;
+                    thumbnailUrlLastFetched: string | null;
+                    inLibrary: boolean;
+                    initialized: boolean;
+                    sourceId: string;
+                };
+            }>;
+        };
+    };
+};
+
+export type GetOptimizationStatusQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetOptimizationStatusQuery = {
+    __typename: 'Query';
+    optimizationStatus: {
+        __typename: 'OptimizationStatus';
+        state: Types.OptimizerState;
+        queue: Array<{
+            __typename: 'OptimizationType';
+            progress: number;
+            state: Types.OptimizationState;
+            tries: number;
+            position: number;
+            originalSize: string | null;
+            optimizedSize: string | null;
+            chapter: {
+                __typename: 'ChapterType';
+                isDownloaded: boolean;
+                isOptimized: boolean;
+                pageCount: number;
+                id: number;
+                name: string;
+                mangaId: number;
+                scanlator: string | null;
+                realUrl: string | null;
+                sourceOrder: number;
+                chapterNumber: number;
+            };
+            manga: {
+                __typename: 'MangaType';
+                id: number;
+                title: string;
+                thumbnailUrl: string | null;
+                thumbnailUrlLastFetched: string | null;
+                inLibrary: boolean;
+                initialized: boolean;
+                sourceId: string;
+            };
+        }>;
+    };
+};
+
+export type OptimizationStatusSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type OptimizationStatusSubscription = {
+    __typename: 'Subscription';
+    optimizationStatusChanged: {
+        __typename: 'OptimizationUpdates';
+        state: Types.OptimizerState;
+        updates: Array<{
+            __typename: 'OptimizationUpdate';
+            type: Types.OptimizationUpdateType;
+            optimization: {
+                __typename: 'OptimizationType';
+                progress: number;
+                state: Types.OptimizationState;
+                tries: number;
+                position: number;
+                originalSize: string | null;
+                optimizedSize: string | null;
+                chapter: {
+                    __typename: 'ChapterType';
+                    isDownloaded: boolean;
+                    isOptimized: boolean;
+                    pageCount: number;
+                    id: number;
+                    name: string;
+                    mangaId: number;
+                    scanlator: string | null;
+                    realUrl: string | null;
+                    sourceOrder: number;
+                    chapterNumber: number;
+                };
+                manga: {
+                    __typename: 'MangaType';
+                    id: number;
+                    title: string;
+                    thumbnailUrl: string | null;
+                    thumbnailUrlLastFetched: string | null;
+                    inLibrary: boolean;
+                    initialized: boolean;
+                    sourceId: string;
+                };
+            };
+        }>;
     };
 };
 

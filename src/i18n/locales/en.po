@@ -116,6 +116,11 @@ msgstr "{0, plural, one {1 searching} other {# searching}}"
 msgid "{0, plural, one {Could not reorder download} other {Could not reorder downloads}}"
 msgstr "{0, plural, one {Could not reorder download} other {Could not reorder downloads}}"
 
+#. placeholder {0}: reorders.length
+#: src/features/optimization/screens/OptimizationQueue.tsx
+msgid "{0, plural, one {Could not reorder optimization} other {Could not reorder optimizations}}"
+msgstr "{0, plural, one {Could not reorder optimization} other {Could not reorder optimizations}}"
+
 #. placeholder {0}: autoScroll.value
 #: src/features/reader/auto-scroll/settings/quick-setting/ReaderNavBarDesktopAutoScroll.tsx
 msgid "{0, plural, one {Second} other {Seconds}}"
@@ -191,6 +196,10 @@ msgid "{count, plural, one {Chapter marked as unread} other {# chapters marked a
 msgstr "{count, plural, one {Chapter marked as unread} other {# chapters marked as unread}}"
 
 #: src/features/chapter/Chapter.constants.ts
+msgid "{count, plural, one {Chapter queued for optimization} other {# chapters queued for optimization}}"
+msgstr "{count, plural, one {Chapter queued for optimization} other {# chapters queued for optimization}}"
+
+#: src/features/chapter/Chapter.constants.ts
 msgid "{count, plural, one {Could not add the download} other {Could not add downloads}}"
 msgstr "{count, plural, one {Could not add the download} other {Could not add downloads}}"
 
@@ -201,6 +210,10 @@ msgstr "{count, plural, one {Could not bookmark the chapter} other {Could not bo
 #: src/features/chapter/Chapter.constants.ts
 msgid "{count, plural, one {Could not cancel the download} other {Could not cancel downloads}}"
 msgstr "{count, plural, one {Could not cancel the download} other {Could not cancel downloads}}"
+
+#: src/features/chapter/Chapter.constants.ts
+msgid "{count, plural, one {Could not cancel the optimization} other {Could not cancel optimizations}}"
+msgstr "{count, plural, one {Could not cancel the optimization} other {Could not cancel optimizations}}"
 
 #: src/features/manga/Manga.constants.ts
 msgid "{count, plural, one {Could not change the categories of the manga} other {Could not change the categories of the manga}}"
@@ -221,6 +234,10 @@ msgstr "{count, plural, one {Could not mark the chapter as read} other {Could no
 #: src/features/chapter/Chapter.constants.ts
 msgid "{count, plural, one {Could not mark the chapter as unread} other {Could not mark chapters as unread}}"
 msgstr "{count, plural, one {Could not mark the chapter as unread} other {Could not mark chapters as unread}}"
+
+#: src/features/chapter/Chapter.constants.ts
+msgid "{count, plural, one {Could not queue the chapter for optimization} other {Could not queue chapters for optimization}}"
+msgstr "{count, plural, one {Could not queue the chapter for optimization} other {Could not queue chapters for optimization}}"
 
 #: src/features/manga/Manga.constants.ts
 msgid "{count, plural, one {Could not remove manga from the library} other {Could not remove manga from the library}}"
@@ -249,6 +266,10 @@ msgstr "{count, plural, one {Download canceled} other {# downloads canceled}}"
 #: src/features/chapter/components/actions/ChaptersDownloadActionMenuItems.tsx
 msgid "{count, plural, one {Next chapter} other {Next # chapters}}"
 msgstr "{count, plural, one {Next chapter} other {Next # chapters}}"
+
+#: src/features/chapter/Chapter.constants.ts
+msgid "{count, plural, one {Optimization canceled} other {# optimizations canceled}}"
+msgstr "{count, plural, one {Optimization canceled} other {# optimizations canceled}}"
 
 #: src/features/manga/Manga.constants.ts
 msgid "{count, plural, one {Removed manga from the library} other {Removed # manga from the library}}"
@@ -285,6 +306,10 @@ msgstr "{count, plural, one {There is # missing chapter.\n"
 #: src/features/chapter/Chapter.constants.ts
 msgid "{count, plural, one {You are about to cancel one download} other {You are about to cancel # downloads}}"
 msgstr "{count, plural, one {You are about to cancel one download} other {You are about to cancel # downloads}}"
+
+#: src/features/chapter/Chapter.constants.ts
+msgid "{count, plural, one {You are about to cancel one optimization} other {You are about to cancel # optimizations}}"
+msgstr "{count, plural, one {You are about to cancel one optimization} other {You are about to cancel # optimizations}}"
 
 #: src/features/manga/Manga.constants.ts
 msgid "{count, plural, one {You are about to change the category of one entry} other {You are about to change the category of # entries}}"
@@ -826,6 +851,7 @@ msgstr "Can't migrate an entry to itself"
 #: src/features/manga/components/details/MangaNotes.tsx
 #: src/features/migration/components/MigrationBulkSearchOptionsDialog.tsx
 #: src/features/migration/components/MigrationOptionsDialog.tsx
+#: src/features/optimization/components/OptimizationQueueChapterCard.tsx
 #: src/features/reader/hotkeys/settings/components/RecordHotkey.tsx
 #: src/features/source/browse/components/SourceOptions.tsx
 #: src/features/source/components/SourceLanguageSelect.tsx
@@ -838,6 +864,7 @@ msgid "Cancel"
 msgstr "Cancel"
 
 #: src/features/downloads/components/DownloadQueueChapterCard.tsx
+#: src/features/optimization/components/OptimizationQueueChapterCard.tsx
 msgid "Cancel all for this series"
 msgstr "Cancel all for this series"
 
@@ -848,6 +875,14 @@ msgstr "Cancel download"
 #: src/features/chapter/Chapter.constants.ts
 msgid "Cancel downloads of selected"
 msgstr "Cancel downloads of selected"
+
+#: src/features/chapter/Chapter.constants.ts
+msgid "Cancel optimization"
+msgstr "Cancel optimization"
+
+#: src/features/chapter/Chapter.constants.ts
+msgid "Cancel optimizations of selected"
+msgstr "Cancel optimizations of selected"
 
 #: src/features/manga/Manga.constants.ts
 #: src/features/tracker/Tracker.constants.ts
@@ -1272,6 +1307,10 @@ msgstr "Could not open random entry"
 msgid "Could not remove all downloads from the queue"
 msgstr "Could not remove all downloads from the queue"
 
+#: src/features/optimization/screens/OptimizationQueue.tsx
+msgid "Could not remove all optimizations from the queue"
+msgstr "Could not remove all optimizations from the queue"
+
 #: src/features/extension/store/screens/ExtensionStores.tsx
 msgid "Could not remove extension store \"{name}\""
 msgstr "Could not remove extension store \"{name}\""
@@ -1303,6 +1342,10 @@ msgstr "Could not retry failed download."
 #: src/features/downloads/screens/DownloadQueue.tsx
 msgid "Could not retry failed downloads"
 msgstr "Could not retry failed downloads"
+
+#: src/features/optimization/screens/OptimizationQueue.tsx
+msgid "Could not retry failed optimizations"
+msgstr "Could not retry failed optimizations"
 
 #: src/features/settings/screens/Appearance.tsx
 msgid "Could not save changes"
@@ -1536,6 +1579,7 @@ msgid "Delete"
 msgstr "Delete"
 
 #: src/features/downloads/screens/DownloadQueue.tsx
+#: src/features/optimization/screens/OptimizationQueue.tsx
 msgid "Delete all"
 msgstr "Delete all"
 
@@ -1689,11 +1733,18 @@ msgid "Doujinshi"
 msgstr "Doujinshi"
 
 #: src/features/app-updates/components/ServerUpdateChecker.tsx
+msgid "Download"
+msgstr "Download"
+
 #: src/features/chapter/Chapter.constants.ts
 #: src/features/chapter/components/buttons/ChapterDownloadButton.tsx
 #: src/features/chapter/components/ChaptersToolbarMenu.tsx
-msgid "Download"
-msgstr "Download"
+msgid "Download & optimize"
+msgstr "Download & optimize"
+
+#: src/features/chapter/Chapter.constants.ts
+msgid "Download & optimize selected"
+msgstr "Download & optimize selected"
 
 #: src/features/downloads/screens/DownloadSettings.tsx
 msgid "Download ahead"
@@ -1720,15 +1771,15 @@ msgstr "Download new chapters"
 msgid "Download queue"
 msgstr "Download queue"
 
-#: src/features/chapter/Chapter.constants.ts
-msgid "Download selected"
-msgstr "Download selected"
-
-#: src/features/chapter/components/cards/ChapterCard.tsx
 #: src/features/chapter/components/ChapterOptions.tsx
 #: src/features/library/components/LibraryOptionsPanel.tsx
+#: src/features/optimization/Optimization.utils.ts
 msgid "Downloaded"
 msgstr "Downloaded"
+
+#: src/features/optimization/Optimization.utils.ts
+msgid "Downloaded · Optimized"
+msgstr "Downloaded · Optimized"
 
 #: src/base/components/downloads/DownloadStateIndicatorCircular.tsx
 #: src/features/settings/Settings.constants.ts
@@ -1859,6 +1910,7 @@ msgstr "Entry \"{id}\" not found"
 #: src/base/components/downloads/DownloadStateIndicatorCircular.tsx
 #: src/base/components/feedback/SnackbarWithDescription.tsx
 #: src/features/downloads/components/DownloadQueueChapterCard.tsx
+#: src/features/optimization/components/OptimizationQueueChapterCard.tsx
 #: src/features/settings/Settings.constants.ts
 msgid "Error"
 msgstr "Error"
@@ -2904,18 +2956,22 @@ msgid "Mountain Sunset"
 msgstr "Mountain Sunset"
 
 #: src/features/downloads/components/DownloadQueueChapterCard.tsx
+#: src/features/optimization/components/OptimizationQueueChapterCard.tsx
 msgid "Move series to bottom"
 msgstr "Move series to bottom"
 
 #: src/features/downloads/components/DownloadQueueChapterCard.tsx
+#: src/features/optimization/components/OptimizationQueueChapterCard.tsx
 msgid "Move series to top"
 msgstr "Move series to top"
 
 #: src/features/downloads/components/DownloadQueueChapterCard.tsx
+#: src/features/optimization/components/OptimizationQueueChapterCard.tsx
 msgid "Move to bottom"
 msgstr "Move to bottom"
 
 #: src/features/downloads/components/DownloadQueueChapterCard.tsx
+#: src/features/optimization/components/OptimizationQueueChapterCard.tsx
 msgid "Move to top"
 msgstr "Move to top"
 
@@ -3027,6 +3083,10 @@ msgstr "No messages yet. Say hello!"
 #: src/features/community/screens/Inbox.tsx
 msgid "No one else to message yet."
 msgstr "No one else to message yet."
+
+#: src/features/optimization/screens/OptimizationQueue.tsx
+msgid "No optimizations"
+msgstr "No optimizations"
 
 #: src/features/community/screens/UserDirectory.tsx
 msgid "No other users yet."
@@ -3202,8 +3262,39 @@ msgstr "Open the WebUI when starting the server"
 msgid "Open website"
 msgstr "Open website"
 
+#: src/features/optimization/Optimization.utils.ts
+msgid "Optimization failed"
+msgstr "Optimization failed"
+
+#: src/features/navigation-bar/NavigationBar.constants.ts
+#: src/features/optimization/screens/OptimizationQueue.tsx
+msgid "Optimization queue"
+msgstr "Optimization queue"
+
+#: src/features/chapter/Chapter.constants.ts
+msgid "Optimize"
+msgstr "Optimize"
+
+#: src/features/chapter/components/ChaptersToolbarMenu.tsx
+msgid "Optimize downloaded chapters"
+msgstr "Optimize downloaded chapters"
+
+#: src/features/chapter/Chapter.constants.ts
+msgid "Optimize selected"
+msgstr "Optimize selected"
+
+#: src/features/navigation-bar/NavigationBar.constants.ts
+msgid "Optimizing"
+msgstr "Optimizing"
+
+#. placeholder {0}: Math.round(optimization.progress * 100)
+#: src/features/optimization/Optimization.utils.ts
+msgid "Optimizing ({0}%)"
+msgstr "Optimizing ({0}%)"
+
 #: src/features/chapter/components/cards/ChapterCard.tsx
 #: src/features/manga/components/MangaOptionButton.tsx
+#: src/features/optimization/components/OptimizationQueueChapterCard.tsx
 msgid "Options"
 msgstr "Options"
 
@@ -3380,6 +3471,10 @@ msgstr "px"
 #: src/base/components/downloads/DownloadStateIndicatorCircular.tsx
 msgid "Queued"
 msgstr "Queued"
+
+#: src/features/optimization/Optimization.utils.ts
+msgid "Queued for optimization"
+msgstr "Queued for optimization"
 
 #: src/features/reader/overlay/navigation/mobile/ReaderBottomBarMobile.tsx
 msgid "Quick settings"
@@ -3558,10 +3653,12 @@ msgstr "Resume"
 #: src/features/chapter/components/buttons/ChapterDownloadRetryButton.tsx
 #: src/features/manga/hooks/useManageMangaLibraryState.tsx
 #: src/features/migration/components/migration-entry/MigrationDestinationEntry.tsx
+#: src/features/optimization/components/OptimizationQueueChapterCard.tsx
 msgid "Retry"
 msgstr "Retry"
 
 #: src/features/downloads/screens/DownloadQueue.tsx
+#: src/features/optimization/screens/OptimizationQueue.tsx
 msgid "Retry all"
 msgstr "Retry all"
 
@@ -4059,6 +4156,7 @@ msgstr "Standard"
 
 #: src/features/downloads/screens/DownloadQueue.tsx
 #: src/features/manga/components/ResumeFAB.tsx
+#: src/features/optimization/screens/OptimizationQueue.tsx
 msgid "Start"
 msgstr "Start"
 
@@ -4104,6 +4202,7 @@ msgid "Status"
 msgstr "Status"
 
 #: src/features/downloads/screens/DownloadQueue.tsx
+#: src/features/optimization/screens/OptimizationQueue.tsx
 msgid "Stop"
 msgstr "Stop"
 
@@ -4313,6 +4412,10 @@ msgstr "Third to last read chapter"
 msgid "This cannot be undone. The user will lose access immediately."
 msgstr "This cannot be undone. The user will lose access immediately."
 
+#: src/features/reader/services/ReaderService.ts
+msgid "This chapter is being optimized and can be opened once that is done"
+msgstr "This chapter is being optimized and can be opened once that is done"
+
 #: src/features/browse/screens/BrowseSettings.tsx
 msgid "This does not prevent unofficial or potentially incorrectly flagged extensions from surfacing NSFW (18+) content within the app."
 msgstr "This does not prevent unofficial or potentially incorrectly flagged extensions from surfacing NSFW (18+) content within the app."
@@ -4454,6 +4557,7 @@ msgstr "Unable to load conversation"
 #: src/features/manga/hooks/useManageMangaLibraryState.tsx
 #: src/features/migration/screens/MigrationSelectMangas.tsx
 #: src/features/migration/screens/MigrationSelectSource.tsx
+#: src/features/optimization/screens/OptimizationQueue.tsx
 #: src/features/reader/screens/Reader.tsx
 #: src/features/reader/settings/screens/GlobalReaderSettings.tsx
 #: src/features/reader/viewer/ReaderChapterViewer.tsx

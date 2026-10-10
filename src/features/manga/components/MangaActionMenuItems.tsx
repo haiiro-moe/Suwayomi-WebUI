@@ -9,6 +9,7 @@
 import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import Delete from '@mui/icons-material/Delete';
 import Download from '@mui/icons-material/Download';
+import AutoFixHigh from '@mui/icons-material/AutoFixHigh';
 import RemoveDone from '@mui/icons-material/RemoveDone';
 import Done from '@mui/icons-material/Done';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -130,6 +131,14 @@ export const MangaActionMenuItems = ({
                         closeMenu={onClose}
                     />
                 </NestedMenuItem>
+            )}
+            {shouldShowMenuItem(hasDownloadedChapters) && (
+                <MenuItem
+                    Icon={AutoFixHigh}
+                    disabled={isMenuItemDisabled(!downloadedMangas.length)}
+                    onClick={() => performAction('optimize', downloadedMangas)}
+                    title={getMenuItemTitle('optimize', downloadedMangas.length)}
+                />
             )}
             {shouldShowMenuItem(hasDownloadedChapters) && (
                 <MenuItem

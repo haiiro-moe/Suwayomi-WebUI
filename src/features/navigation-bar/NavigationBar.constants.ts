@@ -16,6 +16,8 @@ import ExploreIcon from '@mui/icons-material/Explore';
 import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import GetAppOutlinedIcon from '@mui/icons-material/GetAppOutlined';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import AutoFixHighOutlinedIcon from '@mui/icons-material/AutoFixHighOutlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import PendingActionsOutlinedIcon from '@mui/icons-material/PendingActionsOutlined';
@@ -35,7 +37,7 @@ import { NavBarItemMoreGroup } from '@/features/navigation-bar/NavigationBar.typ
 import { AppRoutes } from '@/base/AppRoute.constants.ts';
 import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { STABLE_EMPTY_ARRAY } from '@/base/Base.constants.ts';
-import { DownloaderState } from '@/lib/graphql/generated/graphql-base.types.ts';
+import { DownloaderState, OptimizerState } from '@/lib/graphql/generated/graphql-base.types.ts';
 
 type RestrictedNavBarItem<Show extends NavbarItem['show']> = Omit<NavbarItem, 'show'> & { show: Show };
 
@@ -118,6 +120,35 @@ const NAVIGATION_BAR_DESKTOP_ITEMS = [
 
             const isPaused = downloadStatus?.state === DownloaderState.Stopped;
             const count = downloadStatus?.queue.length ?? 0;
+
+            if (!count) {
+                return {
+                    count,
+                    title: '',
+                };
+            }
+
+            return {
+                count,
+                title: isPaused ? t`Paused — ${count} remaining` : t`${count} remaining`,
+            };
+        },
+    },
+    {
+        path: AppRoutes.optimizations.path,
+        title: msg`Optimizing`,
+        moreTitle: msg`Optimization queue`,
+        SelectedIconComponent: AutoFixHighIcon,
+        IconComponent: AutoFixHighOutlinedIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.HIDDEN_ITEM,
+        useBadge: () => {
+            const { t } = useLingui();
+            const { data } = requestManager.useGetOptimizationStatus();
+            const optimizationStatus = data?.optimizationStatus;
+
+            const isPaused = optimizationStatus?.state === OptimizerState.Stopped;
+            const count = optimizationStatus?.queue.length ?? 0;
 
             if (!count) {
                 return {

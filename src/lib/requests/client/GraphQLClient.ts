@@ -68,6 +68,17 @@ const typePolicies: TypedTypePolicies = {
         },
     },
     DownloadType: { keyFields: ['chapter'] },
+    OptimizationStatus: {
+        keyFields: [],
+        fields: {
+            queue: {
+                merge(_existing, incoming) {
+                    return incoming;
+                },
+            },
+        },
+    },
+    OptimizationType: { keyFields: ['chapter'] },
     CategoryUpdateType: { keyFields: ['category'] },
     MangaUpdateType: { keyFields: ['manga'] },
     UpdaterJobsInfoType: { keyFields: [] },
@@ -123,6 +134,17 @@ const typePolicies: TypedTypePolicies = {
                 read(_, { toReference }) {
                     return toReference({
                         __typename: 'DownloadStatus',
+                        key: {},
+                    });
+                },
+                merge(_, incoming) {
+                    return incoming;
+                },
+            },
+            optimizationStatus: {
+                read(_, { toReference }) {
+                    return toReference({
+                        __typename: 'OptimizationStatus',
                         key: {},
                     });
                 },

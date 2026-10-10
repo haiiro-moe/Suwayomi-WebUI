@@ -26,6 +26,22 @@ import { BaseClient } from '@/lib/requests/client/BaseClient.ts';
 import type {
     AddExtensionStoreMutation,
     AddExtensionStoreMutationVariables,
+    ClearOptimizerMutation,
+    ClearOptimizerMutationVariables,
+    DequeueChapterOptimizationsMutation,
+    DequeueChapterOptimizationsMutationVariables,
+    EnqueueChapterOptimizationsMutation,
+    EnqueueChapterOptimizationsMutationVariables,
+    GetOptimizationStatusQuery,
+    GetOptimizationStatusQueryVariables,
+    OptimizationStatusSubscription,
+    OptimizationStatusSubscriptionVariables,
+    ReorderChapterOptimizationsMutation,
+    ReorderChapterOptimizationsMutationVariables,
+    StartOptimizerMutation,
+    StartOptimizerMutationVariables,
+    StopOptimizerMutation,
+    StopOptimizerMutationVariables,
     CheckForServerUpdatesQuery,
     CheckForServerUpdatesQueryVariables,
     CheckForWebuiUpdateQuery,
@@ -304,6 +320,8 @@ import {
     DownloadUpdateType,
     FetchSourceMangaType,
     MangaJobStatus,
+    OptimizationUpdateType,
+    OptimizerState,
     SortOrder,
 } from '@/lib/graphql/generated/graphql-base.types.ts';
 import { GET_GLOBAL_METADATAS } from '@/lib/graphql/metadata/GlobalMetadataQuery.ts';
@@ -389,6 +407,17 @@ import { CLEAR_SERVER_CACHE } from '@/lib/graphql/image/ImageMutation.ts';
 import { RESET_WEBUI_UPDATE_STATUS, UPDATE_WEBUI } from '@/lib/graphql/server/ServerInfoMutation.ts';
 import { WEBUI_UPDATE_SUBSCRIPTION } from '@/lib/graphql/server/ServerInfoSubscription.ts';
 import { GET_DOWNLOAD_STATUS } from '@/lib/graphql/download/DownloaderQuery.ts';
+import { GET_OPTIMIZATION_STATUS } from '@/lib/graphql/optimization/OptimizationQuery.ts';
+import { OPTIMIZATION_STATUS_SUBSCRIPTION } from '@/lib/graphql/optimization/OptimizationSubscription.ts';
+import {
+    CLEAR_OPTIMIZER,
+    DEQUEUE_CHAPTER_OPTIMIZATIONS,
+    ENQUEUE_CHAPTER_OPTIMIZATIONS,
+    REORDER_CHAPTER_OPTIMIZATIONS,
+    START_OPTIMIZER,
+    STOP_OPTIMIZER,
+} from '@/lib/graphql/optimization/OptimizationMutation.ts';
+import { OPTIMIZATION_STATUS_FIELDS } from '@/lib/graphql/optimization/OptimizationFragments.ts';
 import { defaultPromiseErrorHandler } from '@/lib/DefaultPromiseErrorHandler.ts';
 import type { QueuePriority } from '@/lib/Queue.ts';
 import { SourceAwareQueue } from '@/lib/SourceAwareQueue.ts';
@@ -583,6 +612,9 @@ export const SPECIAL_ED_SOURCES = {
 
 // TODO - extract logic to reduce the size of this file... grew waaaaaaaaaaaaay too big peepoFat
 // TODO - correctly update cache after all mutations instead of refetching queries
+const isOptimizationRemoval = (type: OptimizationUpdateType): boolean =>
+    [OptimizationUpdateType.Dequeued, OptimizationUpdateType.Finished].includes(type);
+
 export class RequestManager {
     public static readonly API_VERSION = '/api/v1/';
 
@@ -4004,6 +4036,198 @@ export class RequestManager {
                 },
             } as SubscriptionHookOptions<DownloadStatusSubscription, DownloadStatusSubscriptionVariables>,
         ) as useSubscription.Result<DownloadStatusSubscription>;
+    }
+
+    public useGetOptimizationStatus(
+        options?: QueryHookOptions<GetOptimizationStatusQuery, GetOptimizationStatusQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetOptimizationStatusQuery, GetOptimizationStatusQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_OPTIMIZATION_STATUS, {}, options);
+    }
+
+    public useOptimizationSubscription(
+        options?: SubscriptionHookOptions<OptimizationStatusSubscription, OptimizationStatusSubscriptionVariables>,
+    ): useSubscription.Result<OptimizationStatusSubscription> {
+        return this.doRequest<OptimizationStatusSubscription, OptimizationStatusSubscriptionVariables>(
+            GQLMethod.USE_SUBSCRIPTION,
+            OPTIMIZATION_STATUS_SUBSCRIPTION,
+            {},
+            {
+                ...options,
+                onData: (onDataOptions) => {
+                    const optimizationChanged = onDataOptions.data.data?.optimizationStatusChanged;
+
+                    if (!optimizationChanged) {
+                        return;
+                    }
+
+                    const { cache } = this.graphQLClient.client;
+
+                    const statusQueryCache = cache.readQuery<GetOptimizationStatusQuery>({
+                        query: GET_OPTIMIZATION_STATUS,
+                    });
+
+                    const queue = statusQueryCache?.optimizationStatus.queue ?? [];
+                    const optimizationsToAdd = optimizationChanged.updates
+                        .filter((update) => !isOptimizationRemoval(update.type))
+                        .filter(
+                            (update) =>
+                                !queue.some(
+                                    (optimization) => optimization.chapter.id === update.optimization.chapter.id,
+                                ),
+                        )
+                        .map((update) => update.optimization);
+
+                    const removedChapterIds = optimizationChanged.updates
+                        .filter((update) => isOptimizationRemoval(update.type))
+                        .map((update) => update.optimization.chapter.id);
+
+                    cache.writeQuery<GetOptimizationStatusQuery>({
+                        query: GET_OPTIMIZATION_STATUS,
+                        data: {
+                            __typename: 'Query',
+                            optimizationStatus: {
+                                __typename: 'OptimizationStatus',
+                                state:
+                                    optimizationChanged.state ??
+                                    statusQueryCache?.optimizationStatus.state ??
+                                    OptimizerState.Stopped,
+                                queue: [...queue, ...optimizationsToAdd].filter(
+                                    (optimization) => !removedChapterIds.includes(optimization.chapter.id),
+                                ),
+                            },
+                        },
+                    });
+
+                    removedChapterIds.forEach((chapterId) => {
+                        cache.evict({
+                            id: cache.identify({
+                                __typename: 'OptimizationType',
+                                chapter: {
+                                    __ref: cache.identify({
+                                        __typename: 'ChapterType',
+                                        id: chapterId,
+                                    }),
+                                },
+                            }),
+                        });
+                    });
+                },
+            } as SubscriptionHookOptions<OptimizationStatusSubscription, OptimizationStatusSubscriptionVariables>,
+        ) as useSubscription.Result<OptimizationStatusSubscription>;
+    }
+
+    public addChaptersToOptimizationQueue(
+        ids: number[],
+        options?: MutationOptions<EnqueueChapterOptimizationsMutation, EnqueueChapterOptimizationsMutationVariables>,
+    ): AbortableApolloMutationResponse<EnqueueChapterOptimizationsMutation> {
+        return this.doRequest<EnqueueChapterOptimizationsMutation, EnqueueChapterOptimizationsMutationVariables>(
+            GQLMethod.MUTATION,
+            ENQUEUE_CHAPTER_OPTIMIZATIONS,
+            { input: { ids } },
+            options,
+        );
+    }
+
+    public removeChaptersFromOptimizationQueue(
+        ids: number[],
+        options?: MutationOptions<DequeueChapterOptimizationsMutation, DequeueChapterOptimizationsMutationVariables>,
+    ): AbortableApolloMutationResponse<DequeueChapterOptimizationsMutation> {
+        return this.doRequest<DequeueChapterOptimizationsMutation, DequeueChapterOptimizationsMutationVariables>(
+            GQLMethod.MUTATION,
+            DEQUEUE_CHAPTER_OPTIMIZATIONS,
+            { input: { ids } },
+            options,
+        );
+    }
+
+    public useReorderChaptersInOptimizationQueue(
+        options?: MutationHookOptions<
+            ReorderChapterOptimizationsMutation,
+            ReorderChapterOptimizationsMutationVariables
+        >,
+    ): AbortableApolloUseMutationResponse<
+        ReorderChapterOptimizationsMutation,
+        ReorderChapterOptimizationsMutationVariables
+    > {
+        const [mutate, result] = this.doRequest(
+            GQLMethod.USE_MUTATION,
+            REORDER_CHAPTER_OPTIMIZATIONS,
+            undefined,
+            options,
+        );
+
+        const wrappedMutate = (mutationOptions: Parameters<typeof mutate>[0]) => {
+            const variables = mutationOptions?.variables?.input;
+            const cachedStatus = this.graphQLClient.client.readFragment<
+                GetOptimizationStatusQuery['optimizationStatus']
+            >({
+                id: 'OptimizationStatus:{}',
+                fragment: OPTIMIZATION_STATUS_FIELDS,
+                fragmentName: 'OPTIMIZATION_STATUS_FIELDS',
+            });
+
+            if (!variables || !cachedStatus) {
+                return mutate(mutationOptions);
+            }
+
+            const updatedQueue = variables.reorders.reduce((queue, { chapterId, to }) => {
+                const index = queue.findIndex(({ chapter }) => chapter.id === chapterId);
+                if (index === -1) {
+                    return queue;
+                }
+
+                return queue.toSpliced(index, 1).toSpliced(to, 0, queue[index]);
+            }, cachedStatus.queue);
+
+            return mutate({
+                optimisticResponse: {
+                    __typename: 'Mutation',
+                    reorderChapterOptimizations: {
+                        __typename: 'OptimizationStatusPayload',
+                        optimizationStatus: {
+                            ...cachedStatus,
+                            queue: updatedQueue,
+                        },
+                    },
+                },
+                ...mutationOptions,
+            });
+        };
+
+        return [wrappedMutate, result];
+    }
+
+    public startOptimizer(
+        options?: MutationOptions<StartOptimizerMutation, StartOptimizerMutationVariables>,
+    ): AbortableApolloMutationResponse<StartOptimizerMutation> {
+        return this.doRequest<StartOptimizerMutation, StartOptimizerMutationVariables>(
+            GQLMethod.MUTATION,
+            START_OPTIMIZER,
+            {},
+            options,
+        );
+    }
+
+    public stopOptimizer(
+        options?: MutationOptions<StopOptimizerMutation, StopOptimizerMutationVariables>,
+    ): AbortableApolloMutationResponse<StopOptimizerMutation> {
+        return this.doRequest<StopOptimizerMutation, StopOptimizerMutationVariables>(
+            GQLMethod.MUTATION,
+            STOP_OPTIMIZER,
+            {},
+            options,
+        );
+    }
+
+    public clearOptimizer(
+        options?: MutationOptions<ClearOptimizerMutation, ClearOptimizerMutationVariables>,
+    ): AbortableApolloMutationResponse<ClearOptimizerMutation> {
+        return this.doRequest<ClearOptimizerMutation, ClearOptimizerMutationVariables>(
+            GQLMethod.MUTATION,
+            CLEAR_OPTIMIZER,
+            {},
+            options,
+        );
     }
 
     public useUpdaterSubscription(

@@ -35,6 +35,8 @@ export const CHAPTER_ACTION_TO_CONFIRMATION_REQUIRED: Record<
 > = {
     download: { always: false, bulkAction: false, bulkActionCountForce: 300 },
     download_cancel: { always: false, bulkAction: true },
+    optimize: { always: false, bulkAction: false },
+    optimize_cancel: { always: false, bulkAction: true },
     delete: { always: true, bulkAction: true },
     bookmark: { always: false, bulkAction: false },
     unbookmark: { always: false, bulkAction: true },
@@ -55,8 +57,8 @@ export const CHAPTER_ACTION_TO_TRANSLATION: {
 } = {
     download: {
         action: {
-            single: msg`Download`,
-            selected: msg`Download selected`,
+            single: msg`Download & optimize`,
+            selected: msg`Download & optimize selected`,
         },
         confirmation: msg`{count, plural, one {You are about to download one chapter} other {You are about to download # chapters.\nSuwayomi is not a mass downloader and too many downloads can get you banned from sources and/or cause performance issues.}}`,
         success: msg`{count, plural, one {Download added} other {# downloads added}}`,
@@ -70,6 +72,23 @@ export const CHAPTER_ACTION_TO_TRANSLATION: {
         confirmation: msg`{count, plural, one {You are about to cancel one download} other {You are about to cancel # downloads}}`,
         success: msg`{count, plural, one {Download canceled} other {# downloads canceled}}`,
         error: msg`{count, plural, one {Could not cancel the download} other {Could not cancel downloads}}`,
+    },
+    optimize: {
+        action: {
+            single: msg`Optimize`,
+            selected: msg`Optimize selected`,
+        },
+        success: msg`{count, plural, one {Chapter queued for optimization} other {# chapters queued for optimization}}`,
+        error: msg`{count, plural, one {Could not queue the chapter for optimization} other {Could not queue chapters for optimization}}`,
+    },
+    optimize_cancel: {
+        action: {
+            single: msg`Cancel optimization`,
+            selected: msg`Cancel optimizations of selected`,
+        },
+        confirmation: msg`{count, plural, one {You are about to cancel one optimization} other {You are about to cancel # optimizations}}`,
+        success: msg`{count, plural, one {Optimization canceled} other {# optimizations canceled}}`,
+        error: msg`{count, plural, one {Could not cancel the optimization} other {Could not cancel optimizations}}`,
     },
     delete: {
         action: {

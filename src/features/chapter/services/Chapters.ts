@@ -12,9 +12,13 @@ import { t } from '@lingui/core/macro';
 import { makeToast } from '@/base/utils/Toast.ts';
 import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { getMetadataServerSettings } from '@/features/settings/services/ServerSettingsMetadata.ts';
-import type { ChapterListFieldsFragment, DownloadTypeFieldsFragment } from '@/lib/graphql/generated/graphql.ts';
+import type {
+    ChapterListFieldsFragment,
+    DownloadTypeFieldsFragment,
+    OptimizationTypeFieldsFragment,
+} from '@/lib/graphql/generated/graphql.ts';
 import type { ChapterType } from '@/lib/graphql/generated/graphql-base.types.ts';
-import { DownloadState } from '@/lib/graphql/generated/graphql-base.types.ts';
+import { DownloadState, OptimizationState } from '@/lib/graphql/generated/graphql-base.types.ts';
 import { CHAPTER_LIST_FIELDS } from '@/lib/graphql/chapter/ChapterFragments.ts';
 import type { MangaIdInfo } from '@/features/manga/Manga.types.ts';
 
@@ -23,6 +27,7 @@ import { ReaderResumeMode } from '@/features/reader/Reader.types.ts';
 import { AppRoutes } from '@/base/AppRoute.constants.ts';
 import { getErrorMessage } from '@/lib/HelperFunctions.ts';
 import { DOWNLOAD_TYPE_FIELDS } from '@/lib/graphql/download/DownloadFragments.ts';
+import { OPTIMIZATION_TYPE_FIELDS } from '@/lib/graphql/optimization/OptimizationFragments.ts';
 import { epochToDate, getDateString } from '@/base/utils/DateHelper.ts';
 import {
     CHAPTER_ACTION_TO_CONFIRMATION_REQUIRED,
@@ -34,6 +39,7 @@ import type {
     ChapterDownloadInfo,
     ChapterIdInfo,
     ChapterNumberInfo,
+    ChapterOptimizedInfo,
     ChapterReadInfo,
     ChapterScanlatorInfo,
 } from '@/features/chapter/Chapter.types.ts';
@@ -112,6 +118,79 @@ export class Chapters {
 
     static getDownloading<Chapter extends ChapterIdInfo>(chapters: Chapter[]): Chapter[] {
         return chapters.filter((chapter) => Chapters.isDownloading(chapter.id));
+    }
+
+    static getOptimizationStatusFromCache<T = OptimizationTypeFieldsFragment>(
+        id: number,
+        fragment: DocumentNode = OPTIMIZATION_TYPE_FIELDS,
+        fragmentName: string = 'OPTIMIZATION_TYPE_FIELDS',
+    ): Unmasked<T> | null {
+        return requestManager.graphQLClient.client.cache.readFragment<T>({
+            id: requestManager.graphQLClient.client.cache.identify({
+                __typename: 'OptimizationType',
+                chapter: {
+                    __ref: requestManager.graphQLClient.client.cache.identify({ __typename: 'ChapterType', id }),
+                },
+            }),
+            fragment,
+            fragmentName,
+        });
+    }
+
+    static useOptimizationStatusFromCache<T = OptimizationTypeFieldsFragment>(
+        id: number,
+        fragment: DocumentNode = OPTIMIZATION_TYPE_FIELDS,
+        fragmentName: string = 'OPTIMIZATION_TYPE_FIELDS',
+    ): MaybeMasked<T> | null {
+        const optimizationStatus = useFragment<T>({
+            from: {
+                __typename: 'OptimizationType',
+                chapter: {
+                    __ref: requestManager.graphQLClient.client.cache.identify({ __typename: 'ChapterType', id }),
+                },
+            },
+            fragment,
+            fragmentName,
+            client: requestManager.graphQLClient.client,
+        });
+
+        if (!optimizationStatus.complete || !Object.keys(optimizationStatus.data ?? {}).length) {
+            return null;
+        }
+
+        return optimizationStatus.data;
+    }
+
+    /**
+     * Chapters in the optimization queue can't be opened until their optimization is done
+     */
+    static isInOptimizationQueue(id: number): boolean {
+        return !!Chapters.getOptimizationStatusFromCache(id);
+    }
+
+    static getInOptimizationQueue<Chapter extends ChapterIdInfo>(chapters: Chapter[]): Chapter[] {
+        return chapters.filter((chapter) => Chapters.isInOptimizationQueue(chapter.id));
+    }
+
+    static isOptimized({ isOptimized }: ChapterOptimizedInfo): boolean {
+        return isOptimized;
+    }
+
+    static isOptimizable<Chapter extends ChapterIdInfo & ChapterDownloadInfo & ChapterOptimizedInfo>(
+        chapter: Chapter,
+    ): boolean {
+        const optimizationStatus = Chapters.getOptimizationStatusFromCache(chapter.id);
+        return (
+            Chapters.isDownloaded(chapter) &&
+            !Chapters.isOptimized(chapter) &&
+            (!optimizationStatus || optimizationStatus.state === OptimizationState.Error)
+        );
+    }
+
+    static getOptimizable<Chapter extends ChapterIdInfo & ChapterDownloadInfo & ChapterOptimizedInfo>(
+        chapters: Chapter[],
+    ): Chapter[] {
+        return chapters.filter(Chapters.isOptimizable);
     }
 
     static isDownloaded({ isDownloaded }: ChapterDownloadInfo): boolean {
@@ -200,6 +279,24 @@ export class Chapters {
             'download_cancel',
             chapterIds.length,
             () => requestManager.removeChaptersFromDownloadQueue(chapterIds).response,
+            disableConfirmation,
+        );
+    }
+
+    static async optimize(chapterIds: number[], disableConfirmation?: boolean): Promise<void> {
+        return Chapters.executeAction(
+            'optimize',
+            chapterIds.length,
+            () => requestManager.addChaptersToOptimizationQueue(chapterIds).response,
+            disableConfirmation,
+        );
+    }
+
+    static async cancelOptimization(chapterIds: number[], disableConfirmation?: boolean): Promise<void> {
+        return Chapters.executeAction(
+            'optimize_cancel',
+            chapterIds.length,
+            () => requestManager.removeChaptersFromOptimizationQueue(chapterIds).response,
             disableConfirmation,
         );
     }
@@ -338,6 +435,10 @@ export class Chapters {
                 return Chapters.download(chapterIds);
             case 'download_cancel':
                 return Chapters.cancelDownload(chapterIds);
+            case 'optimize':
+                return Chapters.optimize(chapterIds);
+            case 'optimize_cancel':
+                return Chapters.cancelOptimization(chapterIds);
             case 'delete':
                 return Chapters.delete(chapterIds);
             case 'mark_as_read':

@@ -199,7 +199,7 @@ export class Mangas {
         {
             excludedScanlators,
             ...state
-        }: Pick<ChapterConditionInput, 'isRead' | 'isDownloaded' | 'isBookmarked'> & {
+        }: Pick<ChapterConditionInput, 'isRead' | 'isDownloaded' | 'isOptimized' | 'isBookmarked'> & {
             excludedScanlators?: string[];
         },
     ): Promise<GetMangasChapterIdsWithStateQuery['chapters']['nodes']> {
@@ -320,6 +320,30 @@ export class Mangas {
 
                 try {
                     await Chapters.download(Chapters.getIds(chaptersToDownload), disableConfirmation);
+                } catch (e) {
+                    // Ignore - Error gets handled in Chapters
+                }
+            },
+            true,
+            true,
+        );
+    }
+
+    static async optimizeChapters(mangaIds: number[], disableConfirmation?: boolean): Promise<void> {
+        return Mangas.executeAction(
+            'optimize',
+            I18N_PLURAL,
+            async () => {
+                const chapters = (
+                    await Mangas.getChapterIdsWithState(mangaIds, { isDownloaded: true, isOptimized: false })
+                ).filter(Chapters.isOptimizable);
+
+                if (!chapters.length) {
+                    return;
+                }
+
+                try {
+                    await Chapters.optimize(Chapters.getIds(chapters), disableConfirmation);
                 } catch (e) {
                     // Ignore - Error gets handled in Chapters
                 }
@@ -512,6 +536,8 @@ export class Mangas {
         switch (action) {
             case 'download':
                 return Mangas.downloadChapters(mangaIds, { downloadAhead, onlyUnread, size }, disableConfirmation);
+            case 'optimize':
+                return Mangas.optimizeChapters(mangaIds, disableConfirmation);
             case 'delete':
                 return Mangas.deleteChapters(mangaIds, disableConfirmation);
             case 'mark_as_read':

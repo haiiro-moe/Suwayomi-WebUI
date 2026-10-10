@@ -12,6 +12,7 @@ import { useLingui } from '@lingui/react/macro';
 import { StyledFab } from '@/base/components/buttons/StyledFab.tsx';
 import { Chapters } from '@/features/chapter/services/Chapters.ts';
 import type {
+    ChapterIdInfo,
     ChapterMangaInfo,
     ChapterNameInfo,
     ChapterNumberInfo,
@@ -26,7 +27,8 @@ import { ReaderService } from '@/features/reader/services/ReaderService.ts';
 export function ResumeFab({
     chapter,
 }: {
-    chapter: ChapterMangaInfo &
+    chapter: ChapterIdInfo &
+        ChapterMangaInfo &
         ChapterSourceOrderInfo &
         ChapterReadInfo &
         ChapterNumberInfo &

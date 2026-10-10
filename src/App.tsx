@@ -42,6 +42,10 @@ import { OffsetContainer } from '@/base/OffsetComponent.tsx';
 
 const { Browse } = loadable(() => import('@/features/browse/screens/Browse.tsx'), lazyLoadFallback);
 const { DownloadQueue } = loadable(() => import('@/features/downloads/screens/DownloadQueue.tsx'), lazyLoadFallback);
+const { OptimizationQueue } = loadable(
+    () => import('@/features/optimization/screens/OptimizationQueue.tsx'),
+    lazyLoadFallback,
+);
 const { Library } = loadable(() => import('@/features/library/screens/Library.tsx'), lazyLoadFallback);
 const { Manga } = loadable(() => import('@/features/manga/screens/Manga.tsx'), lazyLoadFallback);
 const { SearchAll } = loadable(() => import('@/features/global-search/screens/SearchAll.tsx'), lazyLoadFallback);
@@ -172,8 +176,9 @@ const InitializeGuard = ({ children }: PropsWithChildren) => {
 };
 
 const InitialBackgroundRequests = () => {
-    // Load the full download status once on startup to fill the cache
+    // Load the full download and optimization status once on startup to fill the cache
     requestManager.useGetDownloadStatus({ nextFetchPolicy: 'standby' });
+    requestManager.useGetOptimizationStatus({ nextFetchPolicy: 'standby' });
 
     const [fetchExtensionList] = requestManager.useExtensionListFetch();
 
@@ -198,6 +203,7 @@ const BackgroundSubscriptions = () => {
     const skipConnection = isAuthRequired === null || (isAuthRequired && !accessToken);
 
     requestManager.useDownloadSubscription({ skip: skipConnection });
+    requestManager.useOptimizationSubscription({ skip: skipConnection });
     requestManager.useUpdaterSubscription({ skip: skipConnection });
     requestManager.useWebUIUpdateSubscription({ skip: skipConnection });
     requestManager.useSyncSubscription({ skip: skipConnection });
@@ -422,6 +428,7 @@ const MainApp = () => {
                             </Route>
                         </Route>
                         <Route path={AppRoutes.downloads.match} element={<DownloadQueue />} />
+                        <Route path={AppRoutes.optimizations.match} element={<OptimizationQueue />} />
                         <Route path={AppRoutes.manga.match}>
                             <Route path={AppRoutes.manga.children.reader.match} element={null} />
                             <Route index element={<Manga />} />

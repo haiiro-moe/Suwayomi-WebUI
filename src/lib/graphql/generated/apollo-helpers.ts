@@ -171,6 +171,7 @@ export type ChapterTypeKeySpecifier = (
     | 'id'
     | 'isBookmarked'
     | 'isDownloaded'
+    | 'isOptimized'
     | 'isRead'
     | 'lastPageRead'
     | 'lastReadAt'
@@ -192,6 +193,7 @@ export type ChapterTypeFieldPolicy = {
     id?: FieldPolicy<any> | FieldReadFunction<any>;
     isBookmarked?: FieldPolicy<any> | FieldReadFunction<any>;
     isDownloaded?: FieldPolicy<any> | FieldReadFunction<any>;
+    isOptimized?: FieldPolicy<any> | FieldReadFunction<any>;
     isRead?: FieldPolicy<any> | FieldReadFunction<any>;
     lastPageRead?: FieldPolicy<any> | FieldReadFunction<any>;
     lastReadAt?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1076,6 +1078,7 @@ export type MutationKeySpecifier = (
     | 'clearCachedImages'
     | 'clearCookiesAndCache'
     | 'clearDownloader'
+    | 'clearOptimizer'
     | 'connectKoSyncAccount'
     | 'createBackup'
     | 'createCategory'
@@ -1099,8 +1102,10 @@ export type MutationKeySpecifier = (
     | 'deleteUser'
     | 'dequeueChapterDownload'
     | 'dequeueChapterDownloads'
+    | 'dequeueChapterOptimizations'
     | 'enqueueChapterDownload'
     | 'enqueueChapterDownloads'
+    | 'enqueueChapterOptimizations'
     | 'fetchChapterPages'
     | 'fetchChapters'
     | 'fetchExtensions'
@@ -1122,6 +1127,7 @@ export type MutationKeySpecifier = (
     | 'removeFavorite'
     | 'reorderChapterDownload'
     | 'reorderChapterDownloads'
+    | 'reorderChapterOptimizations'
     | 'requestManga'
     | 'resetSettings'
     | 'resetUserSettings'
@@ -1145,8 +1151,10 @@ export type MutationKeySpecifier = (
     | 'setUserSettings'
     | 'setupOwner'
     | 'startDownloader'
+    | 'startOptimizer'
     | 'startSync'
     | 'stopDownloader'
+    | 'stopOptimizer'
     | 'trackProgress'
     | 'unbindTrack'
     | 'updateCategories'
@@ -1180,6 +1188,7 @@ export type MutationFieldPolicy = {
     clearCachedImages?: FieldPolicy<any> | FieldReadFunction<any>;
     clearCookiesAndCache?: FieldPolicy<any> | FieldReadFunction<any>;
     clearDownloader?: FieldPolicy<any> | FieldReadFunction<any>;
+    clearOptimizer?: FieldPolicy<any> | FieldReadFunction<any>;
     connectKoSyncAccount?: FieldPolicy<any> | FieldReadFunction<any>;
     createBackup?: FieldPolicy<any> | FieldReadFunction<any>;
     createCategory?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1203,8 +1212,10 @@ export type MutationFieldPolicy = {
     deleteUser?: FieldPolicy<any> | FieldReadFunction<any>;
     dequeueChapterDownload?: FieldPolicy<any> | FieldReadFunction<any>;
     dequeueChapterDownloads?: FieldPolicy<any> | FieldReadFunction<any>;
+    dequeueChapterOptimizations?: FieldPolicy<any> | FieldReadFunction<any>;
     enqueueChapterDownload?: FieldPolicy<any> | FieldReadFunction<any>;
     enqueueChapterDownloads?: FieldPolicy<any> | FieldReadFunction<any>;
+    enqueueChapterOptimizations?: FieldPolicy<any> | FieldReadFunction<any>;
     fetchChapterPages?: FieldPolicy<any> | FieldReadFunction<any>;
     fetchChapters?: FieldPolicy<any> | FieldReadFunction<any>;
     fetchExtensions?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1226,6 +1237,7 @@ export type MutationFieldPolicy = {
     removeFavorite?: FieldPolicy<any> | FieldReadFunction<any>;
     reorderChapterDownload?: FieldPolicy<any> | FieldReadFunction<any>;
     reorderChapterDownloads?: FieldPolicy<any> | FieldReadFunction<any>;
+    reorderChapterOptimizations?: FieldPolicy<any> | FieldReadFunction<any>;
     requestManga?: FieldPolicy<any> | FieldReadFunction<any>;
     resetSettings?: FieldPolicy<any> | FieldReadFunction<any>;
     resetUserSettings?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1249,8 +1261,10 @@ export type MutationFieldPolicy = {
     setUserSettings?: FieldPolicy<any> | FieldReadFunction<any>;
     setupOwner?: FieldPolicy<any> | FieldReadFunction<any>;
     startDownloader?: FieldPolicy<any> | FieldReadFunction<any>;
+    startOptimizer?: FieldPolicy<any> | FieldReadFunction<any>;
     startSync?: FieldPolicy<any> | FieldReadFunction<any>;
     stopDownloader?: FieldPolicy<any> | FieldReadFunction<any>;
+    stopOptimizer?: FieldPolicy<any> | FieldReadFunction<any>;
     trackProgress?: FieldPolicy<any> | FieldReadFunction<any>;
     unbindTrack?: FieldPolicy<any> | FieldReadFunction<any>;
     updateCategories?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -1292,6 +1306,52 @@ export type OperationPayloadKeySpecifier = ('clientMutationId' | 'success' | Ope
 export type OperationPayloadFieldPolicy = {
     clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
     success?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type OptimizationStatusKeySpecifier = ('queue' | 'state' | OptimizationStatusKeySpecifier)[];
+export type OptimizationStatusFieldPolicy = {
+    queue?: FieldPolicy<any> | FieldReadFunction<any>;
+    state?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type OptimizationStatusPayloadKeySpecifier = (
+    | 'clientMutationId'
+    | 'optimizationStatus'
+    | OptimizationStatusPayloadKeySpecifier
+)[];
+export type OptimizationStatusPayloadFieldPolicy = {
+    clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+    optimizationStatus?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type OptimizationTypeKeySpecifier = (
+    | 'chapter'
+    | 'manga'
+    | 'optimizedSize'
+    | 'originalSize'
+    | 'position'
+    | 'progress'
+    | 'state'
+    | 'tries'
+    | OptimizationTypeKeySpecifier
+)[];
+export type OptimizationTypeFieldPolicy = {
+    chapter?: FieldPolicy<any> | FieldReadFunction<any>;
+    manga?: FieldPolicy<any> | FieldReadFunction<any>;
+    optimizedSize?: FieldPolicy<any> | FieldReadFunction<any>;
+    originalSize?: FieldPolicy<any> | FieldReadFunction<any>;
+    position?: FieldPolicy<any> | FieldReadFunction<any>;
+    progress?: FieldPolicy<any> | FieldReadFunction<any>;
+    state?: FieldPolicy<any> | FieldReadFunction<any>;
+    tries?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type OptimizationUpdateKeySpecifier = ('optimization' | 'type' | OptimizationUpdateKeySpecifier)[];
+export type OptimizationUpdateFieldPolicy = {
+    optimization?: FieldPolicy<any> | FieldReadFunction<any>;
+    type?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type OptimizationUpdatesKeySpecifier = ('initial' | 'state' | 'updates' | OptimizationUpdatesKeySpecifier)[];
+export type OptimizationUpdatesFieldPolicy = {
+    initial?: FieldPolicy<any> | FieldReadFunction<any>;
+    state?: FieldPolicy<any> | FieldReadFunction<any>;
+    updates?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type PageInfoKeySpecifier = (
     | 'endCursor'
@@ -1583,6 +1643,7 @@ export type QueryKeySpecifier = (
     | 'metas'
     | 'myMangaNote'
     | 'onboardingStatus'
+    | 'optimizationStatus'
     | 'otherUserMangaNotes'
     | 'pendingMangaRequestCount'
     | 'permissionNodes'
@@ -1637,6 +1698,7 @@ export type QueryFieldPolicy = {
     metas?: FieldPolicy<any> | FieldReadFunction<any>;
     myMangaNote?: FieldPolicy<any> | FieldReadFunction<any>;
     onboardingStatus?: FieldPolicy<any> | FieldReadFunction<any>;
+    optimizationStatus?: FieldPolicy<any> | FieldReadFunction<any>;
     otherUserMangaNotes?: FieldPolicy<any> | FieldReadFunction<any>;
     pendingMangaRequestCount?: FieldPolicy<any> | FieldReadFunction<any>;
     permissionNodes?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -2415,6 +2477,7 @@ export type SubscriptionKeySpecifier = (
     | 'downloadChanged'
     | 'downloadStatusChanged'
     | 'libraryUpdateStatusChanged'
+    | 'optimizationStatusChanged'
     | 'syncStatusChanged'
     | 'updateStatusChanged'
     | 'userEvents'
@@ -2425,6 +2488,7 @@ export type SubscriptionFieldPolicy = {
     downloadChanged?: FieldPolicy<any> | FieldReadFunction<any>;
     downloadStatusChanged?: FieldPolicy<any> | FieldReadFunction<any>;
     libraryUpdateStatusChanged?: FieldPolicy<any> | FieldReadFunction<any>;
+    optimizationStatusChanged?: FieldPolicy<any> | FieldReadFunction<any>;
     syncStatusChanged?: FieldPolicy<any> | FieldReadFunction<any>;
     updateStatusChanged?: FieldPolicy<any> | FieldReadFunction<any>;
     userEvents?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -3407,6 +3471,29 @@ export type StrictTypedTypePolicies = {
     OperationPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | OperationPayloadKeySpecifier | (() => undefined | OperationPayloadKeySpecifier);
         fields?: OperationPayloadFieldPolicy;
+    };
+    OptimizationStatus?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | OptimizationStatusKeySpecifier | (() => undefined | OptimizationStatusKeySpecifier);
+        fields?: OptimizationStatusFieldPolicy;
+    };
+    OptimizationStatusPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?:
+            | false
+            | OptimizationStatusPayloadKeySpecifier
+            | (() => undefined | OptimizationStatusPayloadKeySpecifier);
+        fields?: OptimizationStatusPayloadFieldPolicy;
+    };
+    OptimizationType?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | OptimizationTypeKeySpecifier | (() => undefined | OptimizationTypeKeySpecifier);
+        fields?: OptimizationTypeFieldPolicy;
+    };
+    OptimizationUpdate?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | OptimizationUpdateKeySpecifier | (() => undefined | OptimizationUpdateKeySpecifier);
+        fields?: OptimizationUpdateFieldPolicy;
+    };
+    OptimizationUpdates?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+        keyFields?: false | OptimizationUpdatesKeySpecifier | (() => undefined | OptimizationUpdatesKeySpecifier);
+        fields?: OptimizationUpdatesFieldPolicy;
     };
     PageInfo?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
         keyFields?: false | PageInfoKeySpecifier | (() => undefined | PageInfoKeySpecifier);

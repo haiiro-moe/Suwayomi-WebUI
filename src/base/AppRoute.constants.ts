@@ -199,6 +199,10 @@ export const AppRoutes = {
         match: 'downloads',
         path: '/downloads',
     },
+    optimizations: {
+        match: 'optimizations',
+        path: '/optimizations',
+    },
     manga: {
         match: 'manga/:id',
         path: (mangaId: MangaIdInfo['id']) => `/manga/${mangaId}`,
