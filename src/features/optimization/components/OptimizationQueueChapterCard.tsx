@@ -65,7 +65,12 @@ const ActionMenu = ({
 };
 
 export const OptimizationQueueChapterCard = memo(
-    ({ item, reorderOptimizations, cancelOptimizations }: { item: ChapterOptimizationStatus } & ActionProps) => {
+    ({
+        item,
+        reorderOptimizations,
+        cancelOptimizations,
+        canManage,
+    }: { item: ChapterOptimizationStatus; canManage: boolean } & ActionProps) => {
         const { t } = useLingui();
         const preventMobileContextMenu = MediaQuery.usePreventMobileContextMenu();
 
@@ -84,9 +89,11 @@ export const OptimizationQueueChapterCard = memo(
                     sx={MediaQuery.preventMobileContextMenuSx()}
                 >
                     <ListCardContent>
-                        <IconButton {...MUIUtil.preventRippleProp()} sx={{ pointerEvents: 'none' }}>
-                            <DragHandle />
-                        </IconButton>
+                        {canManage && (
+                            <IconButton {...MUIUtil.preventRippleProp()} sx={{ pointerEvents: 'none' }}>
+                                <DragHandle />
+                            </IconButton>
+                        )}
                         <Stack
                             sx={{
                                 flexGrow: 1,
@@ -111,7 +118,7 @@ export const OptimizationQueueChapterCard = memo(
                                 </Box>
                             )}
                         </Stack>
-                        {isError && (
+                        {canManage && isError && (
                             <CustomTooltip title={t`Retry`}>
                                 <IconButton
                                     {...MUIUtil.preventRippleProp()}
@@ -127,26 +134,28 @@ export const OptimizationQueueChapterCard = memo(
                                 </IconButton>
                             </CustomTooltip>
                         )}
-                        <CustomTooltip title={t`Options`}>
-                            <IconButton
-                                ref={setAnchorEl}
-                                {...MUIUtil.preventRippleProp()}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    setActionMenuOpen(!actionMenuOpen);
-                                }}
-                            >
-                                <MoreVertIcon />
-                                <ActionMenu
-                                    open={actionMenuOpen}
-                                    optimization={item}
-                                    reorderOptimizations={reorderOptimizations}
-                                    cancelOptimizations={cancelOptimizations}
-                                    anchorEl={anchorEl}
-                                />
-                            </IconButton>
-                        </CustomTooltip>
+                        {canManage && (
+                            <CustomTooltip title={t`Options`}>
+                                <IconButton
+                                    ref={setAnchorEl}
+                                    {...MUIUtil.preventRippleProp()}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setActionMenuOpen(!actionMenuOpen);
+                                    }}
+                                >
+                                    <MoreVertIcon />
+                                    <ActionMenu
+                                        open={actionMenuOpen}
+                                        optimization={item}
+                                        reorderOptimizations={reorderOptimizations}
+                                        cancelOptimizations={cancelOptimizations}
+                                        anchorEl={anchorEl}
+                                    />
+                                </IconButton>
+                            </CustomTooltip>
+                        )}
                     </ListCardContent>
                 </CardActionArea>
             </Card>

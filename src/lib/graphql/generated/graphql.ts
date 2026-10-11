@@ -538,6 +538,7 @@ export type ChapterStateFieldsFragment = {
     isRead: boolean;
     isDownloaded: boolean;
     isOptimized: boolean;
+    isOptimizing: boolean;
     isBookmarked: boolean;
 };
 
@@ -556,6 +557,7 @@ export type ChapterReaderFieldsFragment = {
     isRead: boolean;
     isDownloaded: boolean;
     isOptimized: boolean;
+    isOptimizing: boolean;
     isBookmarked: boolean;
 };
 
@@ -574,6 +576,7 @@ export type ChapterListFieldsFragment = {
     isRead: boolean;
     isDownloaded: boolean;
     isOptimized: boolean;
+    isOptimizing: boolean;
     isBookmarked: boolean;
 };
 
@@ -592,6 +595,7 @@ export type ChapterUpdateListFieldsFragment = {
     isRead: boolean;
     isDownloaded: boolean;
     isOptimized: boolean;
+    isOptimizing: boolean;
     isBookmarked: boolean;
     manga: {
         __typename: 'MangaType';
@@ -625,6 +629,7 @@ export type ChapterHistoryListFieldsFragment = {
     isRead: boolean;
     isDownloaded: boolean;
     isOptimized: boolean;
+    isOptimizing: boolean;
     isBookmarked: boolean;
     manga: {
         __typename: 'MangaType';
@@ -850,6 +855,7 @@ export type GetChaptersReaderQuery = {
             isRead: boolean;
             isDownloaded: boolean;
             isOptimized: boolean;
+            isOptimizing: boolean;
             isBookmarked: boolean;
         }>;
         pageInfo: {
@@ -893,6 +899,7 @@ export type GetChaptersMangaQuery = {
             isRead: boolean;
             isDownloaded: boolean;
             isOptimized: boolean;
+            isOptimizing: boolean;
             isBookmarked: boolean;
         }>;
         pageInfo: {
@@ -937,6 +944,7 @@ export type GetChaptersUpdatesQuery = {
             isRead: boolean;
             isDownloaded: boolean;
             isOptimized: boolean;
+            isOptimizing: boolean;
             isBookmarked: boolean;
             manga: {
                 __typename: 'MangaType';
@@ -995,6 +1003,7 @@ export type GetChaptersHistoryQuery = {
             isRead: boolean;
             isDownloaded: boolean;
             isOptimized: boolean;
+            isOptimizing: boolean;
             isBookmarked: boolean;
             manga: {
                 __typename: 'MangaType';
@@ -1047,6 +1056,7 @@ export type GetMangasChapterIdsWithStateQuery = {
             isRead: boolean;
             isDownloaded: boolean;
             isOptimized: boolean;
+            isOptimizing: boolean;
             isBookmarked: boolean;
         }>;
         pageInfo: {
@@ -2422,6 +2432,7 @@ export type RefreshMangaMutation = {
             isRead: boolean;
             isDownloaded: boolean;
             isOptimized: boolean;
+            isOptimizing: boolean;
             isBookmarked: boolean;
         }>;
     } | null;

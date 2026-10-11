@@ -32,6 +32,8 @@ import { ChaptersDownloadActionMenuItems } from '@/features/chapter/components/a
 import { Chapters } from '@/features/chapter/services/Chapters.ts';
 import { defaultPromiseErrorHandler } from '@/lib/DefaultPromiseErrorHandler.ts';
 import { requestManager } from '@/lib/requests/RequestManager.ts';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
+import { OPTIMIZATIONS_MANAGE_PERMISSION } from '@/features/optimization/Optimization.constants.ts';
 
 interface IProps {
     mangaId: number;
@@ -57,6 +59,8 @@ export const ChaptersToolbarMenu = ({
 
     const areAllChaptersRead = useMemo(() => chapters.every(Chapters.isRead), [chapters]);
     const areAllChaptersDownloaded = useMemo(() => chapters.every(Chapters.isDownloaded), [chapters]);
+    const canManageOptimizations = usePermissions().has(OPTIMIZATIONS_MANAGE_PERMISSION);
+
     // re-render on optimization queue changes, the queue state is read from the cache
     const { data: optimizationStatusData } = requestManager.useGetOptimizationStatus({ fetchPolicy: 'cache-only' });
     const optimizableChapters = useMemo(
@@ -95,19 +99,21 @@ export const ChaptersToolbarMenu = ({
                     </>
                 )}
             </PopupState>
-            <CustomTooltip title={t`Optimize downloaded chapters`} disabled={!optimizableChapters.length}>
-                <IconButton
-                    disabled={!optimizableChapters.length}
-                    onClick={() =>
-                        Chapters.optimize(Chapters.getIds(optimizableChapters)).catch(
-                            defaultPromiseErrorHandler('ChaptersToolbarMenu::optimize'),
-                        )
-                    }
-                    color="inherit"
-                >
-                    <AutoFixHighIcon />
-                </IconButton>
-            </CustomTooltip>
+            {canManageOptimizations && (
+                <CustomTooltip title={t`Optimize downloaded chapters`} disabled={!optimizableChapters.length}>
+                    <IconButton
+                        disabled={!optimizableChapters.length}
+                        onClick={() =>
+                            Chapters.optimize(Chapters.getIds(optimizableChapters)).catch(
+                                defaultPromiseErrorHandler('ChaptersToolbarMenu::optimize'),
+                            )
+                        }
+                        color="inherit"
+                    >
+                        <AutoFixHighIcon />
+                    </IconButton>
+                </CustomTooltip>
+            )}
             <CustomTooltip title={t`Filter and sort`}>
                 <IconButton onClick={() => setOpen(true)} color="inherit">
                     <FilterList color={isFiltered ? 'warning' : undefined} />

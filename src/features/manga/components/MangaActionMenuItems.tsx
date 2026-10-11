@@ -43,6 +43,7 @@ import { MANGA_ACTION_TO_TRANSLATION } from '@/features/manga/Manga.constants.ts
 import { CategorySelect } from '@/features/category/components/CategorySelect.tsx';
 import { STABLE_EMPTY_ARRAY } from '@/base/Base.constants.ts';
 import { usePermissions } from '@/features/authentication/usePermissions.ts';
+import { OPTIMIZATIONS_MANAGE_PERMISSION } from '@/features/optimization/Optimization.constants.ts';
 
 type BaseProps = { onClose: () => void; setHideMenu: (hide: boolean) => void };
 
@@ -72,7 +73,9 @@ export const MangaActionMenuItems = ({
     setHideMenu,
 }: Props) => {
     const { t } = useLingui();
-    const canManageLibrary = usePermissions().has('browse.add_to_library');
+    const permissions = usePermissions();
+    const canManageLibrary = permissions.has('browse.add_to_library');
+    const canManageOptimizations = permissions.has(OPTIMIZATIONS_MANAGE_PERMISSION);
 
     const isSingleMode = !!manga;
 
@@ -132,7 +135,7 @@ export const MangaActionMenuItems = ({
                     />
                 </NestedMenuItem>
             )}
-            {shouldShowMenuItem(hasDownloadedChapters) && (
+            {canManageOptimizations && shouldShowMenuItem(hasDownloadedChapters) && (
                 <MenuItem
                     Icon={AutoFixHigh}
                     disabled={isMenuItemDisabled(!downloadedMangas.length)}

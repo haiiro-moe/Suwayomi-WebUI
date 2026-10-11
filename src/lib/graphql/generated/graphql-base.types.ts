@@ -321,6 +321,8 @@ export type ChapterType = {
     isBookmarked: Scalars['Boolean']['output'];
     isDownloaded: Scalars['Boolean']['output'];
     isOptimized: Scalars['Boolean']['output'];
+    /** Whether the chapter is queued for optimization, in which case it can't be opened. Available without the "optimizations.read" permission, unlike the optimization queue. */
+    isOptimizing: Scalars['Boolean']['output'];
     isRead: Scalars['Boolean']['output'];
     lastPageRead: Scalars['Int']['output'];
     lastReadAt: Scalars['LongString']['output'];

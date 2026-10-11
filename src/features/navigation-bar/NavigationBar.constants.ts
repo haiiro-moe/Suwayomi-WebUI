@@ -18,6 +18,7 @@ import GetAppIcon from '@mui/icons-material/GetApp';
 import GetAppOutlinedIcon from '@mui/icons-material/GetAppOutlined';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import AutoFixHighOutlinedIcon from '@mui/icons-material/AutoFixHighOutlined';
+import { OPTIMIZATIONS_READ_PERMISSION } from '@/features/optimization/Optimization.constants.ts';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import PendingActionsOutlinedIcon from '@mui/icons-material/PendingActionsOutlined';
@@ -142,6 +143,7 @@ const NAVIGATION_BAR_DESKTOP_ITEMS = [
         IconComponent: AutoFixHighOutlinedIcon,
         show: 'desktop',
         moreGroup: NavBarItemMoreGroup.HIDDEN_ITEM,
+        requiredPermission: OPTIMIZATIONS_READ_PERMISSION,
         useBadge: () => {
             const { t } = useLingui();
             const { data } = requestManager.useGetOptimizationStatus();

@@ -28,6 +28,7 @@ import { AppRoutes } from '@/base/AppRoute.constants.ts';
 import { getErrorMessage } from '@/lib/HelperFunctions.ts';
 import { DOWNLOAD_TYPE_FIELDS } from '@/lib/graphql/download/DownloadFragments.ts';
 import { OPTIMIZATION_TYPE_FIELDS } from '@/lib/graphql/optimization/OptimizationFragments.ts';
+import { GET_OPTIMIZATION_STATUS } from '@/lib/graphql/optimization/OptimizationQuery.ts';
 import { epochToDate, getDateString } from '@/base/utils/DateHelper.ts';
 import {
     CHAPTER_ACTION_TO_CONFIRMATION_REQUIRED,
@@ -159,6 +160,13 @@ export class Chapters {
         }
 
         return optimizationStatus.data;
+    }
+
+    /**
+     * Whether the optimization queue is available, which requires the "optimizations.read" permission
+     */
+    static isOptimizationQueueKnown(): boolean {
+        return !!requestManager.graphQLClient.client.cache.readQuery({ query: GET_OPTIMIZATION_STATUS });
     }
 
     /**

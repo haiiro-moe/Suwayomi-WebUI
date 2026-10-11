@@ -56,7 +56,7 @@ export type ChapterMangaInfo = Pick<ChapterType, 'mangaId'>;
 
 export type ChapterDownloadInfo = Pick<ChapterType, 'isDownloaded'>;
 
-export type ChapterOptimizedInfo = Pick<ChapterType, 'isOptimized'>;
+export type ChapterOptimizedInfo = Pick<ChapterType, 'isOptimized'> & Partial<Pick<ChapterType, 'isOptimizing'>>;
 
 export type ChapterBookmarkInfo = Pick<ChapterType, 'isBookmarked'>;
 

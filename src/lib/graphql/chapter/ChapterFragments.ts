@@ -37,6 +37,7 @@ export const CHAPTER_STATE_FIELDS = gql`
         isRead
         isDownloaded
         isOptimized
+        isOptimizing
         isBookmarked
     }
 `;

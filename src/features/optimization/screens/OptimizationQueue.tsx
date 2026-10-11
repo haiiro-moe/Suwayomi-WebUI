@@ -41,11 +41,14 @@ import { STABLE_EMPTY_ARRAY } from '@/base/Base.constants.ts';
 import { StyledGroupItemWrapper } from '@/base/components/virtuoso/StyledGroupItemWrapper.tsx';
 import { Chapters } from '@/features/chapter/services/Chapters.ts';
 import { OptimizationQueueChapterCard } from '@/features/optimization/components/OptimizationQueueChapterCard.tsx';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
+import { OPTIMIZATIONS_MANAGE_PERMISSION } from '@/features/optimization/Optimization.constants.ts';
 
 export const OptimizationQueue = () => {
     const { t } = useLingui();
 
     useAppTitle(t`Optimization queue`);
+    const canManage = usePermissions().has(OPTIMIZATIONS_MANAGE_PERMISSION);
 
     const [reorderOptimizationsMutation] = requestManager.useReorderChaptersInOptimizationQueue();
 
@@ -162,26 +165,28 @@ export const OptimizationQueue = () => {
     };
 
     useAppAction(
-        <>
-            <CustomTooltip title={t`Retry all`} disabled={!failedChapterIds.length}>
-                <IconButton onClick={retryOptimizations} color="inherit" disabled={!failedChapterIds.length}>
-                    <Refresh />
-                </IconButton>
-            </CustomTooltip>
+        canManage && (
+            <>
+                <CustomTooltip title={t`Retry all`} disabled={!failedChapterIds.length}>
+                    <IconButton onClick={retryOptimizations} color="inherit" disabled={!failedChapterIds.length}>
+                        <Refresh />
+                    </IconButton>
+                </CustomTooltip>
 
-            <CustomTooltip title={t`Delete all`}>
-                <IconButton onClick={clearQueue} color="inherit">
-                    <DeleteSweepIcon />
-                </IconButton>
-            </CustomTooltip>
+                <CustomTooltip title={t`Delete all`}>
+                    <IconButton onClick={clearQueue} color="inherit">
+                        <DeleteSweepIcon />
+                    </IconButton>
+                </CustomTooltip>
 
-            <CustomTooltip title={status === OptimizerState.Started ? t`Stop` : t`Start`} disabled={isQueueEmpty}>
-                <IconButton onClick={toggleQueueStatus} disabled={isQueueEmpty} color="inherit">
-                    {status === OptimizerState.Stopped ? <PlayArrowIcon /> : <PauseIcon />}
-                </IconButton>
-            </CustomTooltip>
-        </>,
-        [status, isQueueEmpty, failedChapterIds.length],
+                <CustomTooltip title={status === OptimizerState.Started ? t`Stop` : t`Start`} disabled={isQueueEmpty}>
+                    <IconButton onClick={toggleQueueStatus} disabled={isQueueEmpty} color="inherit">
+                        {status === OptimizerState.Stopped ? <PlayArrowIcon /> : <PauseIcon />}
+                    </IconButton>
+                </CustomTooltip>
+            </>
+        ),
+        [canManage, status, isQueueEmpty, failedChapterIds.length],
     );
 
     // Virtuoso's resize observer can throw this error,
@@ -228,6 +233,7 @@ export const OptimizationQueue = () => {
                 onDragAbort={() => setDndActiveOptimization(null)}
             >
                 <SortableContext
+                    disabled={!canManage}
                     items={queue.map((optimization) => optimization.chapter)}
                     strategy={verticalListSortingStrategy}
                 >
@@ -246,6 +252,7 @@ export const OptimizationQueue = () => {
                                         item={queue[index]}
                                         reorderOptimizations={reorderOptimizations}
                                         cancelOptimizations={cancelOptimizations}
+                                        canManage={canManage}
                                     />
                                 </StyledGroupItemWrapper>
                             </DndSortableItem>
@@ -257,6 +264,7 @@ export const OptimizationQueue = () => {
                         item={dndActiveOptimization!}
                         reorderOptimizations={reorderOptimizations}
                         cancelOptimizations={cancelOptimizations}
+                        canManage={canManage}
                     />
                 </DndOverlayItem>
             </DndContext>

@@ -30,6 +30,8 @@ import { BrowseTab } from '@/features/browse/Browse.types.ts';
 import { LoginPage } from '@/features/authentication/screens/LoginPage.tsx';
 import { AuthGuard } from '@/features/authentication/components/AuthGuard.tsx';
 import { PermissionGuard } from '@/features/authentication/components/PermissionGuard.tsx';
+import { OPTIMIZATIONS_READ_PERMISSION } from '@/features/optimization/Optimization.constants.ts';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 import { defaultPromiseErrorHandler } from '@/lib/DefaultPromiseErrorHandler.ts';
 import { ReactRouter } from '@/lib/react-router/ReactRouter.ts';
 import { AuthManager } from '@/features/authentication/AuthManager.ts';
@@ -178,7 +180,8 @@ const InitializeGuard = ({ children }: PropsWithChildren) => {
 const InitialBackgroundRequests = () => {
     // Load the full download and optimization status once on startup to fill the cache
     requestManager.useGetDownloadStatus({ nextFetchPolicy: 'standby' });
-    requestManager.useGetOptimizationStatus({ nextFetchPolicy: 'standby' });
+    const canReadOptimizations = usePermissions().has(OPTIMIZATIONS_READ_PERMISSION);
+    requestManager.useGetOptimizationStatus({ nextFetchPolicy: 'standby', skip: !canReadOptimizations });
 
     const [fetchExtensionList] = requestManager.useExtensionListFetch();
 
@@ -203,7 +206,8 @@ const BackgroundSubscriptions = () => {
     const skipConnection = isAuthRequired === null || (isAuthRequired && !accessToken);
 
     requestManager.useDownloadSubscription({ skip: skipConnection });
-    requestManager.useOptimizationSubscription({ skip: skipConnection });
+    const canReadOptimizations = usePermissions().has(OPTIMIZATIONS_READ_PERMISSION);
+    requestManager.useOptimizationSubscription({ skip: skipConnection || !canReadOptimizations });
     requestManager.useUpdaterSubscription({ skip: skipConnection });
     requestManager.useWebUIUpdateSubscription({ skip: skipConnection });
     requestManager.useSyncSubscription({ skip: skipConnection });
@@ -428,7 +432,9 @@ const MainApp = () => {
                             </Route>
                         </Route>
                         <Route path={AppRoutes.downloads.match} element={<DownloadQueue />} />
-                        <Route path={AppRoutes.optimizations.match} element={<OptimizationQueue />} />
+                        <Route element={<PermissionGuard permission={OPTIMIZATIONS_READ_PERMISSION} />}>
+                            <Route path={AppRoutes.optimizations.match} element={<OptimizationQueue />} />
+                        </Route>
                         <Route path={AppRoutes.manga.match}>
                             <Route path={AppRoutes.manga.children.reader.match} element={null} />
                             <Route index element={<Manga />} />

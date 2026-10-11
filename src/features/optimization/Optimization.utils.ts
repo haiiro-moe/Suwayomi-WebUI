@@ -9,6 +9,7 @@
 import { t } from '@lingui/core/macro';
 import type { ChapterDownloadInfo, ChapterOptimizedInfo } from '@/features/chapter/Chapter.types.ts';
 import { OptimizationState } from '@/lib/graphql/generated/graphql-base.types.ts';
+import { Chapters } from '@/features/chapter/services/Chapters.ts';
 
 const BYTE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB'];
 
@@ -23,9 +24,14 @@ export const formatBytes = (bytes: number): string => {
  * The muted state text shown next to a chapter, e.g. "Downloaded" or "Optimizing (42%)"
  */
 export const getChapterDownloadStateText = (
-    { isDownloaded, isOptimized }: ChapterDownloadInfo & Partial<ChapterOptimizedInfo>,
+    { isDownloaded, isOptimized, isOptimizing }: ChapterDownloadInfo & Partial<ChapterOptimizedInfo>,
     optimization: { state: OptimizationState; progress: number } | null | undefined,
 ): string | null => {
+    // without access to the optimization queue only the chapter's own state is known
+    if (!optimization && isOptimizing && !Chapters.isOptimizationQueueKnown()) {
+        return t`Queued for optimization`;
+    }
+
     if (optimization) {
         switch (optimization.state) {
             case OptimizationState.Optimizing:
