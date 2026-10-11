@@ -33,6 +33,7 @@ import { MUIUtil } from '@/lib/mui/MUI.util.ts';
 import { OptionalCardActionAreaLink } from '@/base/components/lists/cards/OptionalCardActionAreaLink.tsx';
 import { languageCodeToName } from '@/base/utils/Languages.ts';
 import CardActionArea from '@mui/material/CardActionArea';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 
 const CardAction = ({
     isInstalled,
@@ -65,6 +66,7 @@ interface IProps {
 
 export function ExtensionCard(props: IProps) {
     const { t } = useLingui();
+    const permissions = usePermissions();
 
     const {
         extension: {
@@ -87,12 +89,18 @@ export function ExtensionCard(props: IProps) {
         getInstalledState(isInstalled, isObsolete, hasUpdate),
     );
     const installedState = forcedState ?? localInstalledState;
+    const canInstall = permissions.has('browse.extensions.install');
+    const canUpdate = permissions.has('browse.extensions.update');
+    const canPerformAction = installedState === ExtensionAction.INSTALL ? canInstall : canUpdate;
 
     useEffect(() => {
         setInstalledState(getInstalledState(isInstalled, isObsolete, hasUpdate));
     }, [getInstalledState(isInstalled, isObsolete, hasUpdate)]);
 
     const requestExtensionAction = async (action: ExtensionAction): Promise<void> => {
+        if ((action === ExtensionAction.INSTALL && !canInstall) || (action !== ExtensionAction.INSTALL && !canUpdate)) {
+            return;
+        }
         const nextAction = EXTENSION_ACTION_TO_NEXT_ACTION_MAP[action];
         const state = EXTENSION_ACTION_TO_STATE_MAP[action];
 
@@ -130,7 +138,11 @@ export function ExtensionCard(props: IProps) {
 
     return (
         <Card>
-            <CardAction isInstalled={isInstalled} pkgName={pkgName} performExtensionAction={handleButtonClick}>
+            <CardAction
+                isInstalled={isInstalled || !canInstall}
+                pkgName={pkgName}
+                performExtensionAction={handleButtonClick}
+            >
                 <ListCardContent>
                     <ListCardAvatar
                         iconUrl={requestManager.getValidImgUrlFor(iconUrl)}
@@ -194,18 +206,20 @@ export function ExtensionCard(props: IProps) {
                             </IconButton>
                         </CustomTooltip>
                     )}
-                    <Button
-                        variant="outlined"
-                        sx={{ flexShrink: 0 }}
-                        {...MUIUtil.preventRippleProp()}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleButtonClick();
-                        }}
-                    >
-                        {t(INSTALLED_STATE_TO_TRANSLATION_MAP[installedState])}
-                    </Button>
+                    {canPerformAction && (
+                        <Button
+                            variant="outlined"
+                            sx={{ flexShrink: 0 }}
+                            {...MUIUtil.preventRippleProp()}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleButtonClick();
+                            }}
+                        >
+                            {t(INSTALLED_STATE_TO_TRANSLATION_MAP[installedState])}
+                        </Button>
+                    )}
                 </ListCardContent>
             </CardAction>
         </Card>

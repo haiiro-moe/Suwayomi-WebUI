@@ -7,9 +7,12 @@
  */
 
 import { useEffect, useState } from 'react';
+import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { StringParam, useQueryParam } from 'use-query-params';
@@ -18,6 +21,7 @@ import { PasswordTextField } from '@/base/components/inputs/PasswordTextField.ts
 import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { makeToast } from '@/base/utils/Toast.ts';
 import { getErrorMessage } from '@/lib/HelperFunctions.ts';
+import { SubpathUtil } from '@/lib/utils/SubpathUtil.ts';
 import { AuthManager } from '@/features/authentication/AuthManager.ts';
 import { AppRoutes } from '@/base/AppRoute.constants.ts';
 import { useNavBarContext } from '@/features/navigation-bar/NavbarContext.tsx';
@@ -34,9 +38,32 @@ export const LoginPage = () => {
 
     const [redirect] = useQueryParam(SearchParam.REDIRECT, StringParam);
     const [loginUser, { loading: isLoading }] = requestManager.useLoginUser();
-
+    const { data: onboardingData } = requestManager.useOnboardingStatus();
+    const [setupOwner, { loading: isSettingUp }] = requestManager.useSetupOwner();
+    const onboardingRequired = onboardingData?.onboardingStatus === true;
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const { data: loginInfoData } = requestManager.useGetLoginInfo({ fetchPolicy: 'network-only' });
+    const ssoEnabled = loginInfoData?.aboutServer.ssoEnabled === true;
+
+    const doSetup = async () => {
+        if (password !== confirmPassword) {
+            makeToast(t`Passwords do not match`, 'error');
+            return;
+        }
+        try {
+            const { data } = await setupOwner({ variables: { username, password } });
+            if (data) {
+                AuthManager.setTokens(data.setupOwner.accessToken, data.setupOwner.refreshToken);
+                requestManager.processQueues();
+                navigate(redirect ?? AppRoutes.root.path);
+            }
+        } catch (e) {
+            makeToast(t`Could not set up the owner account`, 'error', getErrorMessage(e));
+        }
+    };
 
     const doLogin = async () => {
         try {
@@ -48,7 +75,7 @@ export const LoginPage = () => {
                 navigate(redirect ?? AppRoutes.root.path);
             }
         } catch (e) {
-            makeToast(t`Could not log in to Suwayomi`, 'error', getErrorMessage(e));
+            makeToast(t`Could not log in to Suwairo`, 'error', getErrorMessage(e));
         }
     };
 
@@ -125,10 +152,42 @@ export const LoginPage = () => {
                             variant="standard"
                             onChange={(e) => setPassword(e.target.value)}
                         />
+                        {onboardingRequired && (
+                            <PasswordTextField
+                                margin="dense"
+                                fullWidth
+                                variant="standard"
+                                label={t`Confirm password`}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
+                        )}
                     </Stack>
-                    <Button disabled={isLoading || (!username && !password)} variant="contained" onClick={doLogin}>
-                        {t`Log in`}
+                    <Button
+                        disabled={isLoading || isSettingUp || (!username && !password)}
+                        variant="contained"
+                        onClick={onboardingRequired ? doSetup : doLogin}
+                    >
+                        {onboardingRequired ? t`Create owner account` : t`Log in`}
                     </Button>
+                    {ssoEnabled && (
+                        <>
+                            <Divider>
+                                <Typography color="text.secondary" variant="caption">{t`or`}</Typography>
+                            </Divider>
+                            <Button
+                                variant="outlined"
+                                startIcon={<VpnKeyOutlinedIcon />}
+                                onClick={() => {
+                                    const subpath = SubpathUtil.getSubpath();
+                                    const ssoUrl = `${window.location.origin}${subpath}/sso/login`;
+                                    const redirectParam = redirect ? `?redirect=${encodeURIComponent(redirect)}` : '';
+                                    window.location.href = `${ssoUrl}${redirectParam}`;
+                                }}
+                            >
+                                {t`Sign in with Haiiro Auth`}
+                            </Button>
+                        </>
+                    )}
                     <Stack sx={{ position: 'absolute', left: 0, bottom: 0 }}>
                         <ServerAddressSetting />
                     </Stack>

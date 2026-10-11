@@ -93,6 +93,7 @@ export type MangaMetadataKeys = keyof MangaMetadata;
 
 export type MangaAction =
     | 'download'
+    | 'optimize'
     | 'delete'
     | 'mark_as_read'
     | 'mark_as_unread'

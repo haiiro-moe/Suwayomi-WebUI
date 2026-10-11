@@ -34,6 +34,7 @@ export const MangaBadges = ({
     unread,
     downloadCount,
     mode,
+    canManageLibrary = true,
 }: {
     inLibraryIndicator?: boolean;
     updateLibraryState: () => void;
@@ -41,6 +42,7 @@ export const MangaBadges = ({
     unread?: number;
     downloadCount?: number;
     mode: MangaCardMode;
+    canManageLibrary: boolean;
 }) => {
     const { t } = useLingui();
 
@@ -52,7 +54,7 @@ export const MangaBadges = ({
 
     return (
         <BadgeContainer>
-            {!isTouchDevice && inLibraryIndicator && mode === 'source' && (
+            {!isTouchDevice && canManageLibrary && inLibraryIndicator && mode === 'source' && (
                 <Button
                     className="source-manga-library-state-button"
                     component="div"

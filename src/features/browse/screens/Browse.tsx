@@ -16,6 +16,7 @@ import { TabsWrapper } from '@/base/components/tabs/TabsWrapper.tsx';
 import { TabsMenu } from '@/base/components/tabs/TabsMenu.tsx';
 import { useAppTitle } from '@/features/navigation-bar/hooks/useAppTitle.ts';
 import { BrowseTab } from '@/features/browse/Browse.types.ts';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 import { GROUPED_VIRTUOSO_Z_INDEX } from '@/lib/virtuoso/Virtuoso.constants.ts';
 import { SearchParam } from '@/base/Base.types.ts';
 import { Migration } from '@/features/migration/screens/Migration.tsx';
@@ -24,12 +25,18 @@ import { useElementSize } from '@mantine/hooks';
 
 export function Browse() {
     const { t } = useLingui();
-    useAppTitle(t`Browse`);
+    const permissions = usePermissions();
+    const canSeeExtensions =
+        permissions.has('browse.extensions.install') || permissions.has('browse.extensions.update');
+    const canSeeMigrate = permissions.has('migrate.access');
+    const isRequestOnly = permissions.has('browse.request') && !permissions.has('browse.add_to_library');
+    useAppTitle(isRequestOnly ? t`Request` : t`Browse`);
 
     const { ref: tabsMenuRef, height: tabsMenuHeight } = useElementSize();
 
     const [tabSearchParam, setTabSearchParam] = useQueryParam(SearchParam.TAB, StringParam, {});
-    const tabName = (tabSearchParam as BrowseTab) ?? BrowseTab.SOURCES;
+    const defaultTab = BrowseTab.SOURCES;
+    const tabName = (tabSearchParam as BrowseTab) ?? defaultTab;
 
     if (!tabSearchParam) {
         setTabSearchParam(tabName, 'replaceIn');
@@ -47,9 +54,17 @@ export function Browse() {
                         value={tabName}
                         onChange={(_, newTab) => setTabSearchParam(newTab, 'replaceIn')}
                     >
-                        <Tab value={BrowseTab.SOURCES} sx={{ textTransform: 'none' }} label={t`Source`} />
-                        <Tab value={BrowseTab.EXTENSIONS} sx={{ textTransform: 'none' }} label={t`Extension`} />
-                        <Tab value={BrowseTab.MIGRATE} sx={{ textTransform: 'none' }} label={t`Migrate`} />
+                        <Tab
+                            value={BrowseTab.SOURCES}
+                            sx={{ textTransform: 'none' }}
+                            label={isRequestOnly ? t`Request` : t`Source`}
+                        />
+                        {canSeeExtensions && (
+                            <Tab value={BrowseTab.EXTENSIONS} sx={{ textTransform: 'none' }} label={t`Extension`} />
+                        )}
+                        {canSeeMigrate && (
+                            <Tab value={BrowseTab.MIGRATE} sx={{ textTransform: 'none' }} label={t`Migrate`} />
+                        )}
                     </TabsMenu>
                 }
             >
@@ -59,12 +74,16 @@ export function Browse() {
                 <TabPanel index={BrowseTab.SOURCES} currentIndex={tabName}>
                     <Sources tabsMenuHeight={tabsMenuHeight} />
                 </TabPanel>
-                <TabPanel index={BrowseTab.EXTENSIONS} currentIndex={tabName}>
-                    <Extensions tabsMenuHeight={tabsMenuHeight} />
-                </TabPanel>
-                <TabPanel index={BrowseTab.MIGRATE} currentIndex={tabName}>
-                    <Migration />
-                </TabPanel>
+                {canSeeExtensions && (
+                    <TabPanel index={BrowseTab.EXTENSIONS} currentIndex={tabName}>
+                        <Extensions tabsMenuHeight={tabsMenuHeight} />
+                    </TabPanel>
+                )}
+                {canSeeMigrate && (
+                    <TabPanel index={BrowseTab.MIGRATE} currentIndex={tabName}>
+                        <Migration />
+                    </TabPanel>
+                )}
             </OffsetComponentWithContainer>
         </TabsWrapper>
     );

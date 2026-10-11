@@ -23,12 +23,14 @@ import { getErrorMessage } from '@/lib/HelperFunctions.ts';
 import { CategorySelect } from '@/features/category/components/CategorySelect';
 import { Confirmation } from '@/base/AppAwaitableComponent.ts';
 import type { MangaIdInfo, MangaInLibraryInfo, MangaTitleInfo } from '@/features/manga/Manga.types.ts';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 
 export const useManageMangaLibraryState = (
     manga: MangaIdInfo & MangaTitleInfo & Partial<MangaInLibraryInfo>,
     confirmRemoval: boolean = false,
 ) => {
     const { t } = useLingui();
+    const canManageLibrary = usePermissions().has('browse.add_to_library');
 
     const [isInLibrary, setIsInLibrary] = useState(!!manga.inLibrary);
 
@@ -187,6 +189,7 @@ export const useManageMangaLibraryState = (
 
     return {
         updateLibraryState,
+        canManageLibrary,
         /**
          * In case of browsing the source, the data has to be fetched via a mutation.
          * Thus, the source browse data never has the updated in library state unless it has to rerender, which does not get

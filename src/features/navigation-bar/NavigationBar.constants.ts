@@ -16,9 +16,21 @@ import ExploreIcon from '@mui/icons-material/Explore';
 import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import GetAppOutlinedIcon from '@mui/icons-material/GetAppOutlined';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import AutoFixHighOutlinedIcon from '@mui/icons-material/AutoFixHighOutlined';
+import { OPTIMIZATIONS_READ_PERMISSION } from '@/features/optimization/Optimization.constants.ts';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
+import PendingActionsOutlinedIcon from '@mui/icons-material/PendingActionsOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import PeopleIcon from '@mui/icons-material/People';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutlined';
+import MailIcon from '@mui/icons-material/Mail';
+import MailOutlineIcon from '@mui/icons-material/MailOutlined';
+import { d } from 'koration';
 import { useLingui } from '@lingui/react/macro';
 import { msg, plural } from '@lingui/core/macro';
 import type { NavbarItem } from '@/features/navigation-bar/NavigationBar.types.ts';
@@ -26,7 +38,7 @@ import { NavBarItemMoreGroup } from '@/features/navigation-bar/NavigationBar.typ
 import { AppRoutes } from '@/base/AppRoute.constants.ts';
 import { requestManager } from '@/lib/requests/RequestManager.ts';
 import { STABLE_EMPTY_ARRAY } from '@/base/Base.constants.ts';
-import { DownloaderState } from '@/lib/graphql/generated/graphql-base.types.ts';
+import { DownloaderState, OptimizerState } from '@/lib/graphql/generated/graphql-base.types.ts';
 
 type RestrictedNavBarItem<Show extends NavbarItem['show']> = Omit<NavbarItem, 'show'> & { show: Show };
 
@@ -38,6 +50,7 @@ const NAVIGATION_BAR_BASE_ITEMS = [
         IconComponent: CollectionsOutlinedBookmarkIcon,
         show: 'both',
         moreGroup: NavBarItemMoreGroup.GENERAL,
+        requiredPermission: 'library.read',
     },
     {
         path: AppRoutes.updates.path,
@@ -46,6 +59,7 @@ const NAVIGATION_BAR_BASE_ITEMS = [
         IconComponent: NewReleasesOutlinedIcon,
         show: 'both',
         moreGroup: NavBarItemMoreGroup.GENERAL,
+        requiredPermission: 'updates.read',
     },
     {
         path: AppRoutes.history.path,
@@ -62,8 +76,11 @@ const NAVIGATION_BAR_BASE_ITEMS = [
         IconComponent: ExploreOutlinedIcon,
         show: 'both',
         moreGroup: NavBarItemMoreGroup.GENERAL,
+        requiredPermission: 'browse.read',
         useBadge: () => {
-            const { data } = requestManager.useGetExtensionList({ fetchPolicy: 'cache-only' });
+            const { data } = requestManager.useGetExtensionList({
+                fetchPolicy: 'cache-only',
+            });
 
             const extensions = data?.extensions.nodes ?? STABLE_EMPTY_ARRAY;
             const availableUpdates = extensions.filter(
@@ -119,6 +136,36 @@ const NAVIGATION_BAR_DESKTOP_ITEMS = [
         },
     },
     {
+        path: AppRoutes.optimizations.path,
+        title: msg`Optimizing`,
+        moreTitle: msg`Optimization queue`,
+        SelectedIconComponent: AutoFixHighIcon,
+        IconComponent: AutoFixHighOutlinedIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.HIDDEN_ITEM,
+        requiredPermission: OPTIMIZATIONS_READ_PERMISSION,
+        useBadge: () => {
+            const { t } = useLingui();
+            const { data } = requestManager.useGetOptimizationStatus();
+            const optimizationStatus = data?.optimizationStatus;
+
+            const isPaused = optimizationStatus?.state === OptimizerState.Stopped;
+            const count = optimizationStatus?.queue.length ?? 0;
+
+            if (!count) {
+                return {
+                    count,
+                    title: '',
+                };
+            }
+
+            return {
+                count,
+                title: isPaused ? t`Paused — ${count} remaining` : t`${count} remaining`,
+            };
+        },
+    },
+    {
         path: AppRoutes.settings.path,
         title: msg`Settings`,
         SelectedIconComponent: SettingsIcon,
@@ -133,6 +180,78 @@ const NAVIGATION_BAR_DESKTOP_ITEMS = [
         IconComponent: InfoIcon,
         show: 'desktop',
         moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+    },
+    {
+        path: AppRoutes.userDirectory.path,
+        title: msg`Users`,
+        SelectedIconComponent: PeopleIcon,
+        IconComponent: PeopleOutlineIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+    },
+    {
+        path: AppRoutes.inbox.path,
+        title: msg`Messages`,
+        SelectedIconComponent: MailIcon,
+        IconComponent: MailOutlineIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+        useBadge: () => {
+            // updated by the user events subscription, polling is only a fallback for missed events
+            const { data } = requestManager.useGetUnreadMessageCount({
+                pollInterval: d(5).minutes.inWholeMilliseconds,
+            });
+            const count = Number(data?.unreadMessageCount ?? 0);
+
+            return {
+                count,
+                title: count
+                    ? plural(count, {
+                          one: '# unread message',
+                          other: '# unread messages',
+                      })
+                    : '',
+            };
+        },
+    },
+    {
+        path: AppRoutes.profile.path,
+        title: msg`Profile`,
+        SelectedIconComponent: AccountCircleIcon,
+        IconComponent: AccountCircleIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+    },
+    {
+        path: AppRoutes.admin.path,
+        title: msg`Administration`,
+        SelectedIconComponent: ManageAccountsIcon,
+        IconComponent: ManageAccountsIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+        requiredPermission: 'admin.users.manage',
+    },
+    {
+        path: AppRoutes.requests.path,
+        title: msg`Requests`,
+        SelectedIconComponent: PendingActionsIcon,
+        IconComponent: PendingActionsOutlinedIcon,
+        show: 'desktop',
+        moreGroup: NavBarItemMoreGroup.SETTING_INFO,
+        requiredPermission: 'requests.read',
+        useBadge: () => {
+            const { t } = useLingui();
+            // updated by the user events subscription, polling is only a fallback for missed events
+            const { data } = requestManager.useGetPendingMangaRequestCount({
+                pollInterval: d(5).minutes.inWholeMilliseconds,
+            });
+            const count = data?.pendingMangaRequestCount ?? 0;
+
+            return {
+                count,
+                title: count ? t`${count} pending` : '',
+            };
+        },
     },
 ] as const satisfies RestrictedNavBarItem<'desktop'>[];
 

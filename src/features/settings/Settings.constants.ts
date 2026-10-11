@@ -11,11 +11,7 @@ import { msg } from '@lingui/core/macro';
 import { d } from 'koration';
 import { DEFAULT_DEVICE } from '@/features/device/services/Device.ts';
 import { DEFAULT_SORT_SETTINGS } from '@/features/migration/Migration.constants.ts';
-import type {
-    GlobalUpdateSkipEntriesSettings,
-    MetadataServerSettings,
-    ServerSettings,
-} from '@/features/settings/Settings.types.ts';
+import type { MetadataServerSettings, ServerSettings } from '@/features/settings/Settings.types.ts';
 import { ImageProcessingTargetMode, ImageProcessingType } from '@/features/settings/Settings.types.ts';
 import { GridLayout } from '@/base/Base.types';
 import { getDefaultLanguages } from '@/base/utils/Languages.ts';
@@ -120,6 +116,11 @@ const AUTH_MODES_TO_TRANSLATION: { [mode in AuthMode]: SelectSettingValueDisplay
         text: msg`UI Login`,
         description: msg`The login will be handled by the client.`,
     },
+    [AuthMode.Sso]: {
+        text: msg`SSO (OIDC)`,
+        description: msg`Login is handled by an external OIDC provider (e.g. Tinyauth with LLDAP). Configure the issuer URL, client id, and client secret in the server config.`,
+        disclaimer: msg`New SSO users are auto-provisioned with the configured default role. Local password login remains available for existing accounts.`,
+    },
 };
 export const AUTH_MODES_SELECT_VALUES: SelectSettingValue<AuthMode>[] = AUTH_MODES.map((mode) => [
     mode,
@@ -189,20 +190,6 @@ const WEB_UI_INTERFACE_TO_TRANSLATIONS: {
 export const WEB_UI_INTERFACE_SELECT_VALUES: SelectSettingValue<WebUiInterface>[] = WEB_UI_INTERFACES.map(
     (webUIInterface) => [webUIInterface, WEB_UI_INTERFACE_TO_TRANSLATIONS[webUIInterface]],
 );
-
-export const GLOBAL_UPDATE_INTERVAL = {
-    default: d(12).hours.inWholeHours,
-    min: d(6).hours.inWholeHours,
-    max: d(1).months.inWholeHours,
-};
-
-export const GLOBAL_UPDATE_SKIP_ENTRIES_TO_TRANSLATION: {
-    [setting in keyof GlobalUpdateSkipEntriesSettings]: MessageDescriptor;
-} = {
-    excludeUnreadChapters: msg`With unread chapter(s)`,
-    excludeNotStarted: msg`That haven't been started`,
-    excludeCompleted: msg`With "Completed" status`,
-};
 
 export const WEB_UI_UPDATE_INTERVAL = {
     default: d(23).hours.inWholeHours,

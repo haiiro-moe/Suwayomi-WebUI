@@ -39,18 +39,24 @@ import type {
     ChapterDownloadInfo,
     ChapterIdInfo,
     ChapterMangaInfo,
+    ChapterOptimizedInfo,
     ChapterReadInfo,
     ChapterRealUrlInfo,
 } from '@/features/chapter/Chapter.types.ts';
 import { IconWebView } from '@/assets/icons/IconWebView.tsx';
 import { IconBrowser } from '@/assets/icons/IconBrowser.tsx';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
+import { OPTIMIZATIONS_MANAGE_PERMISSION } from '@/features/optimization/Optimization.constants.ts';
+import AutoFixHigh from '@mui/icons-material/AutoFixHigh';
+import AutoFixOff from '@mui/icons-material/AutoFixOff';
 
 type BaseProps = { onClose: () => void; selectable?: boolean };
 
 type TChapter = ChapterIdInfo &
     ChapterMangaInfo &
     ChapterDownloadInfo &
+    ChapterOptimizedInfo &
     ChapterBookmarkInfo &
     ChapterReadInfo &
     ChapterRealUrlInfo;
@@ -79,6 +85,8 @@ export const ChapterActionMenuItems = ({
 }: Props) => {
     const { t } = useLingui();
 
+    const canManageOptimizations = usePermissions().has(OPTIMIZATIONS_MANAGE_PERMISSION);
+
     const isSingleMode = !!chapter;
     const { isDownloaded, isRead, isBookmarked } = chapter ?? STABLE_EMPTY_OBJECT;
 
@@ -104,6 +112,8 @@ export const ChapterActionMenuItems = ({
         downloadingChapters,
         downloadableChapters,
         downloadedChapters,
+        optimizableChapters,
+        optimizingChapters,
         unbookmarkedChapters,
         bookmarkedChapters,
         unreadChapters,
@@ -113,6 +123,8 @@ export const ChapterActionMenuItems = ({
             downloadingChapters: Chapters.getDownloading(selectedChapters),
             downloadableChapters: Chapters.getDownloadable(selectedChapters),
             downloadedChapters: Chapters.getDownloaded(selectedChapters),
+            optimizableChapters: Chapters.getOptimizable(selectedChapters),
+            optimizingChapters: Chapters.getInOptimizationQueue(selectedChapters),
             unbookmarkedChapters: Chapters.getNonBookmarked(selectedChapters),
             bookmarkedChapters: Chapters.getBookmarked(selectedChapters),
             unreadChapters: Chapters.getNonRead(selectedChapters),
@@ -222,6 +234,23 @@ export const ChapterActionMenuItems = ({
                     title={getMenuItemTitle('download_cancel', downloadingChapters.length)}
                 />
             )}
+            {canManageOptimizations && shouldShowMenuItem(!!chapter && Chapters.isOptimizable(chapter)) && (
+                <MenuItem
+                    Icon={AutoFixHigh}
+                    disabled={isMenuItemDisabled(!optimizableChapters.length)}
+                    onClick={() => performAction('optimize', optimizableChapters)}
+                    title={getMenuItemTitle('optimize', optimizableChapters.length)}
+                />
+            )}
+            {canManageOptimizations &&
+                shouldShowMenuItem(Chapters.isInOptimizationQueue(chapter?.id ?? FALLBACK_CHAPTER.id)) && (
+                    <MenuItem
+                        Icon={AutoFixOff}
+                        disabled={isMenuItemDisabled(!optimizingChapters.length)}
+                        onClick={() => performAction('optimize_cancel', optimizingChapters)}
+                        title={getMenuItemTitle('optimize_cancel', optimizingChapters.length)}
+                    />
+                )}
             {shouldShowMenuItem(isDownloaded) && (
                 <MenuItem
                     Icon={Delete}

@@ -118,9 +118,14 @@ export class ReaderService {
     }
 
     static async openReader(
-        chapter: ChapterMangaInfo & ChapterSourceOrderInfo & ChapterReadInfo,
+        chapter: ChapterIdInfo & ChapterMangaInfo & ChapterSourceOrderInfo & ChapterReadInfo,
         updateInitialChapter?: boolean,
     ): Promise<void> {
+        if (Chapters.isInOptimizationQueue(chapter.id)) {
+            makeToast(t`This chapter is being optimized and can be opened once that is done`, 'info');
+            return;
+        }
+
         ReactRouter.navigate(AppRoutes.reader.path(chapter.mangaId, chapter.sourceOrder), {
             state: Chapters.getReaderOpenChapterLocationState(chapter, updateInitialChapter),
         });

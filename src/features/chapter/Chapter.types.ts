@@ -7,7 +7,11 @@
  */
 
 import type { ChapterType } from '@/lib/graphql/generated/graphql-base.types';
-import type { ChapterReaderFieldsFragment, DownloadStatusFieldsFragment } from '@/lib/graphql/generated/graphql.ts';
+import type {
+    ChapterReaderFieldsFragment,
+    DownloadStatusFieldsFragment,
+    OptimizationStatusFieldsFragment,
+} from '@/lib/graphql/generated/graphql.ts';
 
 export type ChapterSortMode = 'fetchedAt' | 'source' | 'chapterNumber' | 'uploadedAt';
 
@@ -34,6 +38,8 @@ export type TChapterReader = ChapterReaderFieldsFragment;
 export type ChapterAction =
     | 'download'
     | 'download_cancel'
+    | 'optimize'
+    | 'optimize_cancel'
     | 'delete'
     | 'bookmark'
     | 'unbookmark'
@@ -42,11 +48,15 @@ export type ChapterAction =
 
 export type ChapterDownloadStatus = DownloadStatusFieldsFragment['queue'][number];
 
+export type ChapterOptimizationStatus = OptimizationStatusFieldsFragment['queue'][number];
+
 export type ChapterIdInfo = Pick<ChapterType, 'id'>;
 
 export type ChapterMangaInfo = Pick<ChapterType, 'mangaId'>;
 
 export type ChapterDownloadInfo = Pick<ChapterType, 'isDownloaded'>;
+
+export type ChapterOptimizedInfo = Pick<ChapterType, 'isOptimized'> & Partial<Pick<ChapterType, 'isOptimizing'>>;
 
 export type ChapterBookmarkInfo = Pick<ChapterType, 'isBookmarked'>;
 

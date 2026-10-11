@@ -50,6 +50,7 @@ import type { MetadataBrowseSettings } from '@/features/browse/Browse.types.ts';
 import { useAppAction } from '@/features/navigation-bar/hooks/useAppAction.ts';
 import { SearchParam } from '@/base/Base.types.ts';
 import { i18n } from '@/i18n';
+import { usePermissions } from '@/features/authentication/usePermissions.ts';
 
 const LANGUAGE = 0;
 const EXTENSIONS = 1;
@@ -62,6 +63,7 @@ const GroupHeader = ({
     updatingExtensionIds,
     setUpdatingExtensionIds,
     handleExtensionUpdate,
+    canUpdateExtensions,
 }: {
     groupName: string;
     isFirstItem: boolean;
@@ -70,6 +72,7 @@ const GroupHeader = ({
     updatingExtensionIds: TExtension['pkgName'][];
     setUpdatingExtensionIds: (ids: TExtension['pkgName'][]) => void;
     handleExtensionUpdate: () => void;
+    canUpdateExtensions: boolean;
 }) => {
     const { t } = useLingui();
 
@@ -82,7 +85,7 @@ const GroupHeader = ({
             <Typography variant="h5" component="h2">
                 {translateExtensionLanguage(groupName)}
             </Typography>
-            {isUpdateGroup && (
+            {isUpdateGroup && canUpdateExtensions && (
                 <Button
                     disabled={!!updatingExtensionIds.length}
                     variant="contained"
@@ -115,6 +118,9 @@ const GroupHeader = ({
 
 export function Extensions({ tabsMenuHeight }: { tabsMenuHeight: number }) {
     const { t } = useLingui();
+    const permissions = usePermissions();
+    const canInstallExtensions = permissions.has('browse.extensions.install');
+    const canUpdateExtensions = permissions.has('browse.extensions.update');
 
     const [fetchExtensions, { data, loading: areExtensionsLoading, error: extensionsError }] =
         requestManager.useExtensionListFetch();
@@ -194,28 +200,30 @@ export function Extensions({ tabsMenuHeight }: { tabsMenuHeight: number }) {
     useAppAction(
         <>
             <AppbarSearch />
-            <CustomTooltip title={t`Install external extension`}>
-                <IconButton
-                    onClick={() => {
-                        const input = document.createElement('input');
-                        input.style.display = 'none';
-                        input.type = 'file';
-                        input.onchange = () => {
-                            const file = input.files?.[0];
-                            if (file) {
-                                submitExternalExtension(file);
-                            }
-                        };
+            {canInstallExtensions && (
+                <CustomTooltip title={t`Install external extension`}>
+                    <IconButton
+                        onClick={() => {
+                            const input = document.createElement('input');
+                            input.style.display = 'none';
+                            input.type = 'file';
+                            input.onchange = () => {
+                                const file = input.files?.[0];
+                                if (file) {
+                                    submitExternalExtension(file);
+                                }
+                            };
 
-                        document.documentElement.appendChild(input);
-                        input.click();
-                        document.documentElement.removeChild(input);
-                    }}
-                    color="inherit"
-                >
-                    <AddIcon />
-                </IconButton>
-            </CustomTooltip>
+                            document.documentElement.appendChild(input);
+                            input.click();
+                            document.documentElement.removeChild(input);
+                        }}
+                        color="inherit"
+                    >
+                        <AddIcon />
+                    </IconButton>
+                </CustomTooltip>
+            )}
 
             <LanguageSelect
                 selectedLanguages={shownLangs}
@@ -231,7 +239,9 @@ export function Extensions({ tabsMenuHeight }: { tabsMenuHeight: number }) {
     useWindowEvent('drop', async (e) => {
         e.preventDefault();
         const files = await fromEvent(e);
-        submitExternalExtension(files[0] as File);
+        if (canInstallExtensions) {
+            submitExternalExtension(files[0] as File);
+        }
     });
     useWindowEvent('dragover', (e) => {
         e.preventDefault();
@@ -303,6 +313,7 @@ export function Extensions({ tabsMenuHeight }: { tabsMenuHeight: number }) {
                         updatingExtensionIds={updatingExtensionIds}
                         setUpdatingExtensionIds={setUpdatingExtensionIds}
                         handleExtensionUpdate={handleExtensionUpdate}
+                        canUpdateExtensions={canUpdateExtensions}
                     />
                 );
             }}

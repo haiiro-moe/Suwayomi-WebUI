@@ -26,6 +26,22 @@ import { BaseClient } from '@/lib/requests/client/BaseClient.ts';
 import type {
     AddExtensionStoreMutation,
     AddExtensionStoreMutationVariables,
+    ClearOptimizerMutation,
+    ClearOptimizerMutationVariables,
+    DequeueChapterOptimizationsMutation,
+    DequeueChapterOptimizationsMutationVariables,
+    EnqueueChapterOptimizationsMutation,
+    EnqueueChapterOptimizationsMutationVariables,
+    GetOptimizationStatusQuery,
+    GetOptimizationStatusQueryVariables,
+    OptimizationStatusSubscription,
+    OptimizationStatusSubscriptionVariables,
+    ReorderChapterOptimizationsMutation,
+    ReorderChapterOptimizationsMutationVariables,
+    StartOptimizerMutation,
+    StartOptimizerMutationVariables,
+    StopOptimizerMutation,
+    StopOptimizerMutationVariables,
     CheckForServerUpdatesQuery,
     CheckForServerUpdatesQueryVariables,
     CheckForWebuiUpdateQuery,
@@ -54,8 +70,52 @@ import type {
     EnqueueChapterDownloadMutationVariables,
     EnqueueChapterDownloadsMutation,
     EnqueueChapterDownloadsMutationVariables,
+    CreateRoleMutation,
+    CreateRoleMutationVariables,
+    CreateUserMutation,
+    CreateUserMutationVariables,
+    DeleteRoleMutation,
+    DeleteRoleMutationVariables,
+    DeleteUserMutation,
+    DeleteUserMutationVariables,
     GetAboutQuery,
     GetAboutQueryVariables,
+    GetAdminRolesQuery,
+    GetAdminRolesQueryVariables,
+    GetAdminUsersQuery,
+    GetAdminUsersQueryVariables,
+    GetCategoryAccessQuery,
+    GetCategoryAccessQueryVariables,
+    SetCategoryAccessMutation,
+    SetCategoryAccessMutationVariables,
+    GetRoleCategoryAccessQuery,
+    GetRoleCategoryAccessQueryVariables,
+    SetRoleCategoryAccessMutation,
+    SetRoleCategoryAccessMutationVariables,
+    GetPendingMangaRequestCountQuery,
+    GetPendingMangaRequestCountQueryVariables,
+    UserEventsSubscription,
+    UserEventsSubscriptionVariables,
+    GetCurrentUserProfileQuery,
+    GetCurrentUserProfileQueryVariables,
+    GetUserDirectoryQuery,
+    GetUserDirectoryQueryVariables,
+    GetUserProfileQuery,
+    GetUserProfileQueryVariables,
+    GetConversationQuery,
+    GetConversationQueryVariables,
+    GetUnreadMessageCountQuery,
+    GetUnreadMessageCountQueryVariables,
+    SendMessageMutation,
+    SendMessageMutationVariables,
+    MarkMessageReadMutation,
+    MarkMessageReadMutationVariables,
+    GetUserSettingsQuery,
+    GetUserSettingsQueryVariables,
+    SetUserSettingsMutation,
+    SetUserSettingsMutationVariables,
+    ResetUserSettingsMutation,
+    ResetUserSettingsMutationVariables,
     GetCategoriesSettingsQuery,
     GetCategoriesSettingsQueryVariables,
     GetCategoryMangasQuery,
@@ -194,6 +254,30 @@ import type {
     UpdateSourcePreferencesMutationVariables,
     UpdateWebuiMutation,
     UpdateWebuiMutationVariables,
+    UpdateRoleMutation,
+    UpdateRoleMutationVariables,
+    UpdateUserMutation,
+    UpdateUserMutationVariables,
+    UpdateProfileMutation,
+    UpdateProfileMutationVariables,
+    AddFavoriteMutation,
+    AddFavoriteMutationVariables,
+    RemoveFavoriteMutation,
+    RemoveFavoriteMutationVariables,
+    SetMangaNoteMutation,
+    SetMangaNoteMutationVariables,
+    GetMyMangaNoteQuery,
+    GetMyMangaNoteQueryVariables,
+    GetOtherUserMangaNotesQuery,
+    GetOtherUserMangaNotesQueryVariables,
+    RequestMangaMutation,
+    RequestMangaMutationVariables,
+    GetMangaRequestsQuery,
+    GetMangaRequestsQueryVariables,
+    DecideMangaRequestMutation,
+    DecideMangaRequestMutationVariables,
+    GetRequestPreviewQuery,
+    GetRequestPreviewQueryVariables,
     UserLoginMutation,
     UserLoginMutationVariables,
     UserRefreshMutation,
@@ -236,6 +320,8 @@ import {
     DownloadUpdateType,
     FetchSourceMangaType,
     MangaJobStatus,
+    OptimizationUpdateType,
+    OptimizerState,
     SortOrder,
 } from '@/lib/graphql/generated/graphql-base.types.ts';
 import { GET_GLOBAL_METADATAS } from '@/lib/graphql/metadata/GlobalMetadataQuery.ts';
@@ -244,6 +330,7 @@ import {
     CHECK_FOR_SERVER_UPDATES,
     CHECK_FOR_WEBUI_UPDATE,
     GET_ABOUT,
+    GET_LOGIN_INFO,
     GET_WEBUI_UPDATE_STATUS,
 } from '@/lib/graphql/server/ServerInfoQuery.ts';
 import { GET_EXTENSION, GET_EXTENSIONS } from '@/lib/graphql/extension/ExtensionQuery.ts';
@@ -320,6 +407,17 @@ import { CLEAR_SERVER_CACHE } from '@/lib/graphql/image/ImageMutation.ts';
 import { RESET_WEBUI_UPDATE_STATUS, UPDATE_WEBUI } from '@/lib/graphql/server/ServerInfoMutation.ts';
 import { WEBUI_UPDATE_SUBSCRIPTION } from '@/lib/graphql/server/ServerInfoSubscription.ts';
 import { GET_DOWNLOAD_STATUS } from '@/lib/graphql/download/DownloaderQuery.ts';
+import { GET_OPTIMIZATION_STATUS } from '@/lib/graphql/optimization/OptimizationQuery.ts';
+import { OPTIMIZATION_STATUS_SUBSCRIPTION } from '@/lib/graphql/optimization/OptimizationSubscription.ts';
+import {
+    CLEAR_OPTIMIZER,
+    DEQUEUE_CHAPTER_OPTIMIZATIONS,
+    ENQUEUE_CHAPTER_OPTIMIZATIONS,
+    REORDER_CHAPTER_OPTIMIZATIONS,
+    START_OPTIMIZER,
+    STOP_OPTIMIZER,
+} from '@/lib/graphql/optimization/OptimizationMutation.ts';
+import { OPTIMIZATION_STATUS_FIELDS } from '@/lib/graphql/optimization/OptimizationFragments.ts';
 import { defaultPromiseErrorHandler } from '@/lib/DefaultPromiseErrorHandler.ts';
 import type { QueuePriority } from '@/lib/Queue.ts';
 import { SourceAwareQueue } from '@/lib/SourceAwareQueue.ts';
@@ -345,7 +443,49 @@ import { CHAPTER_META_FIELDS } from '@/lib/graphql/chapter/ChapterFragments.ts';
 import type { MetadataMigrationSettings } from '@/features/migration/Migration.types.ts';
 import type { MangaIdInfo } from '@/features/manga/Manga.types.ts';
 import { updateMetadataList } from '@/features/metadata/services/MetadataApolloCacheHandler.ts';
-import { USER_LOGIN, USER_REFRESH } from '@/lib/graphql/user/UserMutation.ts';
+import {
+    ADD_FAVORITE,
+    DECIDE_MANGA_REQUEST,
+    GET_MANGA_REQUESTS,
+    GET_MY_MANGA_NOTE,
+    GET_PENDING_MANGA_REQUEST_COUNT,
+    GET_OTHER_USER_MANGA_NOTES,
+    GET_REQUEST_PREVIEW,
+    REMOVE_FAVORITE,
+    REQUEST_MANGA,
+    SET_MANGA_NOTE,
+    SETUP_OWNER,
+    UPDATE_PROFILE,
+    USER_LOGIN,
+    USER_REFRESH,
+} from '@/lib/graphql/user/UserMutation.ts';
+import { GET_CURRENT_USER_PROFILE, ONBOARDING_STATUS } from '@/lib/graphql/user/UserQuery.ts';
+import {
+    GET_CONVERSATION,
+    GET_UNREAD_MESSAGE_COUNT,
+    GET_USER_DIRECTORY,
+    GET_USER_PROFILE,
+    MARK_MESSAGE_READ,
+    SEND_MESSAGE,
+    USER_EVENTS_SUBSCRIPTION,
+} from '@/lib/graphql/user/UserCommunity.ts';
+import { GET_USER_SETTINGS, RESET_USER_SETTINGS, SET_USER_SETTINGS } from '@/lib/graphql/user/UserSettings.ts';
+import {
+    CREATE_ROLE,
+    CREATE_USER,
+    DELETE_ROLE,
+    DELETE_USER,
+    SET_CATEGORY_ACCESS,
+    SET_ROLE_CATEGORY_ACCESS,
+    UPDATE_ROLE,
+    UPDATE_USER,
+} from '@/lib/graphql/admin/AdminMutation.ts';
+import {
+    GET_ADMIN_ROLES,
+    GET_ADMIN_USERS,
+    GET_CATEGORY_ACCESS,
+    GET_ROLE_CATEGORY_ACCESS,
+} from '@/lib/graphql/admin/AdminQuery.ts';
 import { AuthManager } from '@/features/authentication/AuthManager.ts';
 import { useLocalStorage } from '@/base/hooks/useStorage.tsx';
 import { KO_SYNC_LOGIN, KO_SYNC_LOGOUT } from '@/lib/graphql/koreader/KoreaderSyncMutation.ts';
@@ -472,6 +612,9 @@ export const SPECIAL_ED_SOURCES = {
 
 // TODO - extract logic to reduce the size of this file... grew waaaaaaaaaaaaay too big peepoFat
 // TODO - correctly update cache after all mutations instead of refetching queries
+const isOptimizationRemoval = (type: OptimizationUpdateType): boolean =>
+    [OptimizationUpdateType.Dequeued, OptimizationUpdateType.Finished].includes(type);
+
 export class RequestManager {
     public static readonly API_VERSION = '/api/v1/';
 
@@ -1428,6 +1571,177 @@ export class RequestManager {
         options?: QueryHookOptions<GetAboutQuery, GetAboutQueryVariables>,
     ): AbortableApolloUseQueryResponse<GetAboutQuery, GetAboutQueryVariables> {
         return this.doRequest(GQLMethod.USE_QUERY, GET_ABOUT, {}, options);
+    }
+
+    /**
+     * Lightweight, unauthenticated counterpart to {@link useGetAbout}.
+     *
+     * GET_ABOUT also fetches `aboutWebUI`, which requires auth (see AuthGuard's usage of
+     * GET_ABOUT as its "am I logged in" probe) - before login, that field always errors and,
+     * per the GraphQL spec, blanks out the whole response. Anything the login screen itself
+     * needs (like whether SSO is enabled) has to come from a query that can't be poisoned by
+     * that unrelated auth-gated field.
+     */
+    public useGetLoginInfo(
+        options?: QueryHookOptions<{ aboutServer: { ssoEnabled: boolean } }, Record<string, never>>,
+    ): AbortableApolloUseQueryResponse<{ aboutServer: { ssoEnabled: boolean } }, Record<string, never>> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_LOGIN_INFO, {}, options);
+    }
+
+    public useGetCurrentUserProfile(
+        options?: QueryHookOptions<GetCurrentUserProfileQuery, GetCurrentUserProfileQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetCurrentUserProfileQuery, GetCurrentUserProfileQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_CURRENT_USER_PROFILE, {}, options);
+    }
+
+    public useGetUserDirectory(
+        options?: QueryHookOptions<GetUserDirectoryQuery, GetUserDirectoryQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetUserDirectoryQuery, GetUserDirectoryQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_USER_DIRECTORY, {}, options);
+    }
+
+    public useGetUserProfile(
+        variables: GetUserProfileQueryVariables,
+        options?: QueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetUserProfileQuery, GetUserProfileQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_USER_PROFILE, variables, options);
+    }
+
+    public useGetConversation(
+        variables: GetConversationQueryVariables,
+        options?: QueryHookOptions<GetConversationQuery, GetConversationQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetConversationQuery, GetConversationQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_CONVERSATION, variables, options);
+    }
+
+    public useGetUnreadMessageCount(
+        options?: QueryHookOptions<GetUnreadMessageCountQuery, GetUnreadMessageCountQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetUnreadMessageCountQuery, GetUnreadMessageCountQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_UNREAD_MESSAGE_COUNT, {}, options);
+    }
+
+    public useSendMessage(
+        options?: MutationHookOptions<SendMessageMutation, SendMessageMutationVariables>,
+    ): AbortableApolloUseMutationResponse<SendMessageMutation, SendMessageMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, SEND_MESSAGE, undefined, options);
+    }
+
+    public useMarkMessageRead(
+        options?: MutationHookOptions<MarkMessageReadMutation, MarkMessageReadMutationVariables>,
+    ): AbortableApolloUseMutationResponse<MarkMessageReadMutation, MarkMessageReadMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, MARK_MESSAGE_READ, undefined, options);
+    }
+
+    public useGetAdminUsers(
+        options?: QueryHookOptions<GetAdminUsersQuery, GetAdminUsersQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetAdminUsersQuery, GetAdminUsersQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_ADMIN_USERS, {}, options);
+    }
+
+    public useGetCategoryAccess(
+        userId: number | undefined,
+        options?: QueryHookOptions<GetCategoryAccessQuery, GetCategoryAccessQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetCategoryAccessQuery, GetCategoryAccessQueryVariables> {
+        return this.doRequest<GetCategoryAccessQuery, GetCategoryAccessQueryVariables>(
+            GQLMethod.USE_QUERY,
+            GET_CATEGORY_ACCESS,
+            { userId: userId ?? 0 },
+            { skip: userId === undefined, ...options },
+        ) as AbortableApolloUseQueryResponse<GetCategoryAccessQuery, GetCategoryAccessQueryVariables>;
+    }
+
+    public useSetCategoryAccess(
+        options?: MutationHookOptions<SetCategoryAccessMutation, SetCategoryAccessMutationVariables>,
+    ): AbortableApolloUseMutationResponse<SetCategoryAccessMutation, SetCategoryAccessMutationVariables> {
+        return this.doRequest<SetCategoryAccessMutation, SetCategoryAccessMutationVariables>(
+            GQLMethod.USE_MUTATION,
+            SET_CATEGORY_ACCESS,
+            undefined,
+            options,
+        ) as AbortableApolloUseMutationResponse<SetCategoryAccessMutation, SetCategoryAccessMutationVariables>;
+    }
+
+    public useGetRoleCategoryAccess(
+        roleId: number | undefined,
+        options?: QueryHookOptions<GetRoleCategoryAccessQuery, GetRoleCategoryAccessQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetRoleCategoryAccessQuery, GetRoleCategoryAccessQueryVariables> {
+        return this.doRequest<GetRoleCategoryAccessQuery, GetRoleCategoryAccessQueryVariables>(
+            GQLMethod.USE_QUERY,
+            GET_ROLE_CATEGORY_ACCESS,
+            { roleId: roleId ?? 0 },
+            { skip: roleId === undefined, ...options },
+        ) as AbortableApolloUseQueryResponse<GetRoleCategoryAccessQuery, GetRoleCategoryAccessQueryVariables>;
+    }
+
+    public useSetRoleCategoryAccess(
+        options?: MutationHookOptions<SetRoleCategoryAccessMutation, SetRoleCategoryAccessMutationVariables>,
+    ): AbortableApolloUseMutationResponse<SetRoleCategoryAccessMutation, SetRoleCategoryAccessMutationVariables> {
+        return this.doRequest<SetRoleCategoryAccessMutation, SetRoleCategoryAccessMutationVariables>(
+            GQLMethod.USE_MUTATION,
+            SET_ROLE_CATEGORY_ACCESS,
+            undefined,
+            options,
+        ) as AbortableApolloUseMutationResponse<SetRoleCategoryAccessMutation, SetRoleCategoryAccessMutationVariables>;
+    }
+
+    public useGetAdminRoles(
+        options?: QueryHookOptions<GetAdminRolesQuery, GetAdminRolesQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetAdminRolesQuery, GetAdminRolesQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_ADMIN_ROLES, {}, options);
+    }
+
+    public useCreateUser(
+        options?: MutationHookOptions<CreateUserMutation, CreateUserMutationVariables>,
+    ): AbortableApolloUseMutationResponse<CreateUserMutation, CreateUserMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, CREATE_USER, undefined, {
+            refetchQueries: [GET_ADMIN_USERS],
+            ...options,
+        });
+    }
+
+    public useUpdateUser(
+        options?: MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>,
+    ): AbortableApolloUseMutationResponse<UpdateUserMutation, UpdateUserMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, UPDATE_USER, undefined, {
+            refetchQueries: [GET_ADMIN_USERS],
+            ...options,
+        });
+    }
+
+    public useDeleteUser(
+        options?: MutationHookOptions<DeleteUserMutation, DeleteUserMutationVariables>,
+    ): AbortableApolloUseMutationResponse<DeleteUserMutation, DeleteUserMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, DELETE_USER, undefined, {
+            refetchQueries: [GET_ADMIN_USERS],
+            ...options,
+        });
+    }
+
+    public useCreateRole(
+        options?: MutationHookOptions<CreateRoleMutation, CreateRoleMutationVariables>,
+    ): AbortableApolloUseMutationResponse<CreateRoleMutation, CreateRoleMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, CREATE_ROLE, undefined, {
+            refetchQueries: [GET_ADMIN_ROLES],
+            ...options,
+        });
+    }
+
+    public useUpdateRole(
+        options?: MutationHookOptions<UpdateRoleMutation, UpdateRoleMutationVariables>,
+    ): AbortableApolloUseMutationResponse<UpdateRoleMutation, UpdateRoleMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, UPDATE_ROLE, undefined, {
+            refetchQueries: [GET_ADMIN_ROLES],
+            ...options,
+        });
+    }
+
+    public useDeleteRole(
+        options?: MutationHookOptions<DeleteRoleMutation, DeleteRoleMutationVariables>,
+    ): AbortableApolloUseMutationResponse<DeleteRoleMutation, DeleteRoleMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, DELETE_ROLE, undefined, {
+            refetchQueries: [GET_ADMIN_ROLES, GET_ADMIN_USERS],
+            ...options,
+        });
     }
 
     public useCheckForServerUpdate(
@@ -3724,6 +4038,198 @@ export class RequestManager {
         ) as useSubscription.Result<DownloadStatusSubscription>;
     }
 
+    public useGetOptimizationStatus(
+        options?: QueryHookOptions<GetOptimizationStatusQuery, GetOptimizationStatusQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetOptimizationStatusQuery, GetOptimizationStatusQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_OPTIMIZATION_STATUS, {}, options);
+    }
+
+    public useOptimizationSubscription(
+        options?: SubscriptionHookOptions<OptimizationStatusSubscription, OptimizationStatusSubscriptionVariables>,
+    ): useSubscription.Result<OptimizationStatusSubscription> {
+        return this.doRequest<OptimizationStatusSubscription, OptimizationStatusSubscriptionVariables>(
+            GQLMethod.USE_SUBSCRIPTION,
+            OPTIMIZATION_STATUS_SUBSCRIPTION,
+            {},
+            {
+                ...options,
+                onData: (onDataOptions) => {
+                    const optimizationChanged = onDataOptions.data.data?.optimizationStatusChanged;
+
+                    if (!optimizationChanged) {
+                        return;
+                    }
+
+                    const { cache } = this.graphQLClient.client;
+
+                    const statusQueryCache = cache.readQuery<GetOptimizationStatusQuery>({
+                        query: GET_OPTIMIZATION_STATUS,
+                    });
+
+                    const queue = statusQueryCache?.optimizationStatus.queue ?? [];
+                    const optimizationsToAdd = optimizationChanged.updates
+                        .filter((update) => !isOptimizationRemoval(update.type))
+                        .filter(
+                            (update) =>
+                                !queue.some(
+                                    (optimization) => optimization.chapter.id === update.optimization.chapter.id,
+                                ),
+                        )
+                        .map((update) => update.optimization);
+
+                    const removedChapterIds = optimizationChanged.updates
+                        .filter((update) => isOptimizationRemoval(update.type))
+                        .map((update) => update.optimization.chapter.id);
+
+                    cache.writeQuery<GetOptimizationStatusQuery>({
+                        query: GET_OPTIMIZATION_STATUS,
+                        data: {
+                            __typename: 'Query',
+                            optimizationStatus: {
+                                __typename: 'OptimizationStatus',
+                                state:
+                                    optimizationChanged.state ??
+                                    statusQueryCache?.optimizationStatus.state ??
+                                    OptimizerState.Stopped,
+                                queue: [...queue, ...optimizationsToAdd].filter(
+                                    (optimization) => !removedChapterIds.includes(optimization.chapter.id),
+                                ),
+                            },
+                        },
+                    });
+
+                    removedChapterIds.forEach((chapterId) => {
+                        cache.evict({
+                            id: cache.identify({
+                                __typename: 'OptimizationType',
+                                chapter: {
+                                    __ref: cache.identify({
+                                        __typename: 'ChapterType',
+                                        id: chapterId,
+                                    }),
+                                },
+                            }),
+                        });
+                    });
+                },
+            } as SubscriptionHookOptions<OptimizationStatusSubscription, OptimizationStatusSubscriptionVariables>,
+        ) as useSubscription.Result<OptimizationStatusSubscription>;
+    }
+
+    public addChaptersToOptimizationQueue(
+        ids: number[],
+        options?: MutationOptions<EnqueueChapterOptimizationsMutation, EnqueueChapterOptimizationsMutationVariables>,
+    ): AbortableApolloMutationResponse<EnqueueChapterOptimizationsMutation> {
+        return this.doRequest<EnqueueChapterOptimizationsMutation, EnqueueChapterOptimizationsMutationVariables>(
+            GQLMethod.MUTATION,
+            ENQUEUE_CHAPTER_OPTIMIZATIONS,
+            { input: { ids } },
+            options,
+        );
+    }
+
+    public removeChaptersFromOptimizationQueue(
+        ids: number[],
+        options?: MutationOptions<DequeueChapterOptimizationsMutation, DequeueChapterOptimizationsMutationVariables>,
+    ): AbortableApolloMutationResponse<DequeueChapterOptimizationsMutation> {
+        return this.doRequest<DequeueChapterOptimizationsMutation, DequeueChapterOptimizationsMutationVariables>(
+            GQLMethod.MUTATION,
+            DEQUEUE_CHAPTER_OPTIMIZATIONS,
+            { input: { ids } },
+            options,
+        );
+    }
+
+    public useReorderChaptersInOptimizationQueue(
+        options?: MutationHookOptions<
+            ReorderChapterOptimizationsMutation,
+            ReorderChapterOptimizationsMutationVariables
+        >,
+    ): AbortableApolloUseMutationResponse<
+        ReorderChapterOptimizationsMutation,
+        ReorderChapterOptimizationsMutationVariables
+    > {
+        const [mutate, result] = this.doRequest(
+            GQLMethod.USE_MUTATION,
+            REORDER_CHAPTER_OPTIMIZATIONS,
+            undefined,
+            options,
+        );
+
+        const wrappedMutate = (mutationOptions: Parameters<typeof mutate>[0]) => {
+            const variables = mutationOptions?.variables?.input;
+            const cachedStatus = this.graphQLClient.client.readFragment<
+                GetOptimizationStatusQuery['optimizationStatus']
+            >({
+                id: 'OptimizationStatus:{}',
+                fragment: OPTIMIZATION_STATUS_FIELDS,
+                fragmentName: 'OPTIMIZATION_STATUS_FIELDS',
+            });
+
+            if (!variables || !cachedStatus) {
+                return mutate(mutationOptions);
+            }
+
+            const updatedQueue = variables.reorders.reduce((queue, { chapterId, to }) => {
+                const index = queue.findIndex(({ chapter }) => chapter.id === chapterId);
+                if (index === -1) {
+                    return queue;
+                }
+
+                return queue.toSpliced(index, 1).toSpliced(to, 0, queue[index]);
+            }, cachedStatus.queue);
+
+            return mutate({
+                optimisticResponse: {
+                    __typename: 'Mutation',
+                    reorderChapterOptimizations: {
+                        __typename: 'OptimizationStatusPayload',
+                        optimizationStatus: {
+                            ...cachedStatus,
+                            queue: updatedQueue,
+                        },
+                    },
+                },
+                ...mutationOptions,
+            });
+        };
+
+        return [wrappedMutate, result];
+    }
+
+    public startOptimizer(
+        options?: MutationOptions<StartOptimizerMutation, StartOptimizerMutationVariables>,
+    ): AbortableApolloMutationResponse<StartOptimizerMutation> {
+        return this.doRequest<StartOptimizerMutation, StartOptimizerMutationVariables>(
+            GQLMethod.MUTATION,
+            START_OPTIMIZER,
+            {},
+            options,
+        );
+    }
+
+    public stopOptimizer(
+        options?: MutationOptions<StopOptimizerMutation, StopOptimizerMutationVariables>,
+    ): AbortableApolloMutationResponse<StopOptimizerMutation> {
+        return this.doRequest<StopOptimizerMutation, StopOptimizerMutationVariables>(
+            GQLMethod.MUTATION,
+            STOP_OPTIMIZER,
+            {},
+            options,
+        );
+    }
+
+    public clearOptimizer(
+        options?: MutationOptions<ClearOptimizerMutation, ClearOptimizerMutationVariables>,
+    ): AbortableApolloMutationResponse<ClearOptimizerMutation> {
+        return this.doRequest<ClearOptimizerMutation, ClearOptimizerMutationVariables>(
+            GQLMethod.MUTATION,
+            CLEAR_OPTIMIZER,
+            {},
+            options,
+        );
+    }
+
     public useUpdaterSubscription(
         options?: SubscriptionHookOptions<UpdaterSubscription, UpdaterSubscriptionVariables>,
     ): useSubscription.Result<UpdaterSubscription> {
@@ -3952,6 +4458,132 @@ export class RequestManager {
         options?: MutationHookOptions<UserLoginMutation, UserLoginMutationVariables>,
     ): AbortableApolloUseMutationResponse<UserLoginMutation, UserLoginMutationVariables> {
         return this.doRequest(GQLMethod.USE_MUTATION, USER_LOGIN, undefined, options);
+    }
+
+    public useUpdateProfile(
+        options?: MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>,
+    ): AbortableApolloUseMutationResponse<UpdateProfileMutation, UpdateProfileMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, UPDATE_PROFILE, undefined, options);
+    }
+
+    public useAddFavorite(
+        options?: MutationHookOptions<AddFavoriteMutation, AddFavoriteMutationVariables>,
+    ): AbortableApolloUseMutationResponse<AddFavoriteMutation, AddFavoriteMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, ADD_FAVORITE, undefined, options);
+    }
+
+    public useRemoveFavorite(
+        options?: MutationHookOptions<RemoveFavoriteMutation, RemoveFavoriteMutationVariables>,
+    ): AbortableApolloUseMutationResponse<RemoveFavoriteMutation, RemoveFavoriteMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, REMOVE_FAVORITE, undefined, options);
+    }
+
+    public useSetMangaNote(
+        options?: MutationHookOptions<SetMangaNoteMutation, SetMangaNoteMutationVariables>,
+    ): AbortableApolloUseMutationResponse<SetMangaNoteMutation, SetMangaNoteMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, SET_MANGA_NOTE, undefined, options);
+    }
+
+    public useGetMyMangaNote(
+        mangaId: number,
+        options?: QueryHookOptions<GetMyMangaNoteQuery, GetMyMangaNoteQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetMyMangaNoteQuery, GetMyMangaNoteQueryVariables> {
+        return this.doRequest<GetMyMangaNoteQuery, GetMyMangaNoteQueryVariables>(
+            GQLMethod.USE_QUERY,
+            GET_MY_MANGA_NOTE,
+            { mangaId },
+            options,
+        ) as AbortableApolloUseQueryResponse<GetMyMangaNoteQuery, GetMyMangaNoteQueryVariables>;
+    }
+
+    public useGetOtherUserMangaNotes(
+        mangaId: number,
+        options?: QueryHookOptions<GetOtherUserMangaNotesQuery, GetOtherUserMangaNotesQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetOtherUserMangaNotesQuery, GetOtherUserMangaNotesQueryVariables> {
+        return this.doRequest<GetOtherUserMangaNotesQuery, GetOtherUserMangaNotesQueryVariables>(
+            GQLMethod.USE_QUERY,
+            GET_OTHER_USER_MANGA_NOTES,
+            { mangaId },
+            options,
+        ) as AbortableApolloUseQueryResponse<GetOtherUserMangaNotesQuery, GetOtherUserMangaNotesQueryVariables>;
+    }
+
+    public useRequestManga(
+        options?: MutationHookOptions<RequestMangaMutation, RequestMangaMutationVariables>,
+    ): AbortableApolloUseMutationResponse<RequestMangaMutation, RequestMangaMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, REQUEST_MANGA, undefined, options);
+    }
+
+    public useGetMangaRequests(
+        options?: QueryHookOptions<GetMangaRequestsQuery, GetMangaRequestsQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetMangaRequestsQuery, GetMangaRequestsQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_MANGA_REQUESTS, {}, options);
+    }
+
+    public useGetPendingMangaRequestCount(
+        options?: QueryHookOptions<GetPendingMangaRequestCountQuery, GetPendingMangaRequestCountQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetPendingMangaRequestCountQuery, GetPendingMangaRequestCountQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_PENDING_MANGA_REQUEST_COUNT, {}, options);
+    }
+
+    public useUserEventsSubscription(
+        options?: SubscriptionHookOptions<UserEventsSubscription, UserEventsSubscriptionVariables>,
+    ): useSubscription.Result<UserEventsSubscription> {
+        return this.doRequest(GQLMethod.USE_SUBSCRIPTION, USER_EVENTS_SUBSCRIPTION, undefined, options);
+    }
+
+    public useDecideMangaRequest(
+        options?: MutationHookOptions<DecideMangaRequestMutation, DecideMangaRequestMutationVariables>,
+    ): AbortableApolloUseMutationResponse<DecideMangaRequestMutation, DecideMangaRequestMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, DECIDE_MANGA_REQUEST, undefined, options);
+    }
+
+    public useGetRequestPreview(
+        mangaId: number,
+        options?: QueryHookOptions<GetRequestPreviewQuery, GetRequestPreviewQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetRequestPreviewQuery, GetRequestPreviewQueryVariables> {
+        return this.doRequest<GetRequestPreviewQuery, GetRequestPreviewQueryVariables>(
+            GQLMethod.USE_QUERY,
+            GET_REQUEST_PREVIEW,
+            { mangaId },
+            options,
+        ) as AbortableApolloUseQueryResponse<GetRequestPreviewQuery, GetRequestPreviewQueryVariables>;
+    }
+
+    public useOnboardingStatus(
+        options?: QueryHookOptions<{ onboardingStatus: boolean }, Record<string, never>>,
+    ): AbortableApolloUseQueryResponse<{ onboardingStatus: boolean }, Record<string, never>> {
+        return this.doRequest(GQLMethod.USE_QUERY, ONBOARDING_STATUS, {}, options);
+    }
+
+    public useSetupOwner(
+        options?: MutationHookOptions<
+            { setupOwner: { accessToken: string; refreshToken: string } },
+            { username: string; password: string }
+        >,
+    ): AbortableApolloUseMutationResponse<
+        { setupOwner: { accessToken: string; refreshToken: string } },
+        { username: string; password: string }
+    > {
+        return this.doRequest(GQLMethod.USE_MUTATION, SETUP_OWNER, undefined, options);
+    }
+
+    public useGetUserSettings(
+        options?: QueryHookOptions<GetUserSettingsQuery, GetUserSettingsQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetUserSettingsQuery, GetUserSettingsQueryVariables> {
+        return this.doRequest(GQLMethod.USE_QUERY, GET_USER_SETTINGS, undefined, options);
+    }
+
+    public useSetUserSettings(
+        options?: MutationHookOptions<SetUserSettingsMutation, SetUserSettingsMutationVariables>,
+    ): AbortableApolloUseMutationResponse<SetUserSettingsMutation, SetUserSettingsMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, SET_USER_SETTINGS, undefined, options);
+    }
+
+    public useResetUserSettings(
+        options?: MutationHookOptions<ResetUserSettingsMutation, ResetUserSettingsMutationVariables>,
+    ): AbortableApolloUseMutationResponse<ResetUserSettingsMutation, ResetUserSettingsMutationVariables> {
+        return this.doRequest(GQLMethod.USE_MUTATION, RESET_USER_SETTINGS, undefined, options);
     }
 
     public startSync(

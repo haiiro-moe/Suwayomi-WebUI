@@ -64,10 +64,7 @@ export const SERVER_SETTINGS = gql`
         maxSourcesInParallel
 
         # updater
-        excludeUnreadChapters
-        excludeNotStarted
-        excludeCompleted
-        globalUpdateInterval
+        globalUpdateCron
         updateMangas
 
         # Authentication

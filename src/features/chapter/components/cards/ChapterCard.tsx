@@ -36,6 +36,7 @@ import type {
     ChapterMangaInfo,
     ChapterNameInfo,
     ChapterNumberInfo,
+    ChapterOptimizedInfo,
     ChapterReadInfo,
     ChapterScanlatorInfo,
     ChapterSourceOrderInfo,
@@ -45,10 +46,12 @@ import type { ChapterType } from '@/lib/graphql/generated/graphql-base.types.ts'
 import { usePress } from '@/base/hooks/usePress.ts';
 import { AppRoutes } from '@/base/AppRoute.constants.ts';
 import { ReaderService } from '@/features/reader/services/ReaderService.ts';
+import { getChapterDownloadStateText } from '@/features/optimization/Optimization.utils.ts';
 
 type TChapter = ChapterIdInfo &
     ChapterMangaInfo &
     ChapterDownloadInfo &
+    ChapterOptimizedInfo &
     ChapterReadInfo &
     ChapterBookmarkInfo &
     ChapterNumberInfo &
@@ -94,7 +97,8 @@ export const ChapterCard = memo((props: IProps) => {
     } = props;
     const isSelecting = selected !== null;
 
-    const { isDownloaded } = chapter;
+    const optimization = Chapters.useOptimizationStatusFromCache(chapter.id);
+    const downloadStateText = getChapterDownloadStateText(chapter, optimization);
 
     const handleClick = (event: MouseEvent | TouchEvent) => {
         if (!isSelecting) {
@@ -151,7 +155,7 @@ export const ChapterCard = memo((props: IProps) => {
                                     title={showChapterNumber ? `${t`Chapter`} ${chapter.chapterNumber}` : chapter.name}
                                     secondaryText={chapter.scanlator}
                                     ternaryText={`${getDateString(Number(chapter.uploadDate ?? 0), true)}${
-                                        isDownloaded ? ` — ${t`Downloaded`}` : ''
+                                        downloadStateText ? ` — ${downloadStateText}` : ''
                                     }`}
                                     infoIcons={
                                         chapter.isBookmarked && (

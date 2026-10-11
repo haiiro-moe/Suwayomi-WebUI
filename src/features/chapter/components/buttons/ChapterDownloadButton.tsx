@@ -38,7 +38,7 @@ export const ChapterDownloadButton = ({
     }
 
     return (
-        <CustomTooltip title={t`Download`}>
+        <CustomTooltip title={t`Download & optimize`}>
             <IconButton
                 {...MUIUtil.preventRippleProp()}
                 onClick={(e) => {
